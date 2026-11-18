@@ -781,6 +781,14 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
   .home-weather .wx-days{grid-template-columns:1fr 1fr}
 }
 @media (min-width:761px){
+  .fam-card.ujin > .fam-block:nth-of-type(1),
+  .fam-card.eunwoo > .fam-block:nth-of-type(1){flex:1;display:flex;flex-direction:column;min-height:180px}
+  .fam-card.ujin > .fam-block:nth-of-type(1) .fam-check,
+  .fam-card.eunwoo > .fam-block:nth-of-type(1) .fam-check{flex:1}
+  .fam-card.ujin > .fam-block:nth-of-type(1) .fam-empty,
+  .fam-card.eunwoo > .fam-block:nth-of-type(1) .fam-empty{flex:1;display:grid;place-items:center;align-content:center;padding:14px}
+  .fam-card.ujin > .fam-block:nth-of-type(1) .fam-add,
+  .fam-card.eunwoo > .fam-block:nth-of-type(1) .fam-add{margin-top:auto}
   .fam-card.taeon .fam-check{display:grid;grid-template-columns:1fr 1fr;gap:1px 4px;max-height:212px;align-content:start}
   .fam-card.taeon .fam-check .fam-item-text{font-size:11.5px}
 }
