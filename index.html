@@ -3156,7 +3156,7 @@ function renderHomework() {
           '<button class="check ' + (s.done ? 'on' : '') + '" data-action="supp-toggle" data-id="' + s.id + '" type="button" aria-label="보충 완료">' + (s.done ? '✓' : '') + '</button>' +
           '<div class="item-body"><div class="item-title ' + (s.done ? 'done' : '') + '">' + esc(s.label) + '</div>' +
           '<div class="item-meta">' + (d.getMonth() + 1) + '/' + d.getDate() + ' (' + DOW[d.getDay()] + ') · 주말 보충 · ★+1</div></div>' +
-          (parentOn ? '<button class="link-btn" data-action="supp-del" data-id="' + s.id + '" type="button">✕</button>' : '') +
+          '<span class="item-acts"><button class="act-btn del" data-action="supp-del" data-id="' + s.id + '" type="button" aria-label="보충수업 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button></span>' +
           '</div>';
       }).join('') + '</div>';
     }
