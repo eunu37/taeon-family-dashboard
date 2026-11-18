@@ -1,0 +1,25 @@
+{
+  "name": "태온이네 가족 대시보드",
+  "short_name": "태온이네",
+  "description": "태온이네 가족 대시보드 · 루틴, 숙제, 타이머, 용돈, 펫 키우기, 가족 달력",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFDF7",
+  "theme_color": "#FFFDF7",
+  "icons": [
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
