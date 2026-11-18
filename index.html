@@ -816,6 +816,31 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
   .cal-grid.mini .cal-cell{min-height:36px}
 }
 
+/* ===== 수정 · 삭제 버튼 (일정 / 루틴 / 숙제) ===== */
+.act-btn{
+  display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;
+  padding:4px 8px;border-radius:8px;font-size:10.5px;font-weight:800;line-height:1.3;
+  background:#FFF3E7;color:#B3703C;border:1px solid #F3DFC9;white-space:nowrap;transition:.15s;
+}
+.act-btn:hover{background:#FFE5CF;border-color:#EFC9A6;color:#9A5A2A}
+.act-btn.del{background:#FDF1EE;color:#BE6B58;border-color:#F3DCD5}
+.act-btn.del:hover{background:#FBE3DC;border-color:#EFC7BC;color:#AF5544}
+.act-btn .em{font-size:11px;line-height:1;font-style:normal}
+.sched-acts{display:flex;gap:3px;flex:0 0 auto;align-items:center}
+.sched-acts .act-btn{padding:3px 6px;font-size:10px;border-radius:7px}
+.item-acts{display:flex;gap:5px;flex:0 0 auto;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.plan-acts{display:flex;gap:5px;flex:0 0 auto;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.plan-head{align-items:center;flex-wrap:wrap}
+.routine-manage .item{padding:9px 11px}
+.routine-manage .prog-row{margin-bottom:5px}
+.cal-day-title{font-size:12px;font-weight:800;color:var(--ink-soft);margin-bottom:6px}
+@media (max-width:560px){
+  .act-btn{padding:4px 7px;font-size:10px}
+  .item-acts,.plan-acts{gap:4px}
+  .sched-acts .act-btn{padding:3px 5px}
+  .sched-acts .act-btn .lbl{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -940,10 +965,14 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
       </div>
       <div class="grid-2">
         <div class="card">
+          <div class="card-head">
+            <div class="card-title"><span class="ico">✅</span>지금 시간대 루틴</div>
+            <button class="btn primary tiny" data-action="routine-add-open" type="button">＋ 루틴 추가</button>
+          </div>
           <div class="period-tabs" id="periodTabs"></div>
           <div class="routine-progress mt14" id="routineProgress"></div>
           <div class="list mt14" id="routineList"></div>
-          <p class="hint mt14">항목을 하나 끝낼 때마다 <b>별 1개(★+1)</b>를 받아요. 하루에 한 번만 인정돼요.</p>
+          <p class="hint mt14">항목을 하나 끝낼 때마다 <b>별 1개(★+1)</b>를 받아요. 하루에 한 번만 인정돼요.<br>필요 없는 항목은 옆의 <b>🗑️ 삭제</b>로 지우고, <b>✏️ 수정</b>으로 이름·시간대를 바꿔요.</p>
         </div>
         <div class="stack">
           <div class="card">
@@ -953,27 +982,13 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
             </div>
             <div class="day-rows" id="routineWeek"></div>
           </div>
-          <div class="card parent-only">
+          <div class="card">
             <div class="card-head">
-              <div class="card-title"><span class="ico">🛠️</span>루틴 관리 (부모 모드)</div>
-              <button class="link-btn" id="routineResetBtn" type="button">오늘 기록 초기화</button>
+              <div class="card-title"><span class="ico">🛠️</span>루틴 관리 · 시간대별</div>
+              <button class="btn ghost tiny" data-action="routine-add-open" type="button">＋ 루틴 추가</button>
             </div>
-            <div class="list" id="routineManage"></div>
-            <form class="inline-form mt14" id="routineAddForm">
-              <div class="field" style="flex:1 1 130px">
-                <label>루틴 추가</label>
-                <input class="input" id="routineAddInput" placeholder="예: 구강 체조" maxlength="24" autocomplete="off">
-              </div>
-              <div class="field" style="flex:0 0 96px">
-                <label>시간대</label>
-                <select class="input" id="routineAddPeriod">
-                  <option value="morning">아침</option>
-                  <option value="afternoon">점심</option>
-                  <option value="evening">저녁</option>
-                </select>
-              </div>
-              <button class="btn primary" type="submit">추가</button>
-            </form>
+            <div class="stack routine-manage" id="routineManage"></div>
+            <p class="hint mt14">여기서는 아침·점심·저녁 루틴을 한 번에 볼 수 있어요. <b>✏️ 수정</b>으로 시간대까지 바꿀 수 있어요.</p>
           </div>
         </div>
       </div>
@@ -998,7 +1013,10 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
           <div class="card">
             <div class="card-head">
               <div class="card-title"><span class="ico">🗓️</span>이번 주 계획</div>
-              <span class="card-sub">월~일 자동 분배</span>
+              <div class="btn-group" style="align-items:center">
+                <span class="card-sub">월~일 자동 분배</span>
+                <button class="btn primary tiny" data-action="plan-add-open" type="button">＋ 숙제 추가</button>
+              </div>
             </div>
             <div class="stack" id="hwPlans"></div>
           </div>
@@ -1011,9 +1029,10 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
           </div>
         </div>
         <div class="stack">
-          <div class="card parent-only">
+          <div class="card" id="planFormCard">
             <div class="card-head">
-              <div class="card-title"><span class="ico">✏️</span>주간 학습 계획 (부모 모드)</div>
+              <div class="card-title"><span class="ico">✏️</span><span id="planFormTitle">주간 학습 계획</span></div>
+              <span class="chip peach" id="planFormMode" style="display:none">✏️ 수정 중</span>
             </div>
             <form id="hwPlanForm">
               <div class="form-grid">
@@ -1041,7 +1060,8 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
                 <div class="day-picker" id="planDays"></div>
               </div>
               <p class="hint mt10" id="hwSplitPreview">요일을 고르면 쪽수가 자동으로 나뉘어요.</p>
-              <button class="btn primary wide mt14" type="submit">계획 추가하기</button>
+              <button class="btn primary wide mt14" type="submit" id="planFormSubmit">계획 추가하기</button>
+              <button class="btn ghost wide mt10" type="button" id="planFormCancel" data-action="plan-edit-cancel" style="display:none">수정 취소</button>
             </form>
           </div>
           <div class="card">
@@ -1453,6 +1473,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
           </div>
           <div class="cal-grid" id="calGrid"></div>
           <div class="row wrap mt14" id="calLegend"></div>
+          <div class="mt14" id="calDayList"></div>
         </div>
         <div class="stack">
           <div class="card">
@@ -1495,7 +1516,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
     <div class="modal-head">
       <div>
         <h3 id="hevTitle">📅 일정 추가</h3>
-        <p>넣은 일정은 가족 모두의 홈 화면에 바로 보여요.</p>
+        <p id="hevSub">넣은 일정은 가족 모두의 홈 화면에 바로 보여요.</p>
       </div>
       <button class="modal-close" type="button" data-close="homeEventModal">✕</button>
     </div>
@@ -1512,7 +1533,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
         </div>
       </div>
       <div class="field mt10"><label>일정</label><input class="input" id="homeEvTitle" placeholder="예: 태온이 치과" maxlength="30" autocomplete="off"></div>
-      <button class="btn primary wide mt14" type="submit">일정 저장</button>
+      <button class="btn primary wide mt14" type="submit" id="hevSubmit">일정 저장</button>
     </form>
   </div>
 </div>
@@ -1691,6 +1712,34 @@ create policy "family_state_all" on family_state
       <button class="modal-close" type="button" data-close="feedModal">✕</button>
     </div>
     <div id="feedBody"></div>
+  </div>
+</div>
+
+<div class="modal-root" id="routineModal">
+  <div class="modal-backdrop" data-close="routineModal"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
+    <div class="modal-head">
+      <div>
+        <h3 id="rmTitle">＋ 루틴 추가</h3>
+        <p id="rmSub">시간대를 고르면 그 시간 루틴 목록에 바로 보여요.</p>
+      </div>
+      <button class="modal-close" type="button" data-close="routineModal">✕</button>
+    </div>
+    <form id="routineModalForm">
+      <div class="field">
+        <label>루틴 이름</label>
+        <input class="input" id="routineModalText" placeholder="예: 구강 체조" maxlength="24" autocomplete="off">
+      </div>
+      <div class="field mt10">
+        <label>시간대</label>
+        <select class="input" id="routineModalPeriod">
+          <option value="morning">🌅 아침</option>
+          <option value="afternoon">☀️ 점심</option>
+          <option value="evening">🌙 저녁</option>
+        </select>
+      </div>
+      <button class="btn primary wide mt14" type="submit" id="routineModalSubmit">루틴 추가하기</button>
+    </form>
   </div>
 </div>
 
@@ -2004,7 +2053,10 @@ var ui = {
   homeCalSel: todayISO(),
   decorate: false,
   gameSpinning: false,
-  wheelRot: 0
+  wheelRot: 0,
+  eventEditId: null,
+  routineEditId: null,
+  planEditId: null
 };
 var parentOn = false;
 var pinBuffer = '';
@@ -2535,7 +2587,12 @@ function renderHomeSchedule() {
       '<div class="sched-title">' + esc(x.title) + '</div>' +
       '<div class="sched-meta">' + korDate(dd) + ' (' + DOW[dd.getDay()] + ')' + (x.kind === 'supp' ? ' · 주말 보충' : '') + '</div></div>' +
       (x.who ? schedAvatars(x.who) : '') +
-      (x.kind === 'event' ? '<button class="sched-del" data-action="event-del" data-id="' + x.id + '" type="button" aria-label="일정 삭제">✕</button>' : '') +
+      (x.kind === 'event'
+        ? '<span class="sched-acts">' +
+          '<button class="act-btn" data-action="event-edit" data-id="' + x.id + '" type="button" aria-label="일정 수정" title="일정 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+          '<button class="act-btn del" data-action="event-del" data-id="' + x.id + '" type="button" aria-label="일정 삭제" title="일정 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+          '</span>'
+        : '') +
       '</div>';
   }).join('');
 }
@@ -2848,6 +2905,8 @@ function renderFamilyCards() {
       '<button class="chip line" data-go="mail" type="button">📮 ' + (unread ? '안 읽은 쪽지 ' + unread : '쪽지 보기') + '</button>' +
       '<button class="chip line" data-go="calendar" type="button">📅 달력</button>' +
       (key === 'taeon' ? '<button class="chip line" data-action="open-growth" type="button">📏 성장</button>' : '') +
+      (key === 'taeon' ? '<button class="chip line" data-go="routine" type="button">✅ 루틴 관리</button>' : '') +
+      (key === 'taeon' ? '<button class="chip line" data-go="homework" type="button">📚 숙제 관리</button>' : '') +
       '</div></div>';
 
     return '<article class="fam-card ' + key + '">' +
@@ -2924,6 +2983,27 @@ function renderHome() {
   renderHomeQuick();
 }
 
+/* ---------- 수정 · 삭제 버튼 조각 ---------- */
+function routineActs(period, id) {
+  return '<button class="act-btn" data-action="routine-edit" data-period="' + period + '" data-id="' + id + '" type="button" aria-label="루틴 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+    '<button class="act-btn del" data-action="routine-del" data-period="' + period + '" data-id="' + id + '" type="button" aria-label="루틴 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>';
+}
+function findEventById(id) {
+  var out = null;
+  (state.events || []).forEach(function (e) { if (e.id === id) out = e; });
+  return out;
+}
+function findPlanById(id) {
+  var out = null;
+  (state.plans || []).forEach(function (p) { if (p.id === id) out = p; });
+  return out;
+}
+function findRoutineById(period, id) {
+  var out = null;
+  ((state.routines || {})[period] || []).forEach(function (it) { if (it.id === id) out = it; });
+  return out;
+}
+
 /* ---------- 루틴 ---------- */
 function renderRoutine() {
   var today = todayISO();
@@ -2952,7 +3032,7 @@ function renderRoutine() {
   el = $('#routineList');
   if (el) {
     if (!items.length) {
-      el.innerHTML = emptyBox('🪄', '이 시간대에 루틴이 없어요.<br>부모 모드에서 추가할 수 있어요.');
+      el.innerHTML = emptyBox('🪄', '이 시간대에 루틴이 없어요.<br>＋ 루틴 추가로 만들어 보세요.');
     } else {
       el.innerHTML = items.map(function (it) {
         var on = isRoutineDone(today, active, it.id);
@@ -2961,6 +3041,7 @@ function renderRoutine() {
           '<div class="item-body"><div class="item-title ' + (on ? 'done' : '') + '">' + esc(it.text) + '</div>' +
           '<div class="item-meta">' + (on ? '★ 받았어요!' : '끝내면 ★+1') + '</div></div>' +
           (on ? '<span class="chip mint">완료</span>' : '') +
+          '<span class="item-acts">' + routineActs(active, it.id) + '</span>' +
           '</div>';
       }).join('');
     }
@@ -2983,16 +3064,23 @@ function renderRoutine() {
     }).join('');
   }
 
-  /* 부모: 루틴 관리 */
+  /* 루틴 관리: 시간대별 전체 목록 (수정 · 삭제) */
   el = $('#routineManage');
   if (el) {
     el.innerHTML = PERIODS.map(function (p) {
-      return '<div style="margin-bottom:8px"><div class="prog-row"><span>' + p.emoji + ' ' + p.label + '</span><small>' + routineItems(p.id).length + '개</small></div>' +
-        '<div class="row wrap" style="gap:6px">' +
-        routineItems(p.id).map(function (it) {
-          return '<span class="inv-chip">' + esc(it.text) + ' <button class="link-btn" style="padding:2px 7px" data-action="routine-del" data-period="' + p.id + '" data-id="' + it.id + '" type="button" aria-label="삭제">✕</button></span>';
-        }).join('') +
-        '</div></div>';
+      var list = routineItems(p.id);
+      return '<div>' +
+        '<div class="prog-row"><span>' + p.emoji + ' ' + p.label + '</span><small>' + list.length + '개</small></div>' +
+        (list.length
+          ? '<div class="list">' + list.map(function (it) {
+            return '<div class="item">' +
+              '<div class="item-emoji">' + p.emoji + '</div>' +
+              '<div class="item-body"><div class="item-title">' + esc(it.text) + '</div>' +
+              '<div class="item-meta">' + p.label + ' · ' + p.range + '</div></div>' +
+              '<span class="item-acts">' + routineActs(p.id, it.id) + '</span></div>';
+          }).join('') + '</div>'
+          : '<div class="hint">' + p.label + ' 루틴이 없어요. <b>＋ 루틴 추가</b>로 넣을 수 있어요.</div>') +
+        '</div>';
     }).join('');
   }
 }
@@ -3006,7 +3094,7 @@ function renderHomework() {
   el = $('#hwToday');
   if (el) {
     if (!hw.length) {
-      el.innerHTML = emptyBox('🌤️', '오늘은 계획된 숙제가 없어요.<br>부모 모드에서 주간 계획을 넣어 보세요.');
+      el.innerHTML = emptyBox('🌤️', '오늘은 계획된 숙제가 없어요.<br>＋ 숙제 추가로 주간 계획을 넣어 보세요.');
     } else {
       var doneN = hw.filter(function (x) { return x.done; }).length;
       el.innerHTML = '<div class="stack">' + hw.map(function (x) {
@@ -3029,7 +3117,7 @@ function renderHomework() {
   el = $('#hwPlans');
   if (el) {
     if (!state.plans.length) {
-      el.innerHTML = emptyBox('📒', '등록된 주간 계획이 없어요.<br>부모 모드에서 첫 계획을 추가해 보세요.');
+      el.innerHTML = emptyBox('📒', '등록된 주간 계획이 없어요.<br>＋ 숙제 추가로 첫 계획을 만들어 보세요.');
     } else {
       el.innerHTML = state.plans.map(function (p) {
         var assigns = planAssignments(p);
@@ -3043,11 +3131,13 @@ function renderHomework() {
           return '<div class="week-cell ' + (done ? 'is-done' : '') + (isToday ? ' is-today' : '') + '">' +
             '<b>' + DOW[dow] + '</b>' + pageLabel(a).replace('쪽', '') + '</div>';
         }).join('');
-        return '<div class="plan-card">' +
-          '<div class="plan-head"><div><div class="plan-name">' + esc(p.book) + '</div>' +
+        return '<div class="plan-card' + (ui.planEditId === p.id ? ' is-editing' : '') + '">' +
+          '<div class="plan-head"><div style="min-width:0"><div class="plan-name">' + esc(p.book) + '</div>' +
           '<div class="card-sub">' + esc(p.subject) + ' · ' + p.start + '~' + p.end + '쪽 · ' + p.days.length + '일</div></div>' +
-          (parentOn ? '<button class="link-btn" data-action="plan-del" data-id="' + p.id + '" type="button">삭제</button>' : '') +
-          '</div>' +
+          '<span class="plan-acts">' +
+          '<button class="act-btn" data-action="plan-edit" data-id="' + p.id + '" type="button" aria-label="숙제 계획 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+          '<button class="act-btn del" data-action="plan-del" data-id="' + p.id + '" type="button" aria-label="숙제 계획 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+          '</span></div>' +
           '<div class="week-strip">' + cells + '</div>' +
           '</div>';
       }).join('');
@@ -3087,6 +3177,20 @@ function renderHomework() {
     }
   }
   renderPlanDays();
+  renderPlanFormUI();
+}
+
+/* 주간 계획 폼: 추가/수정 모드 표시 */
+function renderPlanFormUI() {
+  var editing = !!ui.planEditId;
+  var title = $('#planFormTitle');
+  if (title) title.textContent = editing ? '주간 학습 계획 수정' : '주간 학습 계획';
+  var mode = $('#planFormMode');
+  if (mode) mode.style.display = editing ? 'inline-flex' : 'none';
+  var submit = $('#planFormSubmit');
+  if (submit) submit.textContent = editing ? '계획 수정 저장' : '계획 추가하기';
+  var cancel = $('#planFormCancel');
+  if (cancel) cancel.style.display = editing ? 'flex' : 'none';
 }
 
 function selectedPlanDays() {
@@ -3105,6 +3209,14 @@ function renderPlanDays() {
     return '<button class="day-toggle ' + (on ? 'is-on' : '') + '" data-dow="' + dow + '" type="button">' + DOW[dow] + '</button>';
   }).join('');
   el.setAttribute('data-built', '1');
+}
+function setPlanDays(days) {
+  renderPlanDays();
+  var want = (days || []).map(Number);
+  $$('#planDays .day-toggle').forEach(function (b) {
+    var dow = Number(b.getAttribute('data-dow'));
+    b.classList.toggle('is-on', want.indexOf(dow) >= 0);
+  });
 }
 
 /* ---------- 타이머 ---------- */
@@ -3810,7 +3922,10 @@ function upcomingRowHTML(x) {
     '<div style="flex:1;min-width:0"><div class="item-title">' + esc(x.title) + '</div>' +
     '<div class="item-meta">' + ddayLabel(x.date) + ' · ' + (x.kind === 'supp' ? '주말 보충' : cm.label) + '</div></div>' +
     (x.kind === 'event'
-      ? '<button class="link-btn" data-action="event-del" data-id="' + x.id + '" type="button" aria-label="삭제">✕</button>'
+      ? '<span class="item-acts">' +
+        '<button class="act-btn" data-action="event-edit" data-id="' + x.id + '" type="button" aria-label="일정 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+        '<button class="act-btn del" data-action="event-del" data-id="' + x.id + '" type="button" aria-label="일정 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+        '</span>'
       : '<span class="chip lav">보충</span>') +
     '</div>';
 }
@@ -3867,6 +3982,27 @@ function renderCalendar() {
     var ups = upcomingItems().slice(0, 8);
     if (!ups.length) el.innerHTML = emptyBox('🗓️', '다가오는 일정이 없어요.');
     else el.innerHTML = '<div class="stack">' + ups.map(upcomingRowHTML).join('') + '</div>';
+  }
+
+  /* 선택한 날 일정: 지난 일정도 여기서 수정 · 삭제 */
+  el = $('#calDayList');
+  if (el) {
+    var dayEvs = eventsOn(ui.calSel);
+    var dayHead = '<div class="cal-day-title">' + korDate(parseISO(ui.calSel), true) + ' 일정</div>';
+    if (!dayEvs.length) {
+      el.innerHTML = dayHead + '<div class="hint">이 날은 잡힌 일정이 없어요. 오른쪽 <b>일정 추가</b>로 넣을 수 있어요.</div>';
+    } else {
+      el.innerHTML = dayHead + '<div class="stack">' + dayEvs.map(function (e) {
+        var cm = CAT_META[e.cat] || CAT_META.family;
+        return '<div class="upcoming-item">' +
+          '<span class="chip line">' + cm.label + '</span>' +
+          '<div style="flex:1;min-width:0"><div class="item-title">' + esc(e.title) + '</div></div>' +
+          '<span class="item-acts">' +
+          '<button class="act-btn" data-action="event-edit" data-id="' + e.id + '" type="button" aria-label="일정 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+          '<button class="act-btn del" data-action="event-del" data-id="' + e.id + '" type="button" aria-label="일정 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+          '</span></div>';
+      }).join('') + '</div>';
+    }
   }
 
   var evd = $('#evDate');
@@ -4422,10 +4558,36 @@ document.addEventListener('click', function (e) {
     }
     case 'routine-del': {
       var p2 = el.getAttribute('data-period'), id2 = el.getAttribute('data-id');
+      var gone = findRoutineById(p2, id2);
+      var goneText = gone ? gone.text : '루틴';
       state.routines[p2] = (state.routines[p2] || []).filter(function (x) { return x.id !== id2; });
+      if (ui.routineEditId === id2) ui.routineEditId = null;
       touch(); renderAll();
+      toast('🗑️ ' + goneText + ' · 루틴을 삭제했어요');
       break;
     }
+    case 'routine-add-open':
+      openRoutineEditor(null);
+      break;
+    case 'routine-edit':
+      openRoutineEditor({ period: el.getAttribute('data-period'), id: el.getAttribute('data-id') });
+      break;
+    case 'event-edit':
+      openEventEditor(el.getAttribute('data-id'));
+      break;
+    case 'plan-add-open':
+      resetPlanForm();
+      scrollToEl($('#planFormCard'));
+      toast('새 숙제 계획을 적어 주세요');
+      break;
+    case 'plan-edit':
+      openPlanEditor(el.getAttribute('data-id'));
+      break;
+    case 'plan-edit-cancel':
+      resetPlanForm();
+      renderHomework();
+      toast('수정을 취소했어요');
+      break;
     case 'hw-toggle': {
       var planId = el.getAttribute('data-plan');
       var dateStr = el.getAttribute('data-date') || todayISO();
@@ -4443,9 +4605,11 @@ document.addEventListener('click', function (e) {
     }
     case 'plan-del': {
       var pid = el.getAttribute('data-id');
+      var pGone = findPlanById(pid);
       state.plans = state.plans.filter(function (p) { return p.id !== pid; });
       state.supplements = state.supplements.filter(function (s) { return s.planId !== pid; });
-      touch(); renderAll(); toast('계획을 삭제했어요');
+      if (ui.planEditId === pid) resetPlanForm();
+      touch(); renderAll(); toast('🗑️ ' + (pGone ? pGone.book : '계획') + ' · 숙제 계획을 삭제했어요');
       break;
     }
     case 'supp-toggle': {
@@ -4616,11 +4780,11 @@ document.addEventListener('click', function (e) {
       renderHomeSchedule();
       break;
     case 'home-ev-open': {
+      resetEventForm();
       var hed = $('#homeEvDate');
       if (hed) hed.value = ui.homeCalSel || todayISO();
-      var het = $('#homeEvTitle');
-      if (het) het.value = '';
       openModal('homeEventModal');
+      var het = $('#homeEvTitle');
       if (het) setTimeout(function () { try { het.focus(); } catch (e) { } }, 120);
       break;
     }
@@ -4659,8 +4823,9 @@ document.addEventListener('click', function (e) {
     case 'event-del': {
       var eid = el.getAttribute('data-id');
       state.events = state.events.filter(function (x) { return x.id !== eid; });
+      if (ui.eventEditId === eid) ui.eventEditId = null;
       touch(); renderAll();
-      toast('일정을 지웠어요');
+      toast('🗑️ 일정을 삭제했어요');
       break;
     }
     case 'parent-off':
@@ -4682,6 +4847,102 @@ function findRoutineText(period, id) {
   var items = state.routines[period] || [];
   for (var i = 0; i < items.length; i++) if (items[i].id === id) return items[i].text;
   return '루틴';
+}
+
+/* ---------- 일정 수정 모달 ---------- */
+function scrollToEl(el) {
+  if (!el || !el.scrollIntoView) return;
+  try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { }
+}
+
+function resetEventForm() {
+  ui.eventEditId = null;
+  var d = $('#homeEvDate');
+  if (d) d.value = ui.homeCalSel || todayISO();
+  var w = $('#homeEvWho');
+  if (w) w.value = 'family';
+  var t = $('#homeEvTitle');
+  if (t) t.value = '';
+  var h = $('#hevTitle');
+  if (h) h.textContent = '📅 일정 추가';
+  var sub = $('#hevSub');
+  if (sub) sub.textContent = '넣은 일정은 가족 모두의 홈 화면에 바로 보여요.';
+  var sb = $('#hevSubmit');
+  if (sb) sb.textContent = '일정 저장';
+}
+
+function openEventEditor(id) {
+  var ev = findEventById(id);
+  if (!ev) { toast('일정을 찾지 못했어요.'); return; }
+  ui.eventEditId = ev.id;
+  var d = $('#homeEvDate');
+  if (d) d.value = ev.date;
+  var w = $('#homeEvWho');
+  if (w) w.value = ev.who || ev.cat || 'family';
+  var t = $('#homeEvTitle');
+  if (t) t.value = ev.title;
+  var h = $('#hevTitle');
+  if (h) h.textContent = '📅 일정 수정';
+  var sub = $('#hevSub');
+  if (sub) sub.textContent = '바꾼 날짜 · 사람 · 이름은 홈과 달력에 바로 반영돼요.';
+  var sb = $('#hevSubmit');
+  if (sb) sb.textContent = '수정 저장';
+  openModal('homeEventModal');
+  if (t) setTimeout(function () { try { t.focus(); t.select(); } catch (e) { } }, 120);
+}
+
+/* ---------- 루틴 추가 · 수정 모달 ---------- */
+function openRoutineEditor(ref) {
+  var period = (ui.period || currentPeriod());
+  var text = '';
+  var id = null;
+  if (ref && ref.id) {
+    var found = findRoutineById(ref.period, ref.id);
+    if (!found) { toast('루틴을 찾지 못했어요.'); return; }
+    id = found.id;
+    period = ref.period;
+    text = found.text;
+  }
+  ui.routineEditId = id;
+  var input = $('#routineModalText');
+  if (input) input.value = text;
+  var sel = $('#routineModalPeriod');
+  if (sel) sel.value = period;
+  var h = $('#rmTitle');
+  if (h) h.textContent = id ? '✏️ 루틴 수정' : '＋ 루틴 추가';
+  var sub = $('#rmSub');
+  if (sub) sub.textContent = id ? '이름과 시간대를 바꾸면 루틴 목록에 바로 반영돼요.' : '시간대를 고르면 그 시간 루틴 목록에 바로 보여요.';
+  var sb = $('#routineModalSubmit');
+  if (sb) sb.textContent = id ? '수정 저장' : '루틴 추가하기';
+  openModal('routineModal');
+  if (input) setTimeout(function () { try { input.focus(); input.select(); } catch (e) { } }, 120);
+}
+
+/* ---------- 주간 계획 추가 · 수정 ---------- */
+function resetPlanForm() {
+  ui.planEditId = null;
+  var lastEnd = 0;
+  (state.plans || []).forEach(function (p) { lastEnd = Math.max(lastEnd, Number(p.end) || 0); });
+  var s = $('#planSubject'); if (s) s.value = '';
+  var b = $('#planBook'); if (b) b.value = '';
+  var st = $('#planStart'); if (st) st.value = lastEnd ? lastEnd + 1 : 1;
+  var en = $('#planEnd'); if (en) en.value = lastEnd ? lastEnd + 1 : 1;
+  setPlanDays([1, 2, 3, 4, 5]);
+  renderPlanFormUI();
+}
+
+function openPlanEditor(id) {
+  var plan = findPlanById(id);
+  if (!plan) { toast('계획을 찾지 못했어요.'); return; }
+  ui.planEditId = plan.id;
+  var s = $('#planSubject'); if (s) s.value = plan.subject;
+  var b = $('#planBook'); if (b) b.value = plan.book;
+  var st = $('#planStart'); if (st) st.value = plan.start;
+  var en = $('#planEnd'); if (en) en.value = plan.end;
+  setPlanDays(plan.days);
+  renderHomework();
+  scrollToEl($('#planFormCard'));
+  toast('✏️ 고칠 내용을 바꾸고 저장을 눌러 주세요');
 }
 
 /* ---------- 먹이기 모달 ---------- */
@@ -4731,7 +4992,15 @@ document.addEventListener('submit', function (e) {
     var hDate = ($('#homeEvDate') || {}).value || ui.homeCalSel || todayISO();
     var hWho = ($('#homeEvWho') || {}).value || 'family';
     if (!hTitle) { toast('일정 이름을 적어 주세요.'); return; }
-    state.events.push({ id: uid(), date: hDate, title: hTitle, who: hWho, cat: hWho });
+    var hEdit = ui.eventEditId ? findEventById(ui.eventEditId) : null;
+    if (hEdit) {
+      hEdit.date = hDate;
+      hEdit.title = hTitle;
+      hEdit.who = hWho;
+      hEdit.cat = hWho;
+    } else {
+      state.events.push({ id: uid(), date: hDate, title: hTitle, who: hWho, cat: hWho });
+    }
     var hd = parseISO(hDate);
     ui.homeCalY = hd.getFullYear();
     ui.homeCalM = hd.getMonth();
@@ -4741,23 +5010,47 @@ document.addEventListener('submit', function (e) {
     ui.calSel = hDate;
     var homeEvDateEl = $('#homeEvDate');
     if (homeEvDateEl) homeEvDateEl.value = hDate;
+    var calEvDateEl = $('#evDate');
+    if (calEvDateEl) calEvDateEl.value = hDate;
     closeModal('homeEventModal');
+    resetEventForm();
     touch();
     renderAll();
-    toast('📅 ' + (hd.getMonth() + 1) + '월 ' + hd.getDate() + '일 일정을 넣었어요');
+    toast(hEdit ? '✏️ 일정을 수정했어요' : '📅 ' + (hd.getMonth() + 1) + '월 ' + hd.getDate() + '일 일정을 넣었어요');
     return;
   }
-  if (form.id === 'routineAddForm') {
+  if (form.id === 'routineModalForm') {
     e.preventDefault();
-    var input = $('#routineAddInput');
-    var period = ($('#routineAddPeriod') || {}).value || 'morning';
-    var text = (input ? input.value : '').trim();
-    if (!text) { toast('루틴 이름을 적어 주세요.'); return; }
-    state.routines[period].push({ id: uid(), text: text });
-    if (input) input.value = '';
+    var rText = (($('#routineModalText') || {}).value || '').trim();
+    var rPeriod = ($('#routineModalPeriod') || {}).value || 'morning';
+    if (!rText) { toast('루틴 이름을 적어 주세요.'); return; }
+    var rOldPeriod = null, rFound = null;
+    if (ui.routineEditId) {
+      PERIODS.forEach(function (p) {
+        ((state.routines || {})[p.id] || []).forEach(function (it) {
+          if (it.id === ui.routineEditId) { rFound = it; rOldPeriod = p.id; }
+        });
+      });
+    }
+    if (rFound) {
+      rFound.text = rText;
+      if (rOldPeriod !== rPeriod) {
+        state.routines[rOldPeriod] = (state.routines[rOldPeriod] || []).filter(function (x) { return x.id !== rFound.id; });
+        if (!state.routines[rPeriod]) state.routines[rPeriod] = [];
+        state.routines[rPeriod].push(rFound);
+      }
+      ui.routineEditId = null;
+      toast('✏️ 루틴을 수정했어요');
+    } else {
+      if (!state.routines[rPeriod]) state.routines[rPeriod] = [];
+      state.routines[rPeriod].push({ id: uid(), text: rText });
+      ui.routineEditId = null;
+      toast('＋ 루틴을 추가했어요');
+    }
+    ui.period = rPeriod;
+    closeModal('routineModal');
     touch();
     renderAll();
-    toast('루틴을 추가했어요');
     return;
   }
   if (form.id === 'hwPlanForm') {
@@ -4770,14 +5063,20 @@ document.addEventListener('submit', function (e) {
     if (!subject || !book) { toast('과목과 교재 이름을 적어 주세요.'); return; }
     if (!start || !end || end < start) { toast('쪽수를 바르게 적어 주세요.'); return; }
     if (!days.length) { toast('학습 요일을 하나 이상 골라 주세요.'); return; }
-    state.plans.push({ id: uid(), subject: subject, book: book, start: start, end: end, days: days, created: Date.now() });
-    $('#planSubject').value = '';
-    $('#planBook').value = '';
-    $('#planStart').value = end + 1;
-    $('#planEnd').value = end + 1;
+    var pEdit = ui.planEditId ? findPlanById(ui.planEditId) : null;
+    if (pEdit) {
+      pEdit.subject = subject;
+      pEdit.book = book;
+      pEdit.start = start;
+      pEdit.end = end;
+      pEdit.days = days.slice();
+    } else {
+      state.plans.push({ id: uid(), subject: subject, book: book, start: start, end: end, days: days, created: Date.now() });
+    }
+    resetPlanForm();
     touch();
     renderAll();
-    toast('📚 주간 계획을 추가했어요! 오늘 몫이 자동으로 잡혀요');
+    toast(pEdit ? '✏️ 계획을 수정했어요. 오늘 몫도 새로 계산됐어요' : '📚 주간 계획을 추가했어요! 오늘 몫이 자동으로 잡혀요');
     return;
   }
   if (form.id === 'allowForm') {
@@ -5163,6 +5462,7 @@ function init() {
   loadWeatherCache();
   bindStatic();
   setDateDefaults();
+  resetPlanForm();
   syncHeaderVar();
   window.addEventListener('resize', syncHeaderVar);
   renderAll();
