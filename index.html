@@ -3485,6 +3485,16 @@ function pullRemote(cb) {
       if (!rows || !rows.length) { pushRemote(); if (cb) cb(true); return; }
       var row = rows[0];
       var remoteTs = Date.parse(row.updated_at);
+      /* 예전(v1) 저장 상태에는 예시 기록이 들어 있다. 그런 행은 받아오지 않고,
+         이 기기의 깨끗한 상태로 덮어써서 다른 기기에서도 예시 기록이 돌아오지 않게 한다. */
+      if (Number((row.state || {}).v || 1) < 2) {
+        state.updatedAt = Date.now();
+        saveLocal();
+        syncBusy = false;
+        pushRemote();
+        if (cb) cb(true);
+        return;
+      }
       if (!isNaN(remoteTs) && remoteTs > (state.updatedAt || 0) + 1200) {
         adoptRemote(row.state, remoteTs);
         toast('☁️ 다른 기기의 기록을 불러왔어요');
