@@ -651,6 +651,163 @@ table.simple tr:last-child td{border-bottom:0}
   *{animation-duration:.001s!important;transition-duration:.001s!important}
 }
 
+/* ===== 공용 홈 화면 (2026-11 개편) ===== */
+.home-hero{margin-bottom:16px}
+.home-top{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:16px}
+.home-top > .card{display:flex;flex-direction:column;min-width:0}
+.home-cal-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);gap:16px;flex:1;min-width:0}
+.home-cal-mini{min-width:0}
+.mini-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:7px}
+.mini-head b{font-size:14.5px;font-weight:900;letter-spacing:-0.02em}
+.mini-head .btn{padding:4px 9px;border-radius:9px;font-size:14px;line-height:1.1}
+.cal-grid.mini{gap:3px}
+.cal-grid.mini .cal-dow{font-size:10px;padding:2px 0}
+.cal-grid.mini .cal-cell{min-height:34px;padding:3px 1px 2px;border-radius:9px;align-items:center;gap:2px;justify-content:flex-start}
+.cal-grid.mini .cal-num{font-size:11px;line-height:1.1}
+.cal-dots{display:flex;gap:2px;align-items:center;justify-content:center;height:6px}
+.cal-dot{width:4.5px;height:4.5px;border-radius:50%;background:#CDBDA9;display:inline-block}
+.cal-dot.ujin{background:#79A9DD}.cal-dot.eunwoo{background:#EC8FB2}.cal-dot.taeon{background:#E3B344}
+.cal-dot.family{background:#57B989}.cal-dot.supp{background:#A693F0}
+
+.home-sched{display:flex;flex-direction:column;min-width:0}
+.sched-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.sched-head-text{display:flex;align-items:baseline;gap:6px;min-width:0}
+.sched-head-text b{font-size:13.5px;font-weight:900;letter-spacing:-0.02em}
+.sched-list{display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:272px;padding-right:2px;min-width:0;flex:1}
+.sched-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:12px;background:#FCF9F4;border:1px solid #F3EADD;min-width:0;transition:.15s}
+.sched-item:hover{background:#FFFBF4}
+.sched-item.is-hl{background:#FFF4E6;border-color:#FFCDA5;box-shadow:0 3px 10px rgba(255,175,120,.18)}
+.sched-when{flex:0 0 auto;font-size:10.5px;font-weight:800;color:#A9673A;background:#FFF1E4;border-radius:7px;padding:3px 6px;min-width:34px;text-align:center;white-space:nowrap}
+.sched-body{flex:1;min-width:0}
+.sched-title{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.sched-meta{font-size:10px;color:var(--muted);font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sched-avs{display:flex;gap:1px;flex:0 0 auto;align-items:center}
+.sched-avs .art{width:16px!important;height:16px!important}
+.sched-del{font-size:11px;color:#D2C2B0;padding:2px 4px;border-radius:6px;flex:0 0 auto;line-height:1}
+.sched-del:hover{background:#FBEDE6;color:#C9795F}
+.sched-sel{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:5px 8px;border-radius:9px;background:#FFF8EF;border:1px dashed #F3DCC4;font-size:11px;font-weight:700;color:#8B7059;flex:0 0 auto}
+.sched-sel b{color:#A9673A}
+.sched-empty{padding:18px 14px;border-radius:13px;background:#FCF8F2;border:1px dashed #E9DCCB;color:var(--muted);font-size:11.5px;font-weight:600;line-height:1.7;text-align:center}
+.sched-empty b{color:var(--ink-soft)}
+
+/* 날씨 카드 */
+.home-weather{min-width:0}
+select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;max-width:118px;font-weight:700;background:#FEFCF9}
+.wx-body{display:flex;flex-direction:column;flex:1;min-width:0}
+.wx-now{display:flex;align-items:center;gap:11px;padding:2px 0 11px;min-width:0}
+.wx-ic{font-size:34px;line-height:1;flex:0 0 auto}
+.wx-num{display:flex;flex-direction:column;line-height:1}
+.wx-num b{font-size:31px;font-weight:900;letter-spacing:-0.04em;font-variant-numeric:tabular-nums}
+.wx-num small{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:4px;letter-spacing:0;white-space:nowrap}
+.wx-desc{min-width:0;margin-left:auto;text-align:right}
+.wx-desc b{font-size:12.5px;font-weight:800;display:block;line-height:1.3}
+.wx-desc small{font-size:10.5px;color:var(--muted);font-weight:600;display:block;margin-top:2px}
+.wx-days{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.wx-day{display:flex;flex-direction:column;gap:2px;border-radius:12px;background:#FCF9F4;border:1px solid #F2E9DC;padding:8px 9px;min-width:0}
+.wx-day .wd{font-size:10.5px;font-weight:900;color:#B3703C}
+.wx-day .wc{font-size:11px;font-weight:700;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wx-day .wt{font-size:13px;font-weight:900;font-variant-numeric:tabular-nums}
+.wx-day .wt small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.wx-day .wp{font-size:9.5px;font-weight:700;color:#8FA3B8}
+.wx-outfit{margin-top:9px;background:linear-gradient(135deg,#EAF4FF,#F5F9FF);border:1px solid #D8E8FA;border-radius:12px;padding:9px 11px;font-size:11.5px;font-weight:700;color:#35597F;line-height:1.55;display:flex;flex-direction:column;gap:2px}
+.wx-outfit b{font-size:10.5px;color:#5A83AC}
+.wx-foot{margin-top:auto;padding-top:8px;font-size:10px;color:#BFB1A2;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.wx-foot .link-btn{font-size:10.5px;padding:3px 8px}
+.wx-note{padding:20px 14px;border-radius:13px;background:#FCF8F2;border:1px dashed #E9DCCB;color:var(--muted);font-size:11.5px;font-weight:600;line-height:1.7;text-align:center}
+.wx-skel{height:96px;border-radius:13px;background:linear-gradient(100deg,#F7F1E8 30%,#FDF8F0 50%,#F7F1E8 70%);background-size:200% 100%;animation:wxShimmer 1.4s infinite}
+.wx-skel.line{height:38px}
+@keyframes wxShimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* 가족 카드 3개 */
+.home-family{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:14px;align-items:stretch}
+.fam-card .fam-block:last-child{margin-top:auto}
+.fam-card{position:relative;background:var(--card);border-radius:22px;border:1px solid rgba(240,230,216,.9);box-shadow:var(--shadow);padding:15px 15px 14px;display:flex;flex-direction:column;gap:11px;min-width:0;overflow:hidden}
+.fam-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+.fam-card.ujin::before{background:linear-gradient(90deg,#B9CDE9,#79A9DD)}
+.fam-card.eunwoo::before{background:linear-gradient(90deg,#FBD3E1,#EC8FB2)}
+.fam-card.taeon::before{background:linear-gradient(90deg,#FFE6B0,#E3B344)}
+.fam-head{display:flex;align-items:center;gap:9px;min-width:0}
+.fam-av{width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#FCF6EC;display:grid;place-items:center;padding:3px;box-shadow:inset 0 0 0 1px #F4E9D9}
+.fam-name{min-width:0;flex:1}
+.fam-name b{font-size:15px;font-weight:900;display:block;line-height:1.2;letter-spacing:-0.02em}
+.fam-name span{font-size:10.5px;color:var(--muted);font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fam-head .chip{flex:0 0 auto;font-size:10.5px;padding:4px 8px}
+.fam-block{min-width:0}
+.fam-block + .fam-block{border-top:1px dashed #F1E7D9;padding-top:10px}
+.fam-block-head{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:6px;min-width:0}
+.fam-block-head b{font-size:12px;font-weight:800;color:var(--ink-soft);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.fam-block-head .card-sub{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fam-block-head .link-btn{font-size:10.5px;padding:3px 8px}
+.fam-check{display:flex;flex-direction:column;gap:2px;max-height:192px;overflow-y:auto;padding-right:2px}
+.fam-check.short{max-height:132px}
+.fam-item-row{display:flex;align-items:center;gap:2px;min-width:0}
+.fam-item{display:flex;align-items:center;gap:7px;padding:4px 5px;border-radius:9px;text-align:left;min-width:0;flex:1;background:transparent;transition:.15s}
+.fam-item:hover{background:#FFFAF2}
+.fam-item .check{width:21px;height:21px;flex:0 0 21px;border-radius:7px;font-size:11px;border-width:1.5px}
+.fam-item-text{font-size:12px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.fam-item-text.done{color:var(--muted);text-decoration:line-through;text-decoration-color:#D8C9B7}
+.fam-item-tag{font-size:9px;font-weight:800;color:#B9A791;background:#F7F1E8;border-radius:5px;padding:2px 4px;flex:0 0 auto;line-height:1.2}
+.fam-item-del{font-size:10px;color:#DACBBA;padding:2px 3px;border-radius:5px;flex:0 0 auto;line-height:1}
+.fam-item-del:hover{color:#C9795F;background:#FBEDE6}
+.fam-add{display:flex;gap:5px;margin-top:6px}
+.fam-input{flex:1;min-width:0;padding:7px 9px;font-size:11.5px;border-radius:9px;border:1px solid #EADFCF;background:#FEFCF9;font-weight:600;outline:none;transition:.15s}
+.fam-input:focus{border-color:var(--peach-deep);background:#fff;box-shadow:0 0 0 3px rgba(255,185,142,.18)}
+.fam-add button{flex:0 0 auto;width:29px;height:29px;border-radius:9px;background:#FFF1E4;color:#A9673A;font-size:14px;font-weight:900;display:grid;place-items:center;transition:.15s}
+.fam-add button:hover{background:#FFE4CF}
+.fam-empty{padding:8px 9px;border-radius:10px;background:#FCF8F2;border:1px dashed #EADCCB;color:var(--muted);font-size:10.5px;font-weight:600;text-align:center;line-height:1.5}
+.fam-sched{display:flex;flex-direction:column;gap:4px}
+.fam-sched-row{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;min-width:0}
+.fam-sched-row .d{flex:0 0 auto;font-size:9px;font-weight:800;color:#A9673A;background:#FFF1E4;border-radius:5px;padding:2px 5px}
+.fam-sched-row .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fam-note{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.fam-note .chip{font-size:10.5px;padding:4px 8px;cursor:pointer}
+.fam-note .chip:hover{background:#FFF3E7;color:#A9673A}
+
+/* 빠른 이동 */
+.home-quick{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.home-quick .q{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:12px;font-weight:700;color:var(--muted);box-shadow:var(--shadow-sm);transition:.16s;white-space:nowrap}
+.home-quick .q b{color:var(--ink);font-weight:900;font-variant-numeric:tabular-nums}
+.home-quick .q:hover{transform:translateY(-1px);border-color:#E8D9C5;color:var(--ink-soft)}
+
+@media (max-width:1024px){
+  .home-top{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+  .home-cal-split{gap:12px}
+  .sched-list{max-height:252px}
+}
+@media (max-width:900px){
+  .home-top{grid-template-columns:1fr}
+  .home-cal-split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+  .sched-list{max-height:262px}
+  .home-weather .wx-days{grid-template-columns:1fr 1fr}
+}
+@media (min-width:761px){
+  .fam-card.taeon .fam-check{display:grid;grid-template-columns:1fr 1fr;gap:1px 4px;max-height:212px;align-content:start}
+  .fam-card.taeon .fam-check .fam-item-text{font-size:11.5px}
+}
+@media (max-width:760px){
+  .home-family{grid-template-columns:1fr;gap:12px}
+  .fam-check{max-height:none}
+  .fam-check.short{max-height:none}
+  .home-cal-split{grid-template-columns:1fr;gap:14px}
+  .sched-list{max-height:236px}
+  .cal-grid.mini .cal-cell{min-height:40px}
+}
+@media (max-width:560px){
+  .home-hero .hero-ball{display:none}
+  .home-hero .hero-side{gap:12px;justify-content:flex-start}
+  .home-hero .hero-ring{width:76px;height:76px}
+  .home-hero .hero-ring svg{width:76px;height:76px}
+  .home-hero .hero-ring .ring-label{font-size:9.5px;line-height:1.2}
+  .home-hero .hero-ring .ring-label b{font-size:15px}
+  .home-hero .hero-star{min-width:82px;padding:10px 12px}
+  .home-cal-split{gap:12px}
+  .wx-ic{font-size:30px}
+  .wx-num b{font-size:28px}
+  .home-quick{gap:6px}
+  .home-quick .q{padding:7px 11px;font-size:11.5px}
+  .cal-grid.mini .cal-cell{min-height:36px}
+}
+
 </style>
 </head>
 <body>
@@ -702,19 +859,19 @@ table.simple tr:last-child td{border-bottom:0}
   <main id="main">
     <!-- ============ 홈 ============ -->
     <section class="view is-active" id="view-home">
-      <div class="hero card">
+      <div class="hero card home-hero">
         <div class="hero-ball" aria-hidden="true">
           <svg viewBox="0 0 64 64">
             <circle cx="32" cy="32" r="27" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3"></circle>
             <path d="M5 32a27 27 0 0 1 54 0Z" fill="#EE5B5B"></path>
             <rect x="5" y="29" width="54" height="6" fill="#4A3F35"></rect>
-            <circle cx="32" cy="32" r="8" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3"></circle>
+            <circle cx="32" cy="32" r="8.6" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3"></circle>
           </svg>
         </div>
         <div class="hero-main">
           <span class="hero-eyebrow" id="heroGreeting">좋은 아침이에요</span>
-          <h2 id="heroTitle">오늘도 화이팅, 태온아!</h2>
-          <p class="hero-sub" id="heroSub">오늘의 루틴과 숙제를 확인해 보세요.</p>
+          <h2 id="heroTitle">우리 가족 공용 홈</h2>
+          <p class="hero-sub" id="heroSub">가족 일정과 날씨, 모두의 진행 상황을 한눈에 봐요.</p>
           <div class="hero-chips" id="heroChips"></div>
         </div>
         <div class="hero-side">
@@ -723,79 +880,48 @@ table.simple tr:last-child td{border-bottom:0}
         </div>
       </div>
 
-      <div class="grid">
-        <div class="card">
+      <!-- 1행: 공용 달력·일정 | 오늘·내일 날씨 -->
+      <div class="home-top">
+        <div class="card home-cal-card">
           <div class="card-head">
-            <div class="card-title"><span class="ico">✅</span>오늘의 루틴</div>
-            <button class="link-btn" data-go="routine">전체 보기</button>
+            <div class="card-title"><span class="ico">📅</span>가족 달력 · 일정</div>
+            <div class="btn-group">
+              <button class="btn ghost tiny" data-action="home-cal-today" type="button">오늘</button>
+              <button class="link-btn" data-go="calendar" type="button">달력 전체</button>
+            </div>
           </div>
-          <div id="homeRoutine"></div>
+          <div class="home-cal-split">
+            <div class="home-cal-mini">
+              <div class="mini-head">
+                <button class="btn ghost tiny" data-action="home-cal-prev" type="button" aria-label="이전 달">‹</button>
+                <b id="homeCalMonth">2026년 11월</b>
+                <button class="btn ghost tiny" data-action="home-cal-next" type="button" aria-label="다음 달">›</button>
+              </div>
+              <div class="cal-grid mini" id="homeCalGrid"></div>
+            </div>
+            <div class="home-sched">
+              <div class="sched-head">
+                <div class="sched-head-text"><b>오늘부터 7일</b><span class="card-sub" id="homeSchedCount"></span></div>
+                <button class="link-btn" data-action="home-ev-open" type="button">＋ 일정 추가</button>
+              </div>
+              <div class="sched-list" id="homeSchedList"></div>
+            </div>
+          </div>
         </div>
 
-        <div class="card">
+        <div class="card home-weather">
           <div class="card-head">
-            <div class="card-title"><span class="ico">📚</span>오늘의 숙제</div>
-            <button class="link-btn" data-go="homework">전체 보기</button>
+            <div class="card-title"><span class="ico">🌤️</span>오늘·내일 날씨</div>
+            <select class="input mini" id="weatherLoc" aria-label="날씨 지역"></select>
           </div>
-          <div id="homeHomework"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">⚡</span>우리 포켓몬</div>
-            <button class="link-btn" data-go="pet">키우러 가기</button>
-          </div>
-          <div id="homePet"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">⏱️</span>집중 타이머</div>
-            <button class="link-btn" data-go="timer">타이머 열기</button>
-          </div>
-          <div id="homeTimer"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">💌</span>엄마 확인 대기</div>
-            <span class="card-sub" id="homeApprovalCount"></span>
-          </div>
-          <div id="homeApprovals"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">📊</span>이번 주 학습</div>
-            <button class="link-btn" data-go="stats">통계</button>
-          </div>
-          <div id="homeStats"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">📅</span>다가오는 일정</div>
-            <button class="link-btn" data-go="calendar">달력</button>
-          </div>
-          <div id="homeEvents"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">📮</span>가족 우체통</div>
-            <button class="link-btn" data-go="mail">쪽지 보기</button>
-          </div>
-          <div id="homeMail"></div>
-        </div>
-
-        <div class="card grid-wide">
-          <div class="card-head">
-            <div class="card-title"><span class="ico">👨‍👩‍👦</span>우리 가족</div>
-            <span class="card-sub">태온이를 누르면 키·체중 기록이 열려요</span>
-          </div>
-          <div class="row wrap" id="homeFamily" style="gap:12px"></div>
+          <div id="homeWeather" class="wx-body"></div>
         </div>
       </div>
+
+      <!-- 2행: 가족 3명 카드 -->
+      <div class="home-family" id="homeFamilyCards"></div>
+
+      <div class="home-quick" id="homeQuick"></div>
     </section>
 
     <!-- ============ 루틴 ============ -->
@@ -1355,6 +1481,34 @@ table.simple tr:last-child td{border-bottom:0}
 </div>
 
 <!-- ============ 모달 ============ -->
+<div class="modal-root" id="homeEventModal">
+  <div class="modal-backdrop" data-close="homeEventModal"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hevTitle">
+    <div class="modal-head">
+      <div>
+        <h3 id="hevTitle">📅 일정 추가</h3>
+        <p>넣은 일정은 가족 모두의 홈 화면에 바로 보여요.</p>
+      </div>
+      <button class="modal-close" type="button" data-close="homeEventModal">✕</button>
+    </div>
+    <form id="homeEventForm">
+      <div class="form-grid">
+        <div class="field"><label>날짜</label><input class="input" id="homeEvDate" type="date"></div>
+        <div class="field"><label>누구</label>
+          <select class="input" id="homeEvWho">
+            <option value="family">온 가족</option>
+            <option value="ujin">우진</option>
+            <option value="eunwoo">은우</option>
+            <option value="taeon">태온</option>
+          </select>
+        </div>
+      </div>
+      <div class="field mt10"><label>일정</label><input class="input" id="homeEvTitle" placeholder="예: 태온이 치과" maxlength="30" autocomplete="off"></div>
+      <button class="btn primary wide mt14" type="submit">일정 저장</button>
+    </form>
+  </div>
+</div>
+
 <div class="modal-root" id="pinModal">
   <div class="modal-backdrop" data-close="pinModal"></div>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
@@ -1785,6 +1939,10 @@ function seedState() {
     reading: [],
     growth: [],
     events: [],
+    /* 공용 홈: 가족별 할 일 · 미션 (우진/은우/태온) — 비어 있는 상태로 시작 */
+    familyTodos: { ujin: [], eunwoo: [], taeon: [] },
+    /* 공용 홈: 날씨 지역 프리셋 id (기본 서울 마포구) */
+    weatherLocation: 'mapo',
     game: {
       purpose: '누가 먼저 씻을까?',
       who: { ujin: true, eunwoo: true, taeon: true },
@@ -1807,6 +1965,7 @@ function carryOverSettings(fresh, old) {
   }
   if (/^[0-9]{4}$/.test(String(old.parentPin || ''))) fresh.parentPin = String(old.parentPin);
   if (MEMBER_KEYS.indexOf(old.viewer) >= 0) fresh.viewer = old.viewer;
+  if (typeof old.weatherLocation === 'string' && old.weatherLocation) fresh.weatherLocation = old.weatherLocation;
   var weekly = Number(old.allowance && old.allowance.weekly);
   if (weekly > 0) fresh.allowance.weekly = weekly;
   if (old.game && old.game.who && typeof old.game.who === 'object') {
@@ -1832,6 +1991,9 @@ var ui = {
   calY: new Date().getFullYear(),
   calM: new Date().getMonth(),
   calSel: todayISO(),
+  homeCalY: new Date().getFullYear(),
+  homeCalM: new Date().getMonth(),
+  homeCalSel: todayISO(),
   decorate: false,
   gameSpinning: false,
   wheelRot: 0
@@ -2261,13 +2423,454 @@ function renderChrome() {
   });
 }
 
-/* ---------- 홈 ---------- */
+/* ---------- 공용 홈 ---------- */
 function greetingText() {
   var h = new Date().getHours();
   if (h < 6) return '늦은 밤이에요';
   if (h < 12) return '좋은 아침이에요';
   if (h < 18) return '즐거운 오후예요';
   return '포근한 저녁이에요';
+}
+
+/* --- 홈 달력 --- */
+function homeCalShift(delta) {
+  var d = new Date(ui.homeCalY, ui.homeCalM + delta, 1);
+  ui.homeCalY = d.getFullYear();
+  ui.homeCalM = d.getMonth();
+  renderHomeCal();
+}
+
+function renderHomeCal() {
+  var y = ui.homeCalY, m = ui.homeCalM;
+  var lab = $('#homeCalMonth');
+  if (lab) lab.textContent = y + '년 ' + (m + 1) + '월';
+  var grid = $('#homeCalGrid');
+  if (!grid) return;
+  var first = new Date(y, m, 1);
+  var start = addDays(first, -first.getDay());
+  var today = todayISO();
+  var html = ['일', '월', '화', '수', '목', '금', '토'].map(function (w, i) {
+    return '<div class="cal-dow ' + (i === 0 ? 'sun' : (i === 6 ? 'sat' : '')) + '">' + w + '</div>';
+  }).join('');
+  for (var i = 0; i < 42; i++) {
+    var d = addDays(start, i), ds = isoDate(d);
+    var evs = eventsOn(ds);
+    var supps = pendingSupplements(ds);
+    var cats = [];
+    evs.forEach(function (e) {
+      var c = e.cat || e.who || 'family';
+      if (cats.indexOf(c) < 0) cats.push(c);
+    });
+    if (supps.length && cats.indexOf('supp') < 0) cats.push('supp');
+    var dots = cats.slice(0, 3).map(function (c) { return '<i class="cal-dot ' + c + '"></i>'; }).join('');
+    var cnt = evs.length + supps.length;
+    html += '<button class="cal-cell ' + (d.getMonth() !== m ? 'other ' : '') +
+      (d.getDay() === 0 ? 'sun ' : '') + (d.getDay() === 6 ? 'sat ' : '') +
+      (ds === today ? 'is-today ' : '') + (ds === ui.homeCalSel ? 'is-selected' : '') +
+      '" data-action="home-cal-day" data-date="' + ds + '" type="button" aria-label="' +
+      korDate(d, true) + (cnt ? ' 일정 ' + cnt + '개' : ' 일정 없음') + '">' +
+      '<span class="cal-num">' + d.getDate() + '</span>' +
+      '<span class="cal-dots">' + dots + '</span></button>';
+  }
+  grid.innerHTML = html;
+}
+
+/* --- 홈 다가오는 일정 --- */
+function homeScheduleItems() {
+  var today = todayISO();
+  var end = isoDate(addDays(parseISO(today), 6));
+  var out = [];
+  (state.events || []).forEach(function (e) {
+    if (e.date >= today && e.date <= end) {
+      out.push({ kind: 'event', date: e.date, title: e.title, who: e.who || e.cat || 'family', id: e.id });
+    }
+  });
+  (state.supplements || []).forEach(function (s) {
+    if (!s.done && s.date >= today && s.date <= end) {
+      out.push({ kind: 'supp', date: s.date, title: '보충 · ' + s.label, who: '', id: s.id });
+    }
+  });
+  out.sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+  return out;
+}
+
+function schedAvatars(who) {
+  var keys = (!who || who === 'family') ? MEMBER_KEYS : [who];
+  return '<span class="sched-avs">' + keys.map(function (k) {
+    return FAMILY[k] ? avatarHTML(k, 16) : '';
+  }).join('') + '</span>';
+}
+
+function renderHomeSchedule() {
+  var el = $('#homeSchedList');
+  if (!el) return;
+  var today = todayISO();
+  var sel = ui.homeCalSel || today;
+  var items = homeScheduleItems();
+  var cntEl = $('#homeSchedCount');
+  if (cntEl) cntEl.textContent = items.length ? items.length + '개' : '일정 없음';
+  var head = '';
+  if (sel !== today) {
+    var selEvs = state.events.filter(function (e) { return e.date === sel; });
+    head = '<div class="sched-sel"><span>선택한 날 <b>' + korDate(parseISO(sel), true) + '</b> · 일정 ' + selEvs.length + '개</span>' +
+      '<button class="link-btn" data-action="home-cal-today" type="button">7일 보기</button></div>';
+  }
+  if (!items.length) {
+    el.innerHTML = head + '<div class="sched-empty">🌤️ 가까운 7일 안에 잡힌 일정이 없어요.<br><b>＋ 일정 추가</b>로 가족 일정을 넣어 보세요.</div>';
+    return;
+  }
+  el.innerHTML = head + items.map(function (x) {
+    var dd = parseISO(x.date);
+    return '<div class="sched-item' + (x.date === sel ? ' is-hl' : '') + '">' +
+      '<span class="sched-when">' + ddayLabel(x.date) + '</span>' +
+      '<div class="sched-body">' +
+      '<div class="sched-title">' + esc(x.title) + '</div>' +
+      '<div class="sched-meta">' + korDate(dd) + ' (' + DOW[dd.getDay()] + ')' + (x.kind === 'supp' ? ' · 주말 보충' : '') + '</div></div>' +
+      (x.who ? schedAvatars(x.who) : '') +
+      (x.kind === 'event' ? '<button class="sched-del" data-action="event-del" data-id="' + x.id + '" type="button" aria-label="일정 삭제">✕</button>' : '') +
+      '</div>';
+  }).join('');
+}
+
+/* --- 날씨 (Open-Meteo · 키 없이 무료) --- */
+var WEATHER_PLACES = [
+  { id: 'mapo', name: '서울 마포구', lat: 37.5663, lon: 126.9016 },
+  { id: 'junggu', name: '서울 중구', lat: 37.5636, lon: 126.9975 },
+  { id: 'gangnam', name: '서울 강남구', lat: 37.5172, lon: 127.0473 },
+  { id: 'songpa', name: '서울 송파구', lat: 37.5145, lon: 127.1059 },
+  { id: 'bundang', name: '성남 분당', lat: 37.3595, lon: 127.1052 },
+  { id: 'busan', name: '부산', lat: 35.1796, lon: 129.0756 },
+  { id: 'jeju', name: '제주', lat: 33.4996, lon: 126.5312 }
+];
+var WX_CACHE_KEY = 'taeon-weather-v1';
+var weatherData = null;
+var weatherTs = 0;
+var weatherBusy = false;
+var weatherErr = '';
+
+function weatherPlace(id) {
+  for (var i = 0; i < WEATHER_PLACES.length; i++) if (WEATHER_PLACES[i].id === id) return WEATHER_PLACES[i];
+  return WEATHER_PLACES[0];
+}
+
+function wmoInfo(code) {
+  code = Number(code);
+  var map = {
+    0: { t: '맑음', i: '☀️' }, 1: { t: '대체로 맑음', i: '🌤️' }, 2: { t: '구름 조금', i: '⛅' }, 3: { t: '흐림', i: '☁️' },
+    45: { t: '안개', i: '🌫️' }, 48: { t: '안개', i: '🌫️' },
+    51: { t: '약한 이슬비', i: '🌦️' }, 53: { t: '이슬비', i: '🌦️' }, 55: { t: '이슬비', i: '🌦️' },
+    56: { t: '어는 이슬비', i: '🌧️' }, 57: { t: '어는 이슬비', i: '🌧️' },
+    61: { t: '약한 비', i: '🌧️' }, 63: { t: '비', i: '🌧️' }, 65: { t: '강한 비', i: '🌧️' },
+    66: { t: '어는 비', i: '🌧️' }, 67: { t: '어는 비', i: '🌧️' },
+    71: { t: '약한 눈', i: '🌨️' }, 73: { t: '눈', i: '🌨️' }, 75: { t: '많은 눈', i: '🌨️' }, 77: { t: '눈알갱이', i: '🌨️' },
+    80: { t: '약한 소나기', i: '🌦️' }, 81: { t: '소나기', i: '🌦️' }, 82: { t: '강한 소나기', i: '🌦️' },
+    85: { t: '눈 소나기', i: '🌨️' }, 86: { t: '눈 소나기', i: '🌨️' },
+    95: { t: '천둥번개', i: '⛈️' }, 96: { t: '천둥번개·우박', i: '⛈️' }, 99: { t: '천둥번개·우박', i: '⛈️' }
+  };
+  var v = map[code] || { t: '구름 많음', i: '☁️' };
+  v.rain = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
+  v.snow = (code >= 71 && code <= 77) || code === 85 || code === 86;
+  return v;
+}
+
+function outfitAdvice(feels, code, pop) {
+  feels = Number(feels);
+  pop = Number(pop || 0);
+  var w = wmoInfo(code);
+  var base;
+  if (!isFinite(feels)) base = '가벼운 겉옷을 챙겨요';
+  else if (feels <= -3) base = '패딩에 목도리·장갑까지 단단히';
+  else if (feels <= 3) base = '두꺼운 코트나 패딩, 목도리 챙겨요';
+  else if (feels <= 8) base = '코트·가죽자켓에 니트를 입어요';
+  else if (feels <= 12) base = '자켓이나 두꺼운 가디건이 좋아요';
+  else if (feels <= 17) base = '가벼운 겉옷 한 겹이면 충분해요';
+  else if (feels <= 22) base = '긴팔 셔츠나 얇은 맨투맨이 좋아요';
+  else if (feels <= 27) base = '반팔에 얇은 겉옷을 챙겨요';
+  else base = '민소매·반팔로 시원하게';
+  var extra = '';
+  if (w.snow) extra = ' · 눈이 와요, 미끄러지지 않게 조심!';
+  else if (w.rain || pop >= 60) extra = ' · 우산을 꼭 챙기세요';
+  else if (pop >= 30) extra = ' · 우산을 챙기면 든든해요';
+  return base + extra;
+}
+
+function loadWeatherCache() {
+  try {
+    var raw = localStorage.getItem(WX_CACHE_KEY);
+    if (!raw) return;
+    var j = JSON.parse(raw);
+    if (j && j.data && j.data.loc === state.weatherLocation) {
+      weatherData = j.data;
+      weatherTs = Number(j.ts || 0);
+    }
+  } catch (e) { /* 캐시는 없어도 됨 */ }
+}
+
+function saveWeatherCache() {
+  if (!weatherData) return;
+  try {
+    localStorage.setItem(WX_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: weatherData }));
+  } catch (e) { /* 저장 실패는 조용히 넘어감 */ }
+}
+
+function loadWeather(force) {
+  if (weatherBusy) return;
+  if (!force && weatherData && weatherData.loc === state.weatherLocation && Date.now() - weatherTs < 15 * 60000) return;
+  var p = weatherPlace(state.weatherLocation);
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + p.lat + '&longitude=' + p.lon +
+    '&current=temperature_2m,apparent_temperature,weather_code' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&timezone=Asia%2FSeoul&forecast_days=2';
+  weatherBusy = true;
+  weatherErr = '';
+  renderWeather();
+  var ctrl = null, to = null;
+  try {
+    if (typeof AbortController !== 'undefined') ctrl = new AbortController();
+  } catch (e) { ctrl = null; }
+  if (ctrl) to = setTimeout(function () { try { ctrl.abort(); } catch (e) { } }, 12000);
+  fetch(url, ctrl ? { signal: ctrl.signal } : {})
+    .then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function (j) {
+      if (to) clearTimeout(to);
+      weatherBusy = false;
+      var cur = j.current || {}, dly = j.daily || {};
+      var days = (dly.time || []).map(function (ds, i) {
+        return {
+          date: ds,
+          code: (dly.weather_code || [])[i],
+          max: (dly.temperature_2m_max || [])[i],
+          min: (dly.temperature_2m_min || [])[i],
+          pop: (dly.precipitation_probability_max || [])[i]
+        };
+      });
+      weatherData = {
+        loc: state.weatherLocation,
+        place: p.name,
+        cur: { temp: cur.temperature_2m, feels: cur.apparent_temperature, code: cur.weather_code },
+        days: days,
+        ts: Date.now()
+      };
+      weatherTs = Date.now();
+      weatherErr = '';
+      saveWeatherCache();
+      renderWeather();
+    })
+    .catch(function () {
+      if (to) clearTimeout(to);
+      weatherBusy = false;
+      weatherErr = 'offline';
+      renderWeather();
+    });
+}
+
+function wxChipText() {
+  if (!weatherData || weatherData.loc !== state.weatherLocation || !weatherData.cur) return '';
+  var c = weatherData.cur;
+  if (c.temp === null || c.temp === undefined) return '';
+  var w = wmoInfo(c.code);
+  return w.i + ' ' + Math.round(Number(c.temp)) + '° ' + w.t;
+}
+
+function renderWeather() {
+  var sel = $('#weatherLoc');
+  if (sel) {
+    if (!sel.options.length) {
+      sel.innerHTML = WEATHER_PLACES.map(function (p) {
+        return '<option value="' + p.id + '">' + esc(p.name) + '</option>';
+      }).join('');
+    }
+    if (sel.value !== state.weatherLocation) sel.value = state.weatherLocation;
+  }
+  var el = $('#homeWeather');
+  if (!el) return;
+  var d = (weatherData && weatherData.loc === state.weatherLocation) ? weatherData : null;
+  if (!d) {
+    if (weatherBusy) {
+      el.innerHTML = '<div class="wx-skel"></div><div class="wx-skel line mt10"></div>';
+    } else {
+      el.innerHTML = '<div class="wx-note">📡 날씨를 불러오지 못했어요.<br>인터넷이 연결되면 다시 시도할게요.' +
+        '<button class="btn ghost tiny mt10" data-action="wx-retry" type="button">다시 시도</button></div>';
+    }
+    return;
+  }
+  var cur = d.cur || {}, days = d.days || [];
+  var t0 = days[0] || {}, t1 = days[1] || {};
+  var ci = wmoInfo(cur.code), c0 = wmoInfo(t0.code), c1 = wmoInfo(t1.code);
+  var feels = Math.round(Number(cur.feels));
+  var temp = Math.round(Number(cur.temp));
+  var advice = outfitAdvice(cur.feels, t0.code, t0.pop);
+  var upd = new Date(d.ts || weatherTs || Date.now());
+  var stale = (Date.now() - (d.ts || 0)) > 60 * 60000;
+  var num = function (v) { return (v === null || v === undefined || !isFinite(Number(v))) ? '–' : Math.round(Number(v)) + '°'; };
+  el.innerHTML =
+    '<div class="wx-now">' +
+    '<span class="wx-ic" aria-hidden="true">' + ci.i + '</span>' +
+    '<div class="wx-num"><b>' + (isFinite(temp) ? temp + '°' : '–') + '</b><small>체감 ' + (isFinite(feels) ? feels + '°' : '–') + '</small></div>' +
+    '<div class="wx-desc"><b>' + ci.t + '</b><small>' + esc(d.place || '') + '</small></div>' +
+    '</div>' +
+    '<div class="wx-days">' +
+    '<div class="wx-day"><span class="wd">오늘</span><span class="wc">' + c0.i + ' ' + c0.t + '</span>' +
+    '<span class="wt">' + num(t0.max) + ' <small>/ ' + num(t0.min) + '</small></span>' +
+    '<span class="wp">강수 ' + (t0.pop === null || t0.pop === undefined ? '–' : Math.round(Number(t0.pop)) + '%') + '</span></div>' +
+    '<div class="wx-day"><span class="wd">내일</span><span class="wc">' + c1.i + ' ' + c1.t + '</span>' +
+    '<span class="wt">' + num(t1.max) + ' <small>/ ' + num(t1.min) + '</small></span>' +
+    '<span class="wp">강수 ' + (t1.pop === null || t1.pop === undefined ? '–' : Math.round(Number(t1.pop)) + '%') + '</span></div>' +
+    '</div>' +
+    '<div class="wx-outfit"><b>🧥 옷차림 추천</b><span>' + advice + '</span></div>' +
+    '<div class="wx-foot"><span>Open-Meteo · ' + korTime(upd.getTime()) + ' 기준' + (stale ? ' (저장된 값)' : '') + '</span>' +
+    '<button class="link-btn" data-action="wx-retry" type="button">새로고침</button></div>';
+}
+
+/* --- 가족 카드 --- */
+function famTodos(key) {
+  if (!state.familyTodos || typeof state.familyTodos !== 'object') state.familyTodos = { ujin: [], eunwoo: [], taeon: [] };
+  if (!Array.isArray(state.familyTodos[key])) state.familyTodos[key] = [];
+  return state.familyTodos[key];
+}
+
+function famTodoStats(key) {
+  var list = famTodos(key);
+  var done = list.filter(function (t) { return t.done; }).length;
+  return { total: list.length, done: done, left: list.length - done };
+}
+
+function famTodoRow(key, t) {
+  return '<div class="fam-item-row">' +
+    '<button class="fam-item" data-action="fam-todo-toggle" data-who="' + key + '" data-id="' + t.id + '" type="button">' +
+    '<span class="check ' + (t.done ? 'on' : '') + '">' + (t.done ? '✓' : '') + '</span>' +
+    '<span class="fam-item-text ' + (t.done ? 'done' : '') + '">' + esc(t.text) + '</span>' +
+    '</button>' +
+    '<button class="fam-item-del" data-action="fam-todo-del" data-who="' + key + '" data-id="' + t.id + '" type="button" aria-label="할 일 삭제">✕</button>' +
+    '</div>';
+}
+
+function famAddForm(key) {
+  var m = FAMILY[key];
+  return '<form class="fam-add" data-fam-todo="' + key + '">' +
+    '<input class="fam-input" type="text" maxlength="40" autocomplete="off" placeholder="' +
+    (key === 'taeon' ? '할 일 · 준비물 적기' : m.name + ' 할 일 추가') + '" aria-label="' + m.name + ' 할 일 추가">' +
+    '<button type="submit" aria-label="할 일 추가">＋</button></form>';
+}
+
+function renderFamilyCards() {
+  var el = $('#homeFamilyCards');
+  if (!el) return;
+  /* 30초마다 다시 그려도 입력 중인 칸의 글자가 사라지지 않게 */
+  var active = document.activeElement;
+  var keep = null;
+  if (active && el.contains(active) && active.classList && active.classList.contains('fam-input')) {
+    var kf = active.closest('[data-fam-todo]');
+    keep = {
+      who: kf ? kf.getAttribute('data-fam-todo') : '',
+      value: active.value,
+      pos: active.selectionStart || 0
+    };
+  }
+  var today = todayISO();
+  var now = new Date();
+  el.innerHTML = MEMBER_KEYS.map(function (key) {
+    var m = FAMILY[key];
+    var todos = famTodos(key);
+    var st = famTodoStats(key);
+    var badge = '';
+    var blocks = '';
+
+    if (key === 'taeon') {
+      var rStats = routineStats(today);
+      var hw = homeworkOn(now);
+      var hwDone = hw.filter(function (x) { return x.done; }).length;
+      var all = rStats.total + hw.length;
+      var pct = pctOf(rStats.done + hwDone, all);
+      badge = '<span class="chip butter">오늘 ' + pct + '%</span>';
+      blocks += '<div class="fam-block">' +
+        '<div class="fam-block-head"><b>✅ 오늘 루틴 · 숙제</b>' +
+        '<span class="card-sub">' + (rStats.done + hwDone) + '/' + all + ' · 체크하면 ★</span></div>' +
+        bar(pct, 'mint') +
+        '<div class="fam-check mt10">' +
+        PERIODS.map(function (p) {
+          return routineItems(p.id).map(function (it) {
+            var on = isRoutineDone(today, p.id, it.id);
+            return '<button class="fam-item" data-action="routine-toggle" data-period="' + p.id + '" data-id="' + it.id + '" type="button">' +
+              '<span class="check ' + (on ? 'on' : '') + '">' + (on ? '✓' : '') + '</span>' +
+              '<span class="fam-item-text ' + (on ? 'done' : '') + '">' + esc(it.text) + '</span>' +
+              '<span class="fam-item-tag">' + p.emoji + '</span></button>';
+          }).join('');
+        }).join('') +
+        hw.map(function (x) {
+          return '<button class="fam-item" data-action="hw-toggle" data-plan="' + x.plan.id + '" data-date="' + x.date + '" type="button">' +
+            '<span class="check ' + (x.done ? 'on' : '') + '">' + (x.done ? '✓' : '') + '</span>' +
+            '<span class="fam-item-text ' + (x.done ? 'done' : '') + '">' + esc(x.plan.book) + ' ' + pageLabel(x.a) + '</span>' +
+            '<span class="fam-item-tag">숙제</span></button>';
+        }).join('') +
+        '</div></div>';
+    } else {
+      badge = '<span class="chip ' + (st.total && !st.left ? 'mint' : 'line') + '">' + st.done + '/' + st.total + ' 완료</span>';
+    }
+
+    blocks += '<div class="fam-block">' +
+      '<div class="fam-block-head"><b>📝 ' + (key === 'taeon' ? '내 할 일 · 준비물' : '할 일 · 미션') + '</b>' +
+      (st.done
+        ? '<button class="link-btn" data-action="fam-todo-clear" data-who="' + key + '" type="button">완료 지우기</button>'
+        : '<span class="card-sub">' + (st.left ? st.left + '개 남음' : '') + '</span>') +
+      '</div>' +
+      (todos.length
+        ? '<div class="fam-check' + (key === 'taeon' ? ' short' : '') + '">' + todos.map(function (t) { return famTodoRow(key, t); }).join('') + '</div>'
+        : '<div class="fam-empty">' + (key === 'taeon' ? '할 일이나 준비물을 적어 보세요.' : '할 일을 적어 두면 홈에서 바로 체크할 수 있어요.') + '</div>') +
+      famAddForm(key) +
+      '</div>';
+
+    var evs = (state.events || []).filter(function (e) {
+      return e.date === today && (e.who === key || e.who === 'family' || e.cat === key);
+    });
+    var unread = unreadTotal(key);
+    blocks += '<div class="fam-block">' +
+      '<div class="fam-block-head"><b>📌 오늘 일정 · 쪽지</b>' +
+      '<span class="card-sub">' + (unread ? '새 쪽지 ' + unread : '') + '</span></div>' +
+      (evs.length
+        ? '<div class="fam-sched">' + evs.slice(0, 3).map(function (e) {
+          var who = e.who === 'family' ? '가족' : (FAMILY[e.who] ? FAMILY[e.who].name : '가족');
+          return '<div class="fam-sched-row"><span class="d">' + esc(who) + '</span><span class="t">' + esc(e.title) + '</span></div>';
+        }).join('') + '</div>'
+        : '<div class="fam-empty">오늘은 따로 잡힌 일정이 없어요.</div>') +
+      '<div class="fam-note">' +
+      '<button class="chip line" data-go="mail" type="button">📮 ' + (unread ? '안 읽은 쪽지 ' + unread : '쪽지 보기') + '</button>' +
+      '<button class="chip line" data-go="calendar" type="button">📅 달력</button>' +
+      (key === 'taeon' ? '<button class="chip line" data-action="open-growth" type="button">📏 성장</button>' : '') +
+      '</div></div>';
+
+    return '<article class="fam-card ' + key + '">' +
+      '<header class="fam-head">' +
+      '<span class="fam-av">' + avatarHTML(key, 40) + '</span>' +
+      '<span class="fam-name"><b>' + m.name + '</b><span>' + m.role + ' · ' + m.monName + '</span></span>' +
+      badge + '</header>' + blocks + '</article>';
+  }).join('');
+  if (keep) {
+    var inp = el.querySelector('[data-fam-todo="' + keep.who + '"] .fam-input');
+    if (inp) {
+      inp.value = keep.value;
+      try {
+        inp.focus({ preventScroll: true });
+        inp.setSelectionRange(keep.pos, keep.pos);
+      } catch (e) { /* 포커스 복원은 선택 사항 */ }
+    }
+  }
+}
+
+function renderHomeQuick() {
+  var el = $('#homeQuick');
+  if (!el) return;
+  var st = petStage();
+  var pending = state.requests.filter(function (r) { return r.status === 'pending'; }).length;
+  var wk = weekSummary();
+  el.innerHTML =
+    '<button class="q" data-go="timer" type="button">⏱️ 집중 타이머 <b>' + fmtMMSS(timerRemaining()) + '</b></button>' +
+    '<button class="q" data-go="pet" type="button">🐣 ' + esc(state.pet.name) + ' <b>' + st.lv + '단계</b></button>' +
+    '<button class="q" data-go="timer" type="button">💌 확인 대기 <b>' + pending + '건</b></button>' +
+    '<button class="q" data-go="stats" type="button">📊 이번 주 <b>' + wk.overall + '%</b></button>';
 }
 
 function renderHome() {
@@ -2277,22 +2880,23 @@ function renderHome() {
   var hwDone = hw.filter(function (x) { return x.done; }).length;
   var pending = state.requests.filter(function (r) { return r.status === 'pending'; });
   var todayPct = pctOf(rStats.done + hwDone, rStats.total + hw.length);
+  var sched = homeScheduleItems();
 
   var el;
   el = $('#heroGreeting'); if (el) el.textContent = greetingText();
-  el = $('#heroTitle');
-  if (el) el.textContent = state.viewer === 'taeon'
-    ? '오늘도 화이팅, 태온아!'
-    : viewerName() + '님, 오늘도 수고 많아요!';
+  el = $('#heroTitle'); if (el) el.textContent = '우리 가족 공용 홈';
   el = $('#heroSub');
-  if (el) el.textContent = now.getHours() < 12
-    ? '아침 루틴을 시작해 볼까요? 오늘 숙제는 ' + hw.length + '개예요.'
-    : '오늘 루틴 ' + rStats.done + '/' + rStats.total + ' · 숙제 ' + hwDone + '/' + hw.length + ' 를 해냈어요.';
+  if (el) {
+    el.textContent = '오늘 루틴 ' + rStats.done + '/' + rStats.total + ' · 숙제 ' + hwDone + '/' + hw.length +
+      ' · 가까운 일정 ' + sched.length + '개를 가족이 함께 봐요.';
+  }
 
   el = $('#heroChips');
   if (el) {
     var pm = periodMeta(currentPeriod());
+    var wx = wxChipText();
     el.innerHTML =
+      (wx ? '<span class="chip sky">' + wx + '</span>' : '') +
       '<span class="chip peach">' + pm.emoji + ' 지금은 ' + pm.label + ' 루틴</span>' +
       '<span class="chip mint">✅ 루틴 ' + rStats.done + '/' + rStats.total + '</span>' +
       '<span class="chip sky">📚 숙제 ' + hwDone + '/' + hw.length + '</span>' +
@@ -2305,151 +2909,11 @@ function renderHome() {
       '<div class="ring-label"><b>' + todayPct + '%</b>오늘의 달성</div>';
   }
 
-  /* 오늘의 루틴 */
-  el = $('#homeRoutine');
-  if (el) {
-    el.innerHTML = PERIODS.map(function (p) {
-      var items = routineItems(p.id);
-      var done = items.filter(function (i) { return isRoutineDone(todayISO(), p.id, i.id); }).length;
-      var pct = pctOf(done, items.length);
-      return '<div style="margin-bottom:11px">' +
-        '<div class="prog-row"><span>' + p.emoji + ' ' + p.label + ' 루틴</span><small>' + done + ' / ' + items.length + ' 완료</small></div>' +
-        bar(pct, p.id === 'afternoon' ? 'sky' : (p.id === 'evening' ? 'lav' : '')) +
-        '</div>';
-    }).join('') +
-      '<div class="row mt10" style="justify-content:space-between">' +
-      '<span class="chip ' + (rStats.done === rStats.total && rStats.total ? 'mint' : 'peach') + '">' +
-      (rStats.done === rStats.total && rStats.total ? '🎉 오늘 루틴 모두 완료!' : '★ 남은 루틴 ' + (rStats.total - rStats.done) + '개') + '</span>' +
-      '<button class="link-btn" data-action="go" data-view="routine" type="button">하러 가기</button></div>';
-  }
-
-  /* 오늘의 숙제 */
-  el = $('#homeHomework');
-  if (el) {
-    if (!hw.length) {
-      el.innerHTML = emptyBox('🌤️', '오늘은 계획된 숙제가 없어요.<br>여유로운 하루를 보내요!');
-    } else {
-      el.innerHTML = '<div class="stack">' + hw.map(function (x) {
-        return '<div class="item">' +
-          '<button class="check ' + (x.done ? 'on' : '') + '" data-action="hw-toggle" data-plan="' + x.plan.id + '" data-date="' + x.date + '" type="button" aria-label="숙제 완료">' + (x.done ? '✓' : '') + '</button>' +
-          '<div class="item-body"><div class="item-title ' + (x.done ? 'done' : '') + '">' + esc(x.plan.book) + ' ' + pageLabel(x.a) + '</div>' +
-          '<div class="item-meta">' + esc(x.plan.subject) + ' · 완료하면 ★+2</div></div>' +
-          '<span class="chip ' + (x.done ? 'mint' : 'line') + '">' + (x.done ? '완료' : '오늘 몫') + '</span>' +
-          '</div>';
-      }).join('') + '</div>';
-    }
-  }
-
-  /* 펫 */
-  el = $('#homePet');
-  if (el) {
-    var st = petStage();
-    el.innerHTML = '<div class="row" style="gap:14px">' +
-      '<div>' + stageArt(st, 58, { big: true }) + '</div>' +
-      '<div style="flex:1;min-width:0">' +
-      '<div class="row" style="justify-content:space-between"><b style="font-size:14px">' + esc(state.pet.name) + '</b>' +
-      '<span class="chip butter">' + st.lv + '단계 · ' + st.name + '</span></div>' +
-      '<div class="prog-row mt10"><span>EXP</span><small>' + state.pet.exp + ' / ' + (petNeed() || 'MAX') + '</small></div>' +
-      bar(petExpPct(), 'mint') + '</div></div>' +
-      '<div class="row mt14" style="justify-content:space-between">' +
-      '<span class="chip lav">🍬 보유 간식 ' + SNACKS.reduce(function (s, i) { return s + invCount(i.id); }, 0) + '개</span>' +
-      '<button class="link-btn" data-action="pet-quickfeed" type="button">간식 주기</button></div>';
-  }
-
-  /* 타이머 */
-  el = $('#homeTimer');
-  if (el) {
-    var rem = timerRemaining();
-    el.innerHTML = '<div class="row" style="justify-content:space-between;align-items:flex-end">' +
-      '<div><div style="font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1">' + fmtMMSS(rem) + '</div>' +
-      '<div class="card-sub">' + (state.timer.running ? '집중하는 중이에요 🔥' : (rem < state.timer.minutes * 60000 ? '잠시 멈춰 있어요' : '아직 시작 전이에요')) + '</div></div>' +
-      '<span class="chip ' + (pending.length ? 'butter' : 'line') + '">확인 대기 ' + pending.length + '</span></div>' +
-      '<button class="btn primary wide mt14" data-action="timer-quickstart" type="button">' + (state.timer.running ? '타이머 보기' : '25분 집중 시작') + '</button>';
-  }
-
-  /* 확인 대기 */
-  el = $('#homeApprovals');
-  var ac = $('#homeApprovalCount');
-  if (ac) ac.textContent = pending.length ? pending.length + '건 기다리는 중' : '대기 없음';
-  if (el) {
-    if (!pending.length) {
-      el.innerHTML = emptyBox('🌿', '확인할 요청이 없어요.<br>타이머를 끝내면 여기에 도착해요.');
-    } else {
-      el.innerHTML = '<div class="stack">' + pending.slice(0, 3).map(function (r) {
-        return '<div class="item">' +
-          '<div class="item-emoji">💌</div>' +
-          '<div class="item-body"><div class="item-title">' + (r.minutes > 0 ? r.minutes + '분 집중 완료' : '숙제 완료') + ' 확인 요청</div>' +
-          '<div class="item-meta">' + korTime(r.ts) + ' · 승인하면 ★+5</div></div>' +
-          (parentOn
-            ? '<button class="btn mint tiny" data-action="approve" data-id="' + r.id + '" type="button">승인</button>'
-            : '<span class="chip butter">대기</span>') +
-          '</div>';
-      }).join('') + '</div>';
-    }
-  }
-
-  /* 이번 주 학습 */
-  el = $('#homeStats');
-  if (el) {
-    var wk = weekSummary();
-    var dots = weekDates(new Date()).map(function (d) {
-      var ds = isoDate(d);
-      var isFuture = d > new Date();
-      var rs = routineStats(ds);
-      var dayHw = homeworkOn(d);
-      var doneHw = dayHw.filter(function (x) { return x.done; }).length;
-      var rate = pctOf(rs.done + doneHw, rs.total + dayHw.length);
-      var cls = isFuture ? 'gray' : (rate >= 80 ? 'green' : (rate > 0 ? '' : 'red'));
-      return '<span class="chip line" style="padding:5px 8px"><span class="dot ' + cls + '"></span>' + DOW[d.getDay()] + '</span>';
-    }).join('');
-    el.innerHTML = '<div class="row" style="justify-content:space-between;align-items:flex-end">' +
-      '<div><div style="font-size:28px;font-weight:900;line-height:1.1">' + wk.overall + '%</div>' +
-      '<div class="card-sub">이번 주 달성률</div></div>' +
-      '<span class="chip mint">루틴 ' + wk.routineDone + '/' + wk.routineTotal + '</span></div>' +
-      '<div class="row wrap mt14" style="gap:5px">' + dots + '</div>';
-  }
-
-  /* 일정 */
-  el = $('#homeEvents');
-  if (el) {
-    var ups = upcomingItems().slice(0, 3);
-    if (!ups.length) el.innerHTML = emptyBox('🗓️', '다가오는 일정이 없어요.');
-    else el.innerHTML = '<div class="stack">' + ups.map(upcomingRowHTML).join('') + '</div>';
-  }
-
-  /* 우체통 */
-  el = $('#homeMail');
-  if (el) {
-    var recent = [];
-    Object.keys(state.mail.rooms).forEach(function (r) {
-      roomMessages(r).forEach(function (m) { recent.push({ m: m, room: r }); });
-    });
-    recent.sort(function (a, b) { return b.m.ts - a.m.ts; });
-    if (!recent.length) el.innerHTML = emptyBox('📮', '아직 쪽지가 없어요.');
-    else el.innerHTML = '<div class="stack">' + recent.slice(0, 2).map(function (x) {
-      var f = FAMILY[x.m.from] || { name: '가족' };
-      return '<div class="item"><div class="item-emoji">' + avatarHTML(x.m.from, 26) + '</div>' +
-        '<div class="item-body"><div class="item-title">' + esc(x.m.text) + '</div>' +
-        '<div class="item-meta">' + f.name + ' · ' + relTime(x.m.ts) + ' · ' + (x.room === 'all' ? '전체 가족방' : FAMILY[x.room].name + ' 방') + '</div></div></div>';
-    }).join('') + '</div>';
-  }
-
-  /* 가족 */
-  el = $('#homeFamily');
-  if (el) {
-    el.innerHTML = MEMBER_KEYS.map(function (k) {
-      var m = FAMILY[k];
-      var isTaeon = k === 'taeon';
-      var tag = isTaeon ? 'button' : 'div';
-      var attrs = isTaeon ? ' type="button" data-action="open-growth" style="cursor:pointer"' : '';
-      return '<' + tag + attrs + ' class="row" style="gap:10px;background:' + (isTaeon ? '#FFF6E4' : '#FCF9F4') + ';border:1px solid ' + (isTaeon ? '#FFE3B8' : '#F2E9DC') + ';border-radius:16px;padding:10px 14px;min-width:150px">' +
-        '<div style="width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:#fff;box-shadow:var(--shadow-sm);padding:3px">' + avatarHTML(k, 40) + '</div>' +
-        '<div><div style="font-weight:800;font-size:14px">' + m.name + ' <small style="color:var(--muted);font-weight:700">' + m.age + '세</small></div>' +
-        '<div class="card-sub">' + m.role + '</div></div>' +
-        (isTaeon ? '<span class="chip butter" style="margin-left:auto">📏</span>' : '') +
-        '</' + tag + '>';
-    }).join('');
-  }
+  renderHomeCal();
+  renderHomeSchedule();
+  renderWeather();
+  renderFamilyCards();
+  renderHomeQuick();
 }
 
 /* ---------- 루틴 ---------- */
@@ -4122,6 +4586,68 @@ document.addEventListener('click', function (e) {
       if (evd) evd.value = ui.calSel;
       renderCalendar();
       break;
+    /* ---------- 공용 홈 ---------- */
+    case 'home-cal-prev':
+      homeCalShift(-1);
+      break;
+    case 'home-cal-next':
+      homeCalShift(1);
+      break;
+    case 'home-cal-today': {
+      var tn = new Date();
+      ui.homeCalY = tn.getFullYear();
+      ui.homeCalM = tn.getMonth();
+      ui.homeCalSel = todayISO();
+      renderHomeCal();
+      renderHomeSchedule();
+      break;
+    }
+    case 'home-cal-day':
+      ui.homeCalSel = el.getAttribute('data-date');
+      renderHomeCal();
+      renderHomeSchedule();
+      break;
+    case 'home-ev-open': {
+      var hed = $('#homeEvDate');
+      if (hed) hed.value = ui.homeCalSel || todayISO();
+      var het = $('#homeEvTitle');
+      if (het) het.value = '';
+      openModal('homeEventModal');
+      if (het) setTimeout(function () { try { het.focus(); } catch (e) { } }, 120);
+      break;
+    }
+    case 'fam-todo-toggle': {
+      var ftw = el.getAttribute('data-who');
+      var ftid = el.getAttribute('data-id');
+      var todo = famTodos(ftw).filter(function (t) { return t.id === ftid; })[0];
+      if (!todo) break;
+      todo.done = !todo.done;
+      todo.doneAt = todo.done ? Date.now() : null;
+      touch();
+      renderAll();
+      if (todo.done) toast('✓ ' + FAMILY[ftw].name + ' · ' + todo.text + ' 완료!');
+      break;
+    }
+    case 'fam-todo-del': {
+      var ftdw = el.getAttribute('data-who');
+      var ftdid = el.getAttribute('data-id');
+      state.familyTodos[ftdw] = famTodos(ftdw).filter(function (t) { return t.id !== ftdid; });
+      touch();
+      renderAll();
+      break;
+    }
+    case 'fam-todo-clear': {
+      var ftcw = el.getAttribute('data-who');
+      var before = famTodos(ftcw).length;
+      state.familyTodos[ftcw] = famTodos(ftcw).filter(function (t) { return !t.done; });
+      touch();
+      renderAll();
+      toast('완료한 할 일 ' + (before - state.familyTodos[ftcw].length) + '개를 지웠어요');
+      break;
+    }
+    case 'wx-retry':
+      loadWeather(true);
+      break;
     case 'event-del': {
       var eid = el.getAttribute('data-id');
       state.events = state.events.filter(function (x) { return x.id !== eid; });
@@ -4176,6 +4702,43 @@ function renderFeedModal() {
 /* ---------- 폼 제출 ---------- */
 document.addEventListener('submit', function (e) {
   var form = e.target;
+  if (form.hasAttribute && form.hasAttribute('data-fam-todo')) {
+    e.preventDefault();
+    var fw = form.getAttribute('data-fam-todo');
+    var finput = form.querySelector('.fam-input') || form.querySelector('input');
+    var ftxt = (finput && finput.value ? finput.value : '').trim();
+    if (!ftxt) { toast('할 일을 적어 주세요.'); return; }
+    var flist = famTodos(fw);
+    if (flist.length >= 40) { toast('할 일은 40개까지 담을 수 있어요.'); return; }
+    flist.push({ id: uid(), text: ftxt, done: false, ts: Date.now(), doneAt: null });
+    if (finput) finput.value = '';
+    touch();
+    renderAll();
+    toast('📝 ' + (FAMILY[fw] ? FAMILY[fw].name : '가족') + ' 할 일에 넣었어요');
+    return;
+  }
+  if (form.id === 'homeEventForm') {
+    e.preventDefault();
+    var hTitle = (($('#homeEvTitle') || {}).value || '').trim();
+    var hDate = ($('#homeEvDate') || {}).value || ui.homeCalSel || todayISO();
+    var hWho = ($('#homeEvWho') || {}).value || 'family';
+    if (!hTitle) { toast('일정 이름을 적어 주세요.'); return; }
+    state.events.push({ id: uid(), date: hDate, title: hTitle, who: hWho, cat: hWho });
+    var hd = parseISO(hDate);
+    ui.homeCalY = hd.getFullYear();
+    ui.homeCalM = hd.getMonth();
+    ui.homeCalSel = hDate;
+    ui.calY = hd.getFullYear();
+    ui.calM = hd.getMonth();
+    ui.calSel = hDate;
+    var homeEvDateEl = $('#homeEvDate');
+    if (homeEvDateEl) homeEvDateEl.value = hDate;
+    closeModal('homeEventModal');
+    touch();
+    renderAll();
+    toast('📅 ' + (hd.getMonth() + 1) + '월 ' + hd.getDate() + '일 일정을 넣었어요');
+    return;
+  }
   if (form.id === 'routineAddForm') {
     e.preventDefault();
     var input = $('#routineAddInput');
@@ -4518,6 +5081,21 @@ function bindStatic() {
       e.target.value = '';
     });
   }
+  var weatherLoc = $('#weatherLoc');
+  if (weatherLoc) {
+    weatherLoc.addEventListener('change', function () {
+      var wanted = weatherLoc.value;
+      var ok = WEATHER_PLACES.some(function (p) { return p.id === wanted; });
+      state.weatherLocation = ok ? wanted : 'mapo';
+      weatherData = null;
+      weatherTs = 0;
+      weatherErr = '';
+      touch();
+      loadWeatherCache();
+      loadWeather(true);
+      renderWeather();
+    });
+  }
 }
 
 function adjustStars(sign) {
@@ -4574,6 +5152,7 @@ function setDateDefaults() {
 
 function init() {
   loadState();
+  loadWeatherCache();
   bindStatic();
   setDateDefaults();
   syncHeaderVar();
@@ -4583,9 +5162,10 @@ function init() {
   setInterval(tickTimer, 250);
   setInterval(function () {
     renderChrome();
-    if (ui.view === 'home') { renderHome(); renderTimer(); }
+    if (ui.view === 'home') { renderHome(); renderTimer(); loadWeather(); }
     if (ui.view === 'routine') renderRoutine();
   }, 30000);
+  loadWeather();
   window.addEventListener('storage', function (e) {
     if (e.key === STORE_KEY && e.newValue) {
       try {
