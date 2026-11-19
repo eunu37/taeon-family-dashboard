@@ -161,7 +161,7 @@ a{color:inherit}
 .row{display:flex;align-items:center;gap:10px}
 .row.wrap{flex-wrap:wrap}
 .spacer{flex:1}
-.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}
+.mt8{margin-top:8px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}
 
 /* ---------- hero ---------- */
 .hero{
@@ -556,6 +556,21 @@ table.simple tr:last-child td{border-bottom:0}
 }
 .keypad button:hover{background:#FFF8F0;transform:translateY(-1px)}
 .keypad button.alt{background:#FBF3E9;font-size:13px;color:var(--muted)}
+.pin-forgot{
+  display:block;width:100%;margin-top:12px;padding:6px 4px;background:none;border:0;
+  font-size:12px;font-weight:800;color:var(--muted);text-decoration:underline;text-underline-offset:3px;
+  text-align:center;cursor:pointer;transition:.14s;
+}
+.pin-forgot:hover{color:var(--ink-soft)}
+.pin-forgot[hidden]{display:none}
+.pin-reset{margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
+.pin-reset[hidden]{display:none}
+#pinDots[hidden],#pinKeypad[hidden],#pinHint[hidden]{display:none}
+.pin-reset-note{
+  background:#FBF5EA;border-radius:12px;padding:10px 12px;margin-bottom:12px;
+}
+.pin-reset .btn.wide{margin-top:8px}
+.pin-reset .field .input{text-align:center;font-size:20px;font-weight:800;letter-spacing:.28em}
 .modal-section{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}
 .modal-section h4{font-size:13.5px;font-weight:900;margin-bottom:9px;display:flex;align-items:center;gap:6px}
 .code-box{
@@ -1835,7 +1850,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
     <div class="modal-head">
       <div>
         <h3 id="pinTitle">🔒 부모님 확인</h3>
-        <p>부모님만 들어올 수 있어요. 처음 비밀번호는 <b>0000</b>이에요.</p>
+        <p id="pinSub">부모님만 들어올 수 있어요. 처음 비밀번호는 <b>0000</b>이에요.</p>
       </div>
       <button class="modal-close" type="button" data-close="pinModal">✕</button>
     </div>
@@ -1857,6 +1872,19 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
       <button type="button" class="alt" data-key="cancel">취소</button>
     </div>
     <p class="hint mt14" id="pinHint" style="text-align:center">비밀번호를 눌러 주세요.</p>
+
+    <button class="pin-forgot" type="button" id="pinForgotBtn">비밀번호를 잊으셨나요? (초기화·재설정)</button>
+
+    <div class="pin-reset" id="pinResetPanel" hidden>
+      <p class="hint pin-reset-note">기존 가족 기록(숙제·공부·도감·용돈 등)은 그대로 유지되고, 부모 비밀번호만 새로 설정해요.</p>
+      <div class="field mt10">
+        <label for="pinResetInput">새 비밀번호 (숫자 4자리)</label>
+        <input class="input" id="pinResetInput" type="password" inputmode="numeric" maxlength="4" placeholder="예: 2580" autocomplete="off">
+      </div>
+      <button class="btn primary wide mt10" type="button" id="pinResetSave">새 비밀번호로 저장하고 열기</button>
+      <button class="btn ghost wide mt8" type="button" id="pinResetDefault">기본값(0000)으로 초기화</button>
+      <button class="btn ghost wide mt8" type="button" id="pinResetBack">돌아가기</button>
+    </div>
   </div>
 </div>
 
@@ -5089,11 +5117,58 @@ function updatePinDots() {
 function openPinModal() {
   pinBuffer = '';
   updatePinDots();
+  showPinResetPanel(false);
   var hint = $('#pinHint');
   if (hint) hint.textContent = '비밀번호를 눌러 주세요.';
   openModal('pinModal');
 }
+
+/* 비밀번호 잊음 → 재설정 패널 */
+function showPinResetPanel(show) {
+  var panel = $('#pinResetPanel');
+  var forgot = $('#pinForgotBtn');
+  var dots = $('#pinDots'), keypad = $('#pinKeypad'), hint = $('#pinHint');
+  if (dots) dots.hidden = !!show;
+  if (keypad) keypad.hidden = !!show;
+  if (hint) hint.hidden = !!show;
+  if (panel) panel.hidden = !show;
+  if (forgot) forgot.hidden = !!show;
+  var title = $('#pinTitle'), sub = $('#pinSub');
+  if (title) title.textContent = show ? '🔑 비밀번호 재설정' : '🔒 부모님 확인';
+  if (sub) {
+    sub.innerHTML = show
+      ? '부모 비밀번호만 새로 정해요. 기존 기록은 그대로 남아 있어요.'
+      : '부모님만 들어올 수 있어요. 처음 비밀번호는 <b>0000</b>이에요.';
+  }
+  pinBuffer = '';
+  updatePinDots();
+  if (hint) hint.textContent = '비밀번호를 눌러 주세요.';
+  if (show) {
+    var inp = $('#pinResetInput');
+    if (inp) { inp.value = ''; try { inp.focus(); } catch (e) {} }
+  }
+}
+
+/* state의 다른 값은 건드리지 않고 parentPin만 새 값으로 */
+function applyPinReset(newPin, isDefault) {
+  state.parentPin = newPin;
+  touch();
+  parentOn = true;
+  showPinResetPanel(false);
+  closeModal('pinModal');
+  renderAll();
+  openParentSettings();
+  toast(isDefault ? '🔑 부모 비밀번호를 0000으로 초기화했어요' : '🔑 부모 비밀번호를 새로 설정했어요');
+}
+
+function savePinResetFromInput() {
+  var v = String(($('#pinResetInput') || {}).value || '').trim();
+  if (!/^[0-9]{4}$/.test(v)) { toast('숫자 4자리로 입력해 주세요.'); return; }
+  applyPinReset(v, false);
+}
 function pressPinKey(key) {
+  var resetPanel = $('#pinResetPanel');
+  if (resetPanel && !resetPanel.hidden) return;
   if (key === 'cancel') { closeModal('pinModal'); return; }
   if (key === 'del') { pinBuffer = pinBuffer.slice(0, -1); updatePinDots(); return; }
   if (pinBuffer.length >= 4) return;
@@ -6285,6 +6360,28 @@ function bindStatic() {
     parentBtn.addEventListener('click', function () {
       if (parentOn) openParentSettings();
       else openPinModal();
+    });
+  }
+
+  /* 부모 비밀번호 재설정 */
+  var pinForgotBtn = $('#pinForgotBtn');
+  if (pinForgotBtn) pinForgotBtn.addEventListener('click', function () { showPinResetPanel(true); });
+  var pinResetBack = $('#pinResetBack');
+  if (pinResetBack) pinResetBack.addEventListener('click', function () { showPinResetPanel(false); });
+  var pinResetSave = $('#pinResetSave');
+  if (pinResetSave) pinResetSave.addEventListener('click', savePinResetFromInput);
+  var pinResetDefault = $('#pinResetDefault');
+  if (pinResetDefault) {
+    pinResetDefault.addEventListener('click', function () { applyPinReset('0000', true); });
+  }
+  var pinResetInput = $('#pinResetInput');
+  if (pinResetInput) {
+    pinResetInput.addEventListener('input', function () {
+      var digits = this.value.replace(/[^0-9]/g, '').slice(0, 4);
+      if (digits !== this.value) this.value = digits;
+    });
+    pinResetInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); savePinResetFromInput(); }
     });
   }
   var syncBtn = $('#syncBtn');
