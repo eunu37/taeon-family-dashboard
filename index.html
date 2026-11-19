@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="태온이네">
 <meta name="application-name" content="태온이네">
-<meta name="description" content="태온이네 가족 대시보드 · 루틴, 숙제, 타이머, 용돈, 펫 키우기, 가족 달력">
+<meta name="description" content="태온이네 가족 대시보드 · 루틴, 숙제, 공부 시간표, 타이머, 포켓몬 도감, 용돈, 가족 달력">
 <title>태온이네 가족 대시보드</title>
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -841,6 +841,214 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
   .sched-acts .act-btn .lbl{display:none}
 }
 
+/* ===== 숙제 · 공부 · 포켓몬 도감 (2026-11 개편) ===== */
+.mb10{margin-bottom:10px}.mt6{margin-top:6px}
+.hw-date{font-size:15px;font-weight:900;letter-spacing:-0.02em}
+
+/* 숙제: 그날그날 비고정 숙제 */
+.task-group{display:flex;flex-direction:column;gap:7px}
+.task-group-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 2px}
+.task-group-head b{font-size:12px;font-weight:900;color:var(--ink-soft);letter-spacing:-0.01em}
+.task-group-head span{font-size:11px;font-weight:800;color:var(--muted)}
+.done-group .task-group-head b{color:#7FA98F}
+.task-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;background:#FCF8F2;border:1px solid #F2E9DC;transition:.16s}
+.task-item:hover{background:#FFF9F1}
+.task-item.is-done{background:#F7FBF8;border-color:#E3F0E8}
+.task-body{flex:1;min-width:0}
+.task-text{font-size:13.5px;font-weight:800;line-height:1.4;word-break:keep-all}
+.task-text.done{color:var(--muted);text-decoration:line-through;text-decoration-color:#D8C9B7}
+.task-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;align-items:center}
+.task-tag{font-size:10.5px;font-weight:800;color:#A9673A;background:#FFF1E4;border-radius:6px;padding:2px 6px;line-height:1.3}
+.task-memo{font-size:11px;font-weight:600;color:var(--muted)}
+.hw-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.hw-day{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px 7px;border-radius:12px;background:#FCF9F4;border:1px solid #F1E8DB;transition:.15s}
+.hw-day:hover{background:#FFFBF4;border-color:#EFD9BF}
+.hw-day b{font-size:11.5px;font-weight:900;color:var(--muted)}
+.hw-day span{font-size:13px;font-weight:900;color:var(--ink-soft);line-height:1.1}
+.hw-day small{font-size:9.5px;font-weight:800;color:var(--muted)}
+.hw-day i{width:6px;height:6px;border-radius:50%;background:#E4D7C5;margin:1px 0}
+.hw-day i.part{background:#FFC98E}
+.hw-day i.all{background:#5FBF8F}
+.hw-day.is-today{background:#FFF3E6;border-color:#FFC9A2}
+.hw-day.is-sel{box-shadow:0 0 0 2px #FFB98E inset;background:#FFF6EC}
+.reward-box{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:16px;background:linear-gradient(140deg,#FFF8E8,#FFF1E4);border:1px solid #FBDFC4}
+.reward-box b{font-size:13px;font-weight:900;color:#98602F}
+.reward-ball{width:52px;height:52px;flex:0 0 52px}
+.reward-ball svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 8px rgba(190,120,80,.2))}
+
+/* 공부: 오늘의 공부 */
+.study-today{background:radial-gradient(600px 220px at 92% -10%,#F1F7FF 0,rgba(241,247,255,0) 60%),linear-gradient(135deg,#FFFFFF,#FFFDF9)}
+.study-chips{display:flex;flex-wrap:wrap;gap:8px}
+.study-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:14px;background:#fff;border:1px solid #ECE1D2;box-shadow:var(--shadow-sm);transition:.16s;text-align:left}
+.study-chip:hover{transform:translateY(-1px);border-color:#E4D2BC}
+.study-chip-check{width:20px;height:20px;flex:0 0 20px;border-radius:50%;border:2px solid #E1D3C1;display:grid;place-items:center;font-size:11px;color:#fff;font-weight:800;line-height:1}
+.study-chip.is-on{background:linear-gradient(140deg,#EFFBF4,#E1F6EA);border-color:#A9E0C2;box-shadow:0 4px 12px rgba(95,191,143,.18)}
+.study-chip.is-on .study-chip-check{background:linear-gradient(140deg,#8FD8B3,#5FBF8F);border-color:#5FBF8F}
+.study-chip-text{display:flex;flex-direction:column;min-width:0}
+.study-chip-text b{font-size:13px;font-weight:800;line-height:1.25}
+.study-chip.is-on .study-chip-text b{color:#2E7D57}
+.study-chip-text small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.study-chip-tag{font-size:9.5px;font-weight:800;color:#8A6A17;background:#FFF8DF;border-radius:5px;padding:2px 5px}
+
+/* 공부: 주간 시간표 */
+.tt-wrap{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.tt-day{display:flex;flex-direction:column;min-width:0;border-radius:14px;background:#FCFAF6;border:1px solid #F1E8DB;overflow:hidden}
+.tt-day.is-today{background:#FFF8EC;border-color:#FFC9A2;box-shadow:0 6px 16px rgba(255,175,120,.16)}
+.tt-head{display:flex;align-items:center;gap:4px;padding:8px 8px 6px;border-bottom:1px solid #F3EADF}
+.tt-day.is-today .tt-head{border-bottom-color:#FBDFC4}
+.tt-dow{font-size:12.5px;font-weight:900;color:var(--ink-soft)}
+.tt-day.is-today .tt-dow{color:#A9673A}
+.tt-date{font-size:10px;font-weight:700;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-add{width:22px;height:22px;flex:0 0 22px;border-radius:7px;background:#FFF1E4;color:#A9673A;font-size:12px;font-weight:900;display:grid;place-items:center;line-height:1;transition:.15s}
+.tt-add:hover{background:#FFE1CB}
+.tt-body{display:flex;flex-direction:column;gap:5px;padding:7px;flex:1;min-width:0}
+.tt-sub{display:flex;align-items:flex-start;gap:2px;border-radius:10px;background:#fff;border:1px solid #EFE5D7}
+.tt-sub.is-done{background:#F1FAF5;border-color:#C8EBD8}
+.tt-main{display:flex;align-items:flex-start;gap:5px;padding:6px 5px;flex:1;min-width:0;text-align:left}
+.tt-check{width:15px;height:15px;flex:0 0 15px;border-radius:50%;border:1.6px solid #E1D3C1;display:grid;place-items:center;font-size:9px;color:#fff;font-weight:900;margin-top:1px}
+.tt-sub.is-done .tt-check{background:#5FBF8F;border-color:#5FBF8F}
+.tt-texts{display:flex;flex-direction:column;min-width:0}
+.tt-texts b{font-size:11px;font-weight:800;line-height:1.3;word-break:keep-all}
+.tt-sub.is-done .tt-texts b{color:#2E7D57}
+.tt-texts small{font-size:9px;font-weight:700;color:var(--muted);line-height:1.3;word-break:keep-all}
+.tt-acts{display:flex;flex-direction:column;gap:1px;padding:3px 3px 0 0;flex:0 0 auto}
+.tt-acts button{font-size:9px;line-height:1;opacity:.55;transition:.15s;border-radius:3px}
+.tt-acts button:hover{opacity:1;background:#FFF1E4}
+.tt-plan{font-size:9.5px;font-weight:800;color:#6D97C2;background:#EFF6FF;border:1px dashed #CFE2F7;border-radius:7px;padding:4px 5px;line-height:1.3;word-break:keep-all}
+.tt-plan small{font-weight:700;color:#8AA9C6}
+.tt-empty{font-size:10px;font-weight:700;color:#C4B6A5;text-align:center;padding:10px 2px;border-radius:9px;background:#FBF7F1;border:1px dashed #EEE2D2}
+.tt-foot{font-size:9.5px;font-weight:800;color:var(--muted);text-align:center;padding:0 6px 7px}
+.tt-day.is-today .tt-foot{color:#B3703C}
+.tt-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:10.5px;font-weight:700;color:var(--muted);margin-top:9px}
+.tt-legend i{font-style:normal}
+
+/* 포켓몬 도감 */
+.dex-hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.dex-ball-card{display:flex;flex-direction:column;align-items:center;gap:10px;background:radial-gradient(520px 200px at 50% -20%,#FFEFF0 0,rgba(255,239,240,0) 65%),linear-gradient(150deg,#FFFFFF,#FFFAF6)}
+.dex-ball-stage{display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap}
+.dex-ball-big{width:96px;height:96px;filter:drop-shadow(0 10px 18px rgba(200,90,90,.24));animation:ballFloat 3s ease-in-out infinite}
+.dex-ball-big svg{width:100%;height:100%;display:block}
+@keyframes ballFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
+.dex-ball-count{display:flex;flex-direction:column;align-items:center;line-height:1}
+.dex-ball-count b{font-size:34px;font-weight:900;color:#D65050;font-variant-numeric:tabular-nums;background:#FFF1F1;border:1px solid #FBD9D9;border-radius:16px;padding:4px 16px;min-width:74px;text-align:center}
+.dex-ball-count span{font-size:11.5px;font-weight:800;color:var(--muted);margin-top:4px}
+.dex-open-btn{max-width:320px;font-size:15px;padding:13px 18px}
+.dex-note{margin-top:8px;font-size:11.5px;font-weight:700;color:#B3703C;background:#FFF6EC;border:1px dashed #F3DCC4;border-radius:11px;padding:8px 11px;text-align:center}
+.dex-partner-card{display:flex;flex-direction:column}
+.dex-partner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 12px;border-radius:14px;background:#FCF8F2;border:1px solid #F2E9DC;flex:1}
+.dex-partner-label{font-size:10.5px;font-weight:900;color:#B3703C;background:#FFF1E4;border-radius:6px;padding:3px 7px}
+.dex-partner-pic{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;background:#fff;border-radius:14px;border:1px solid #F0E6D8;padding:3px}
+.dex-partner-body{display:flex;flex-direction:column;min-width:0;flex:1}
+.dex-partner-body b{font-size:14px;font-weight:900}
+.dex-partner-body small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.dex-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.dex-filter{padding:7px 12px;border-radius:999px;background:#F8F2E9;color:var(--muted);font-size:12px;font-weight:800;transition:.15s}
+.dex-filter.is-on{background:#FFF0E2;color:#A25B29;box-shadow:inset 0 0 0 1px #FFD2AF}
+.dex-types{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.type-chip{padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;background:#fff;border:1px solid #EDE2D2;color:var(--muted);transition:.15s}
+.type-chip.is-on{background:var(--tc,#F7F1E8);border-color:var(--tc,#E6D8C5);color:#fff}
+.dex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.dex-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 6px 8px;border-radius:14px;background:#fff;border:1px solid #F0E6D8;transition:.16s;min-width:0}
+.dex-card:hover{transform:translateY(-2px);border-color:#EAD3B8;box-shadow:var(--shadow-sm)}
+.dex-card.is-got{background:linear-gradient(160deg,#FFFFFF,#FFFBF3);border-color:#F1E3CE}
+.dex-card.is-lock{background:#F7F3EC;border-color:#EDE4D8}
+.dex-card-no{position:absolute;top:5px;left:6px;font-size:8.5px;font-weight:800;color:#C3B3A1}
+.dex-card-pic{width:64px;height:64px;display:grid;place-items:center;margin-top:4px}
+.dex-card-name{font-size:11.5px;font-weight:900;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dex-card.is-lock .dex-card-name{color:#BFAE9B;letter-spacing:.06em}
+.dex-card-foot{display:flex;align-items:center;gap:4px;justify-content:center;min-height:13px}
+.type-dots{display:inline-flex;gap:2px}
+.type-dots i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.rarity-txt{font-size:8.5px;font-weight:800}
+.dex-dupe{font-size:9px;font-weight:900;color:#B3703C;background:#FFF1E4;border-radius:5px;padding:1px 4px}
+.type-row{display:inline-flex;gap:4px;flex-wrap:wrap;align-items:center}
+.type-badge{font-size:10px;font-weight:800;color:#fff;border-radius:6px;padding:2.5px 7px;line-height:1.3}
+.rarity-badge{font-size:10px;font-weight:900;border:1px solid;border-radius:6px;padding:2px 7px;line-height:1.3}
+.art.is-sil img{filter:brightness(0) saturate(0) opacity(.16)}
+.art.is-sil .art-fb{opacity:.2}
+
+/* 도감 상세 · 몬스터볼 열기 */
+.dex-detail-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.dex-detail-art{width:160px;height:160px;flex:0 0 160px;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#FFF6E8 0,#FFFDF9 70%);border-radius:20px;border:1px solid #F2E8DA}
+.dex-detail-info{flex:1;min-width:170px}
+.dex-detail-no{font-size:11.5px;font-weight:800;color:var(--muted)}
+.dex-detail-name{font-size:24px;font-weight:900;letter-spacing:-0.03em;line-height:1.2}
+.dex-detail-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:11.5px;color:var(--muted);font-weight:700}
+.dex-detail-stats b{color:var(--ink-soft)}
+.dex-desc{margin-top:14px;font-size:13px;font-weight:700;line-height:1.6;color:var(--ink-soft);background:#FCF8F2;border:1px solid #F2E9DC;border-radius:14px;padding:12px 14px}
+.dex-catch{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.dex-catch span{font-size:11px;font-weight:700;color:var(--muted);background:#F8F2E9;border-radius:8px;padding:5px 9px}
+.dex-catch b{color:var(--ink-soft);font-weight:900}
+.ball-ic{display:inline-block;vertical-align:middle}
+.ball-ic svg{width:100%;height:100%;display:block}
+.ball-modal{max-width:520px}
+.ball-stage{display:flex;flex-direction:column;align-items:center;gap:12px;padding:10px 0 6px;text-align:center}
+.ball-shake{width:150px;height:150px;filter:drop-shadow(0 12px 20px rgba(200,90,90,.25));animation:ballShake 1.05s ease-in-out infinite;transform-origin:50% 80%}
+@keyframes ballShake{0%,100%{transform:rotate(-9deg)}25%{transform:rotate(9deg)}50%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.ball-caption{font-size:12.5px;font-weight:800;color:#B3703C;animation:pulseFade 1.4s ease-in-out infinite}
+@keyframes pulseFade{0%,100%{opacity:.55}50%{opacity:1}}
+.ball-result-art{width:168px;height:168px;display:grid;place-items:center;animation:pop .4s cubic-bezier(.2,.9,.3,1.2)}
+.ball-result-name{font-size:24px;font-weight:900;letter-spacing:-0.03em}
+.ball-result-desc{font-size:12.5px;font-weight:700;color:var(--ink-soft);line-height:1.6;max-width:420px}
+.new-badge{font-size:13px;font-weight:900;color:#fff;background:linear-gradient(140deg,#FF8A80,#E85050);border-radius:999px;padding:6px 16px;box-shadow:0 6px 16px rgba(232,80,80,.3);animation:pop .35s cubic-bezier(.2,.9,.3,1.3)}
+.again-badge{font-size:12px;font-weight:900;color:#8A6A17;background:#FFF8DF;border-radius:999px;padding:6px 14px}
+.reward-modal{max-width:440px}
+.reward-pop{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:6px 2px 2px}
+.reward-pop h3{font-size:21px;font-weight:900;letter-spacing:-0.03em}
+.reward-pop p{font-size:13px;font-weight:700;color:var(--ink-soft);line-height:1.6}
+.reward-big-ball{width:110px;height:110px;animation:pop .5s cubic-bezier(.2,.9,.3,1.3)}
+.reward-big-ball svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 20px rgba(200,90,90,.28))}
+.reward-spark{font-size:22px}
+.reward-line{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-weight:900;color:#B3703C}
+.fam-partner{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;background:#FFF7EC;border:1px solid #F2E2CC;border-radius:10px;padding:1px}
+
+@media (max-width:1024px){
+  .dex-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .tt-wrap{overflow-x:auto;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(128px,1fr);padding-bottom:4px}
+  .tt-day{min-width:112px}
+}
+@media (max-width:760px){
+  .dex-hero{grid-template-columns:1fr}
+  .dex-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+  .dex-detail-art{width:120px;height:120px;flex-basis:120px}
+  .dex-detail-name{font-size:20px}
+  .study-chip{padding:8px 11px}
+  .study-chip-text b{font-size:12.5px}
+  .hw-week{gap:4px}
+}
+@media (max-width:560px){
+  .dex-ball-big{width:76px;height:76px}
+  .dex-ball-count b{font-size:34px}
+  .dex-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+  .dex-card-pic{width:54px;height:54px}
+  .dex-card-name{font-size:10.5px}
+  .task-item{padding:9px 10px}
+  .task-text{font-size:12.5px}
+  .reward-box{gap:9px;padding:10px 12px}
+  .reward-ball{width:42px;height:42px;flex-basis:42px}
+  .ball-result-art{width:132px;height:132px}
+}
+
+/* 다듬기: 좁은 화면 카드 머리 · 시간표 안내 */
+.btn{white-space:nowrap}
+.card-title{min-width:0}
+.study-today-date{display:block;margin:-4px 0 9px}
+.study-empty{padding:12px 14px;border-radius:12px;background:#FCF8F2;border:1px dashed #E9DCCB;color:var(--muted);font-size:11.5px;font-weight:700;line-height:1.6;text-align:center}
+.tt-scroll-hint{display:none;font-size:10.5px;font-weight:700;color:#B3703C}
+@media (max-width:1024px){
+  .tt-wrap{position:relative}
+  .tt-scroll-hint{display:inline}
+}
+@media (max-width:760px){
+  .card-head{flex-wrap:wrap;gap:8px}
+  .card-head .card-sub{display:none}
+  .card-head .btn-group .card-sub{display:none}
+  .card-head .btn-group{flex-wrap:wrap}
+  .study-today .card-head{align-items:flex-start}
+  .dex-card-no{font-size:8px}
+  .tt-legend{gap:6px;font-size:10px}
+}
+
 </style>
 </head>
 <body>
@@ -877,15 +1085,16 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
   <nav class="tabs" id="tabs" aria-label="메뉴">
     <button class="tab is-active" data-view="home"><span>🏠</span>홈</button>
     <button class="tab" data-view="routine"><span>✅</span>루틴</button>
-    <button class="tab" data-view="homework"><span>📚</span>숙제</button>
+    <button class="tab" data-view="homework"><span>📝</span>숙제</button>
+    <button class="tab" data-view="study"><span>📖</span>공부</button>
     <button class="tab" data-view="timer"><span>⏱️</span>타이머</button>
-    <button class="tab" data-view="pet"><span>🐣</span>펫</button>
+    <button class="tab" data-view="dex"><span>🎮</span>포켓몬 도감</button>
     <button class="tab" data-view="allowance"><span>💰</span>용돈</button>
     <button class="tab" data-view="mail"><span>📮</span>우체통<i class="tab-dot" id="mailDot" style="display:none"></i></button>
-    <button class="tab" data-view="reading"><span>📖</span>독서</button>
+    <button class="tab" data-view="reading"><span>📚</span>독서</button>
     <button class="tab" data-view="growth"><span>📏</span>성장</button>
     <button class="tab" data-view="stats"><span>📊</span>통계</button>
-    <button class="tab" data-view="game"><span>🎲</span>게임</button>
+    <button class="tab" data-view="game"><span>🎡</span>돌림판</button>
     <button class="tab" data-view="calendar"><span>📅</span>달력</button>
   </nav>
 
@@ -994,36 +1203,114 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
       </div>
     </section>
 
-    <!-- ============ 숙제 ============ -->
+    <!-- ============ 숙제 (그날그날 비고정 숙제) ============ -->
     <section class="view" id="view-homework">
       <div class="section-title">
-        <h2>📚 숙제 · 홈스쿨</h2>
-        <p>주간 계획을 넣으면 오늘 몫이 자동으로 계산돼요</p>
+        <h2>📝 오늘의 숙제</h2>
+        <p>알림장·학원 숙제·준비물처럼 그날그날 생기는 숙제를 하나씩 넣어요</p>
       </div>
       <div class="grid-2">
         <div class="stack">
           <div class="card">
             <div class="card-head">
-              <div class="card-title"><span class="ico">🌞</span>오늘의 숙제</div>
-              <span class="card-sub" id="hwTodayDate"></span>
+              <div class="card-title"><span class="ico">📝</span>숙제 목록</div>
+              <div class="btn-group">
+                <button class="btn ghost tiny" data-action="hw-day-prev" type="button" aria-label="이전 날">‹</button>
+                <button class="btn ghost tiny" id="hwTaskTodayBtn" data-action="hw-today" type="button" style="display:none">오늘</button>
+                <button class="btn ghost tiny" data-action="hw-day-next" type="button" aria-label="다음 날">›</button>
+                <button class="btn primary tiny" data-action="hw-task-add" type="button">＋ 숙제 추가</button>
+              </div>
             </div>
-            <div id="hwToday"></div>
-            <p class="hint mt14">숙제를 끝내면 <b>별 2개(★+2)</b>를 받아요.</p>
+            <div class="row wrap" style="justify-content:space-between;gap:8px">
+              <b class="hw-date" id="hwTaskDate">오늘</b>
+            </div>
+            <div class="row wrap mt10" id="hwTaskProgress"></div>
+            <div class="mt14" id="hwTaskList"></div>
+            <p class="hint mt14" id="hwTaskReward"></p>
           </div>
+        </div>
+        <div class="stack">
           <div class="card">
             <div class="card-head">
-              <div class="card-title"><span class="ico">🗓️</span>이번 주 계획</div>
-              <div class="btn-group" style="align-items:center">
-                <span class="card-sub">월~일 자동 분배</span>
-                <button class="btn primary tiny" data-action="plan-add-open" type="button">＋ 숙제 추가</button>
+              <div class="card-title"><span class="ico">🗓️</span>이번 주 숙제</div>
+              <span class="card-sub">날짜를 누르면 그날 숙제를 봐요</span>
+            </div>
+            <div class="hw-week" id="hwWeekStrip"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="ico">🔴</span>포켓몬볼 보상</div></div>
+            <div class="reward-box">
+              <div class="reward-ball" aria-hidden="true">
+                <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.5"></circle><path d="M5 32a27 27 0 0 1 54 0Z" fill="#EE5B5B"></path><rect x="5" y="28.6" width="54" height="6.8" fill="#4A3F35"></rect><circle cx="32" cy="32" r="8.6" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.5"></circle></svg>
+              </div>
+              <div style="flex:1;min-width:150px">
+                <b>오늘 할 일을 다 하면 몬스터볼 +1</b>
+                <p class="hint mt6">오늘의 <b>공부</b>와 <b>숙제</b>를 모두 체크하면 포켓몬볼을 한 개 받아요. 하루에 한 번만 받을 수 있어요.</p>
+              </div>
+              <button class="btn butter" data-action="go-dex" type="button">🔴 도감 열기</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="ico">💡</span>이렇게 써요</div></div>
+            <div class="hint">
+              학교 알림장, 학원 숙제, 내일 준비물처럼 <b>매일 달라지는 숙제</b>를 여기에 넣어요.<br>
+              과목·교재를 정해 두고 요일별로 하는 공부는 <b>📖 공부</b> 탭에서 관리해요.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 공부 (고정 과목 · 요일 시간표) ============ -->
+    <section class="view" id="view-study">
+      <div class="section-title">
+        <h2>📖 공부</h2>
+        <p>요일별 고정 과목을 시간표로 계획하고, 오늘 몫을 하나씩 체크해요</p>
+      </div>
+
+      <div class="card study-today">
+        <div class="card-head">
+          <div class="card-title"><span class="ico">🌞</span>오늘의 공부</div>
+          <div class="row wrap" id="studyTodayHead"></div>
+        </div>
+        <div class="study-today-date card-sub" id="studyTodayDate"></div>
+        <div class="study-chips" id="studyTodayChips"></div>
+        <div class="mt14" id="studyTodayBar"></div>
+        <p class="hint mt10">과목을 누르면 체크돼요. <b>오늘의 공부</b>와 <b>오늘의 숙제</b>를 모두 끝내면 <b>포켓몬볼 +1</b>!</p>
+      </div>
+
+      <div class="card mt14">
+        <div class="card-head">
+          <div class="card-title"><span class="ico">🗓️</span>주간 시간표</div>
+          <div class="btn-group">
+            <span class="card-sub">오늘 요일은 노란색</span>
+            <button class="btn primary tiny" data-action="study-add" type="button">＋ 과목 추가</button>
+          </div>
+        </div>
+        <div class="tt-wrap" id="studyTimetable"></div>
+        <div class="tt-legend">
+          <span>칸을 누르면 그 요일 공부를 체크해요 <b class="tt-scroll-hint">· 옆으로 넘겨 보세요 →</b></span>
+          <span><i>✏️</i> 수정 · <i>🗑️</i> 그 요일에서 빼기</span>
+        </div>
+        <div class="study-empty mt10" id="studyEmptyHint">아직 시간표가 비어 있어요. ＋ 과목 추가로 국어·수학·영어를 요일별로 넣어 보세요.</div>
+      </div>
+
+      <div class="grid-2 mt14">
+        <div class="stack">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="ico">📒</span>교재 · 쪽수 계획</div>
+              <div class="btn-group">
+                <span class="card-sub">쪽수를 요일별로 나눠요</span>
+                <button class="btn primary tiny" data-action="plan-add-open" type="button">＋ 계획 추가</button>
               </div>
             </div>
             <div class="stack" id="hwPlans"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <div class="card-title"><span class="ico">🧩</span>주말 보충수업</div>
-              <span class="card-sub">놓친 숙제는 주말에</span>
+              <div class="card-title"><span class="ico">🧩</span>주말 보충</div>
+              <span class="card-sub">놓친 교재 분량은 주말에</span>
             </div>
             <div id="hwSupplement"></div>
           </div>
@@ -1031,7 +1318,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
         <div class="stack">
           <div class="card" id="planFormCard">
             <div class="card-head">
-              <div class="card-title"><span class="ico">✏️</span><span id="planFormTitle">주간 학습 계획</span></div>
+              <div class="card-title"><span class="ico">✏️</span><span id="planFormTitle">교재 · 쪽수 계획</span></div>
               <span class="chip peach" id="planFormMode" style="display:none">✏️ 수정 중</span>
             </div>
             <form id="hwPlanForm">
@@ -1048,11 +1335,11 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
               <div class="form-grid mt10">
                 <div class="field">
                   <label>시작 쪽</label>
-                  <input class="input" id="planStart" type="number" min="1" value="170">
+                  <input class="input" id="planStart" type="number" min="1" placeholder="170">
                 </div>
                 <div class="field">
                   <label>끝 쪽</label>
-                  <input class="input" id="planEnd" type="number" min="1" value="190">
+                  <input class="input" id="planEnd" type="number" min="1" placeholder="190">
                 </div>
               </div>
               <div class="field mt10">
@@ -1071,7 +1358,8 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
             <div class="hint">
               <b>170~190쪽을 월~금</b>으로 정하면 21쪽을 5일로 나눠
               월 170~175 · 화 176~180 · 수 181~185 · 목 186~190쪽처럼 자동 배분돼요.
-              남는 쪽은 앞 요일부터 하루에 1쪽씩 더 붙어요.
+              남는 쪽은 앞 요일부터 하루에 1쪽씩 더 붙어요.<br>
+              교재 계획도 <b>오늘의 공부</b>에 함께 나와요.
             </div>
           </div>
         </div>
@@ -1138,39 +1426,42 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
       </div>
     </section>
 
-    <!-- ============ 펫 ============ -->
-    <section class="view" id="view-pet">
+    <!-- ============ 포켓몬 도감 ============ -->
+    <section class="view" id="view-dex">
       <div class="section-title">
-        <h2>🐣 태온이의 포켓몬 친구</h2>
-        <p>별을 모아 열매를 사고, 같은 열매 2개를 합성해 더 좋은 간식을 만들어요</p>
+        <h2>🎮 포켓몬 도감</h2>
+        <p>몬스터볼을 열어 포켓몬을 만나고, 도감을 하나씩 채워요</p>
       </div>
-      <div class="pet-layout">
-        <div class="card">
+
+      <div class="dex-hero">
+        <div class="card dex-ball-card">
+          <div class="dex-ball-stage">
+            <div class="dex-ball-big" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.4"></circle><path d="M5 32a27 27 0 0 1 54 0Z" fill="#EE5B5B"></path><rect x="5" y="28.6" width="54" height="6.8" fill="#4A3F35"></rect><circle cx="32" cy="32" r="8.6" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.4"></circle></svg>
+            </div>
+            <div class="dex-ball-count"><b id="dexBallCount">0</b><span>포켓몬볼</span></div>
+          </div>
+          <button class="btn primary wide dex-open-btn" id="dexOpenBtn" data-action="ball-open" type="button">몬스터볼 열기!</button>
+          <p class="hint mt10" id="dexBallHint"></p>
+        </div>
+        <div class="card dex-partner-card">
           <div class="card-head">
-            <div class="card-title"><span class="ico">🏠</span>포켓몬 하우스</div>
-            <span class="card-sub" id="petStageName">1단계 · 신비한 포켓몬 알</span>
+            <div class="card-title"><span class="ico">⭐</span>대표 파트너</div>
+            <span class="card-sub">홈 화면에도 함께 보여요</span>
           </div>
-          <div class="room" id="roomScene">
-            <div class="pet-name" id="petNameTag">콩콩</div>
-            <div class="room-wall"><div class="room-pet" id="petRoomPet">🥚</div></div>
-            <div class="room-floor" id="roomFloor"></div>
-          </div>
-          <div class="mt14">
-            <div class="exp-row"><span id="petExpText">EXP 0 / 30</span><span id="petStageHint">다음 단계까지 30</span></div>
-            <div class="bar mint"><i id="petExpBar" style="width:0%"></i></div>
-          </div>
-          <div class="btn-group mt14">
-            <button class="btn primary" id="petFeedBtn" type="button">🍬 간식 주기</button>
-            <button class="btn ghost" id="petRenameBtn" type="button">이름 바꾸기</button>
-            <button class="btn ghost" id="petDecorateBtn" type="button">🛋️ 꾸미기</button>
-          </div>
-          <div id="decorateBox" class="mt14"></div>
-          <div class="stage-road mt14" id="petStageRoad"></div>
+          <div class="dex-partner" id="dexPartner"></div>
         </div>
-        <div class="card">
-          <div class="shop-tabs" id="shopTabs"></div>
-          <div id="shopBody"></div>
+      </div>
+
+      <div class="card mt14">
+        <div class="card-head">
+          <div class="card-title"><span class="ico">📕</span>포켓몬 도감</div>
+          <span class="card-sub">몬스터볼을 열면 랜덤으로 등장해요</span>
         </div>
+        <div id="dexProgress" class="mb10"></div>
+        <div class="dex-filters" id="dexFilters"></div>
+        <div class="dex-types" id="dexTypes"></div>
+        <div class="dex-grid" id="dexGrid"></div>
       </div>
     </section>
 
@@ -1417,7 +1708,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
     <!-- ============ 게임 ============ -->
     <section class="view" id="view-game">
       <div class="section-title">
-        <h2>🎲 누가 먼저 할까?!</h2>
+        <h2>🎡 누가 먼저 할까?!</h2>
         <p>돌림판을 돌려 공정하게 정해요</p>
       </div>
       <div class="grid-2">
@@ -1701,17 +1992,127 @@ create policy "family_state_all" on family_state
   </div>
 </div>
 
-<div class="modal-root" id="feedModal">
-  <div class="modal-backdrop" data-close="feedModal"></div>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fmTitle">
+<div class="modal-root" id="hwTaskModal">
+  <div class="modal-backdrop" data-close="hwTaskModal"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hwTaskModalTitle">
     <div class="modal-head">
       <div>
-        <h3 id="fmTitle">🍬 간식 주기</h3>
-        <p>간식을 주면 펫이 경험치를 얻어요</p>
+        <h3 id="hwTaskModalTitle">📝 숙제 추가</h3>
+        <p id="hwTaskModalSub">그날그날 생기는 숙제를 하나씩 넣어 두세요.</p>
       </div>
-      <button class="modal-close" type="button" data-close="feedModal">✕</button>
+      <button class="modal-close" type="button" data-close="hwTaskModal">✕</button>
     </div>
-    <div id="feedBody"></div>
+    <form id="hwTaskForm">
+      <div class="field">
+        <label>숙제 내용</label>
+        <input class="input" id="hwTaskText" placeholder="예: 수학 익힘 42~43쪽 풀기" maxlength="60" autocomplete="off">
+      </div>
+      <div class="form-grid mt10">
+        <div class="field">
+          <label>과목 · 태그</label>
+          <input class="input" id="hwTaskTag" list="hwTagList" placeholder="수학 / 알림장 / 준비물" maxlength="12" autocomplete="off">
+          <datalist id="hwTagList">
+            <option value="국어"></option>
+            <option value="수학"></option>
+            <option value="영어"></option>
+            <option value="과학"></option>
+            <option value="사회"></option>
+            <option value="학교 알림장"></option>
+            <option value="학원"></option>
+            <option value="준비물"></option>
+            <option value="독서"></option>
+            <option value="기타"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label>날짜</label>
+          <input class="input" id="hwTaskInputDate" type="date">
+        </div>
+      </div>
+      <div class="field mt10">
+        <label>메모 (선택)</label>
+        <input class="input" id="hwTaskMemo" placeholder="준비물: 색연필 · 부모님 확인" maxlength="40" autocomplete="off">
+      </div>
+      <button class="btn primary wide mt14" type="submit" id="hwTaskSubmit">숙제 추가하기</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-root" id="studyModal">
+  <div class="modal-backdrop" data-close="studyModal"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="studyModalTitle">
+    <div class="modal-head">
+      <div>
+        <h3 id="studyModalTitle">📖 공부 과목 추가</h3>
+        <p id="studyModalSub">요일을 고르면 그 요일 시간표 칸에 바로 들어가요.</p>
+      </div>
+      <button class="modal-close" type="button" data-close="studyModal">✕</button>
+    </div>
+    <form id="studyForm">
+      <div class="field">
+        <label>과목 이름</label>
+        <input class="input" id="studyName" placeholder="예: 기탄국어" maxlength="14" autocomplete="off">
+      </div>
+      <div class="form-grid mt10">
+        <div class="field">
+          <label>교재 · 내용 (선택)</label>
+          <input class="input" id="studyBook" placeholder="기탄 C단계 2장" maxlength="24" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>시간 (선택)</label>
+          <input class="input" id="studyTime" placeholder="16:00~16:40" maxlength="16" autocomplete="off">
+        </div>
+      </div>
+      <div class="field mt10">
+        <label>요일 (여러 개 고를 수 있어요)</label>
+        <div class="day-picker" id="studyDays"></div>
+      </div>
+      <button class="btn primary wide mt14" type="submit" id="studySubmit">과목 추가하기</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-root" id="ballRewardModal">
+  <div class="modal-backdrop" data-close="ballRewardModal"></div>
+  <div class="modal reward-modal" role="dialog" aria-modal="true" aria-labelledby="brwdTitle">
+    <div class="reward-pop">
+      <span class="reward-spark" aria-hidden="true">✨</span>
+      <div class="reward-big-ball" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.4"></circle><path d="M5 32a27 27 0 0 1 54 0Z" fill="#EE5B5B"></path><rect x="5" y="28.6" width="54" height="6.8" fill="#4A3F35"></rect><circle cx="32" cy="32" r="8.6" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.4"></circle></svg>
+      </div>
+      <h3 id="brwdTitle">몬스터볼을 받았어요!</h3>
+      <p id="ballRewardText"></p>
+      <div class="btn-group" style="justify-content:center">
+        <button class="btn primary" data-action="ball-open" type="button">지금 열어 보기</button>
+        <button class="btn ghost" data-close="ballRewardModal" type="button">도감에 모아 두기</button>
+      </div>
+      <p class="hint mt10">하루에 한 개씩, 공부와 숙제를 모두 끝낸 날에만 받아요.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-root" id="ballOpenModal">
+  <div class="modal-backdrop" data-close="ballOpenModal"></div>
+  <div class="modal ball-modal" role="dialog" aria-modal="true" aria-labelledby="ballOpenTitle">
+    <div class="modal-head">
+      <div>
+        <h3 id="ballOpenTitle">🔴 몬스터볼</h3>
+        <p id="ballOpenHint">몬스터볼이 흔들리고 있어요…</p>
+      </div>
+      <button class="modal-close" type="button" data-close="ballOpenModal">✕</button>
+    </div>
+    <div id="ballOpenBody"></div>
+  </div>
+</div>
+
+<div class="modal-root" id="dexDetailModal">
+  <div class="modal-backdrop" data-close="dexDetailModal"></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dexDetailTitle">
+    <div class="modal-head">
+      <div><h3 id="dexDetailTitle">📕 도감 정보</h3></div>
+      <button class="modal-close" type="button" data-close="dexDetailModal">✕</button>
+    </div>
+    <div id="dexDetailBody"></div>
   </div>
 </div>
 
@@ -1769,57 +2170,96 @@ var FAMILY = {
 };
 var MEMBER_KEYS = ['ujin', 'eunwoo', 'taeon'];
 
-var SNACKS = [
-  { id: 'banana', name: '바나나', emoji: '🍌', price: 3, exp: 10 },
-  { id: 'razz', name: '라즈열매', emoji: '🍒', price: 3, exp: 10 },
-  { id: 'oran', name: '오랭열매', emoji: '🫐', price: 2, exp: 8 },
-  { id: 'pinap', name: '파인열매', emoji: '🍍', price: 4, exp: 12 },
-  { id: 'candy', name: '이상한사탕', emoji: '🍬', price: 5, exp: 16 },
-  { id: 'icecream', name: '바나나아이스크림', emoji: '🍦', price: 0, exp: 26, synth: true },
-  { id: 'razzjuice', name: '라즈주스', emoji: '🧃', price: 0, exp: 26, synth: true },
-  { id: 'pinejuice', name: '파인주스', emoji: '🍹', price: 0, exp: 30, synth: true },
-  { id: 'supercandy', name: '슈퍼사탕', emoji: '🍭', price: 0, exp: 40, synth: true },
-  { id: 'parfait', name: '바나나파르페', emoji: '🍨', price: 0, exp: 60, synth: true },
-  { id: 'royalcandy', name: '왕실사탕', emoji: '👑', price: 0, exp: 80, synth: true }
+/* ---------- 포켓몬 도감 데이터 (도감 번호 · 한국어/영문 이름 · 타입 · 희귀도 · 키 · 몸무게 · 특성 · 설명) ---------- */
+var DEX = [
+  { n: 1, ko: '이상해씨', en: 'Bulbasaur', t: ['풀', '독'], r: 'normal', h: 0.7, w: 6.9, a: '심록', d: '등에 있는 씨앗에 양분을 저장해 두어서 며칠이고 먹지 않아도 괜찮아요.' },
+  { n: 4, ko: '파이리', en: 'Charmander', t: ['불꽃'], r: 'normal', h: 0.6, w: 8.5, a: '맹화', d: '꼬리 끝의 불꽃이 기분을 알려 줘요. 기분이 좋으면 불꽃이 활활 타오른답니다.' },
+  { n: 7, ko: '꼬부기', en: 'Squirtle', t: ['물'], r: 'normal', h: 0.5, w: 9.0, a: '급류', d: '등껍질에 물을 담아 두었다가 위험할 때 얼굴에 힘껏 뿜어요.' },
+  { n: 10, ko: '캐터피', en: 'Caterpie', t: ['벌레'], r: 'normal', h: 0.3, w: 2.9, a: '인분', d: '머리의 더듬이로 냄새를 맡아서 좋아하는 잎을 찾아요.' },
+  { n: 12, ko: '버터플', en: 'Butterfree', t: ['벌레', '비행'], r: 'rare', h: 1.1, w: 32.0, a: '복안', d: '날개에 물방울 같은 가루가 묻어 있어서 비가 와도 잘 날아요.' },
+  { n: 16, ko: '구구', en: 'Pidgey', t: ['노말', '비행'], r: 'normal', h: 0.3, w: 1.8, a: '날카로운눈', d: '날개를 크게 펄럭여 모래를 일으켜 상대를 놀라게 해요.' },
+  { n: 19, ko: '꼬렛', en: 'Rattata', t: ['노말'], r: 'normal', h: 0.3, w: 3.5, a: '도주', d: '이빨이 계속 자라서 매일 딱딱한 것을 갉아 닳게 해요.' },
+  { n: 25, ko: '피카츄', en: 'Pikachu', t: ['전기'], r: 'rare', h: 0.4, w: 6.0, a: '정전기', d: '볼에 전기를 모아요. 기분이 좋으면 볼이 반짝반짝 빛나요.' },
+  { n: 26, ko: '라이츄', en: 'Raichu', t: ['전기'], r: 'rare', h: 0.8, w: 30.0, a: '정전기', d: '꼬리를 땅에 대면 몸에 모인 전기를 땅속으로 보낼 수 있어요.' },
+  { n: 27, ko: '모래두지', en: 'Sandshrew', t: ['땅'], r: 'normal', h: 0.6, w: 12.0, a: '모래숨기', d: '몸을 둥글게 말면 모래 속을 빠르게 굴러다닐 수 있어요.' },
+  { n: 35, ko: '삐삐', en: 'Clefairy', t: ['페어리'], r: 'rare', h: 0.6, w: 7.5, a: '미인계', d: '달이 밝은 밤에는 친구들이 모여서 함께 춤을 춰요.' },
+  { n: 37, ko: '식스테일', en: 'Vulpix', t: ['불꽃'], r: 'normal', h: 0.6, w: 9.9, a: '타오르는불꽃', d: '꼬리 안에서 불꽃이 살랑살랑 흔들려요. 아직 어리면 꼬리가 하나예요.' },
+  { n: 39, ko: '푸린', en: 'Jigglypuff', t: ['노말', '페어리'], r: 'normal', h: 0.5, w: 5.5, a: '미인계', d: '노래로 모두를 잠들게 해요. 노래를 끝까지 듣지 않으면 삐진답니다.' },
+  { n: 52, ko: '나옹', en: 'Meowth', t: ['노말'], r: 'normal', h: 0.4, w: 4.2, a: '픽업', d: '반짝반짝 빛나는 것을 찾아 모으는 걸 아주 좋아해요.' },
+  { n: 54, ko: '고라파덕', en: 'Psyduck', t: ['물'], r: 'normal', h: 0.8, w: 19.6, a: '습기', d: '머리가 아플 때마다 이상한 힘을 써요. 그래서 항상 머리를 감싸고 있어요.' },
+  { n: 58, ko: '가디', en: 'Growlithe', t: ['불꽃'], r: 'normal', h: 0.7, w: 19.0, a: '위협', d: '냄새를 아주 잘 맡아서 잃어버린 물건을 찾아 줘요.' },
+  { n: 63, ko: '캐이시', en: 'Abra', t: ['에스퍼'], r: 'normal', h: 0.9, w: 19.5, a: '싱크로', d: '하루에 18시간은 자요. 위험하면 자는 동안에도 순식간에 순간이동해요.' },
+  { n: 66, ko: '알통몬', en: 'Machop', t: ['격투'], r: 'normal', h: 0.8, w: 19.5, a: '근성', d: '온몸이 근육이에요. 커다란 바위를 들어 올리며 힘을 기른답니다.' },
+  { n: 74, ko: '꼬마돌', en: 'Geodude', t: ['바위', '땅'], r: 'normal', h: 0.4, w: 20.0, a: '돌머리', d: '산길에 누워 있는데 바위와 똑 닮아서 자주 밟히곤 해요.' },
+  { n: 77, ko: '포니타', en: 'Ponyta', t: ['불꽃'], r: 'normal', h: 1.0, w: 30.0, a: '도주', d: '태어날 때는 다리가 약하지만 하루 만에 달릴 수 있게 돼요.' },
+  { n: 79, ko: '야돈', en: 'Slowpoke', t: ['물', '에스퍼'], r: 'normal', h: 1.2, w: 36.0, a: '무기력', d: '꼬리로 낚시를 해요. 꼬리를 물려도 한참 뒤에야 아파해요.' },
+  { n: 81, ko: '코일', en: 'Magnemite', t: ['전기', '강철'], r: 'normal', h: 0.3, w: 6.0, a: '자기력', d: '공중에 떠서 번개를 모아요. 전기가 좋아서 콘센트에 다가가기도 해요.' },
+  { n: 92, ko: '고오스', en: 'Gastly', t: ['고스트', '독'], r: 'rare', h: 1.3, w: 0.1, a: '부유', d: '몸이 가스를 모아 만들어졌어요. 바람이 세게 불면 날아가 버려요.' },
+  { n: 94, ko: '팬텀', en: 'Gengar', t: ['고스트', '독'], r: 'super', h: 1.5, w: 40.5, a: '부유', d: '그림자 속에 숨는 걸 좋아해요. 달빛 아래에서는 그림자가 조금 짙어 보여요.' },
+  { n: 95, ko: '롱스톤', en: 'Onix', t: ['바위', '땅'], r: 'rare', h: 8.8, w: 210.0, a: '돌머리', d: '땅속을 빠르게 파고다녀요. 그 소리는 꼭 작은 지진 같아요.' },
+  { n: 104, ko: '탕구리', en: 'Cubone', t: ['땅'], r: 'normal', h: 0.4, w: 6.5, a: '돌머리', d: '머리에 쓴 뼈 투구를 아주 소중히 여겨요. 밤이 되면 조용히 울기도 해요.' },
+  { n: 113, ko: '럭키', en: 'Chansey', t: ['노말'], r: 'rare', h: 1.1, w: 34.6, a: '자연회복', d: '영양 가득한 알을 나눠 줘요. 다친 사람을 보면 꼭 건네준답니다.' },
+  { n: 123, ko: '스라크', en: 'Scyther', t: ['벌레', '비행'], r: 'rare', h: 1.5, w: 56.0, a: '벌레의알림', d: '낫처럼 생긴 팔로 풀을 베어요. 움직임이 너무 빨라 잔상만 보여요.' },
+  { n: 129, ko: '잉어킹', en: 'Magikarp', t: ['물'], r: 'normal', h: 0.9, w: 10.0, a: '쓸지느러미', d: '힘없이 펄떡거리기만 해요. 그래도 아주 오래 사는 포켓몬이에요.' },
+  { n: 131, ko: '라프라스', en: 'Lapras', t: ['물', '얼음'], r: 'super', h: 2.5, w: 220.0, a: '저수', d: '사람을 등에 태우고 바다를 건너 주는 다정한 포켓몬이에요.' },
+  { n: 132, ko: '메타몽', en: 'Ditto', t: ['노말'], r: 'rare', h: 0.3, w: 4.0, a: '변신', d: '보는 것은 무엇이든 똑같이 변신할 수 있어요.' },
+  { n: 133, ko: '이브이', en: 'Eevee', t: ['노말'], r: 'rare', h: 0.3, w: 6.5, a: '적응력', d: '여러 모습으로 진화할 수 있는 가능성을 가진 포켓몬이에요.' },
+  { n: 143, ko: '잠만보', en: 'Snorlax', t: ['노말'], r: 'super', h: 2.1, w: 460.0, a: '두꺼운지방', d: '하루 대부분을 자요. 배가 고프면 자면서도 뭔가를 먹어요.' },
+  { n: 147, ko: '미뇽', en: 'Dratini', t: ['드래곤'], r: 'rare', h: 1.8, w: 3.3, a: '탈피', d: '날개가 생기기 전부터 하늘을 나는 꿈을 꾸며 위를 바라봐요.' },
+  { n: 149, ko: '망나뇽', en: 'Dragonite', t: ['드래곤', '비행'], r: 'super', h: 2.2, w: 210.0, a: '정신력', d: '바다를 하루 만에 건널 수 있어요. 사람을 돕는 다정한 마음을 가졌어요.' },
+  { n: 150, ko: '뮤츠', en: 'Mewtwo', t: ['에스퍼'], r: 'legend', h: 2.0, w: 122.0, a: '압박', d: '유전자로 만들어진 전설의 포켓몬이에요. 엄청난 힘을 조심해야 해요.' },
+  { n: 151, ko: '뮤', en: 'Mew', t: ['에스퍼'], r: 'legend', h: 0.4, w: 4.0, a: '싱크로', d: '가장 희귀한 포켓몬이에요. 어떤 기술이든 쓸 수 있다고 해요.' },
+  { n: 172, ko: '피츄', en: 'Pichu', t: ['전기'], r: 'normal', h: 0.3, w: 2.0, a: '정전기', d: '아직 전기를 다루는 게 서툴러서 자기 몸에도 찌릿찌릿해요.' },
+  { n: 175, ko: '토게피', en: 'Togepi', t: ['페어리'], r: 'rare', h: 0.3, w: 1.5, a: '천진난만', d: '알껍질에서 깬 지 얼마 안 되어 자주 넘어져요. 다정한 마음이 힘이 돼요.' },
+  { n: 179, ko: '메리프', en: 'Mareep', t: ['전기'], r: 'normal', h: 0.6, w: 7.8, a: '정전기', d: '털에 정전기가 모여요. 털이 다 자라면 몸에서 빛이 나기도 해요.' },
+  { n: 187, ko: '통통코', en: 'Hoppip', t: ['풀', '비행'], r: 'normal', h: 0.4, w: 0.5, a: '엽록소', d: '바람을 타고 하늘을 둥둥 떠다녀요. 좋은 바람이 불면 여행을 떠나요.' },
+  { n: 196, ko: '에브이', en: 'Espeon', t: ['에스퍼'], r: 'super', h: 0.9, w: 26.5, a: '싱크로', d: '햇빛을 받으면 이마의 보석이 빛나요. 사람의 마음을 먼저 읽어요.' },
+  { n: 197, ko: '블래키', en: 'Umbreon', t: ['악'], r: 'super', h: 1.0, w: 27.0, a: '싱크로', d: '달빛을 받아 몸의 고리가 빛나요. 위험을 알릴 때 그 빛을 써요.' },
+  { n: 212, ko: '핫삼', en: 'Scizor', t: ['벌레', '강철'], r: 'super', h: 1.8, w: 118.0, a: '벌레의알림', d: '단단한 강철 몸이지만 아주 무겁지는 않아요. 날개가 있어 날 수 있답니다.' },
+  { n: 255, ko: '아차모', en: 'Torchic', t: ['불꽃'], r: 'normal', h: 0.4, w: 2.5, a: '맹화', d: '작은 날개를 퍼덕이며 불꽃을 뿜어요. 그래서 몸이 늘 따뜻해요.' },
+  { n: 258, ko: '물짱이', en: 'Mudkip', t: ['물'], r: 'normal', h: 0.4, w: 7.6, a: '급류', d: '볼에 물을 저장해요. 힘을 낼 때는 이빨로 나무도 밀어내요.' },
+  { n: 280, ko: '랄토스', en: 'Ralts', t: ['에스퍼', '페어리'], r: 'normal', h: 0.4, w: 6.6, a: '싱크로', d: '사람의 기분을 감지해요. 기분이 좋으면 다가오고 나쁘면 숨어요.' },
+  { n: 282, ko: '가디안', en: 'Gardevoir', t: ['에스퍼', '페어리'], r: 'super', h: 1.6, w: 48.4, a: '싱크로', d: '미래를 예측해서 소중한 사람을 지켜 주는 포켓몬이에요.' },
+  { n: 302, ko: '깜까미', en: 'Sableye', t: ['악', '고스트'], r: 'rare', h: 0.5, w: 11.0, a: '날카로운눈', d: '눈이 보석처럼 반짝여요. 동굴에서 보석을 찾아 먹어요.' },
+  { n: 359, ko: '앱솔', en: 'Absol', t: ['악'], r: 'rare', h: 1.2, w: 47.0, a: '압박', d: '재난을 미리 느끼고 알려 주지만, 그래서 미움을 받기도 해요.' },
+  { n: 371, ko: '아공이', en: 'Bagon', t: ['드래곤'], r: 'rare', h: 0.6, w: 42.1, a: '돌머리', d: '하늘을 나는 것이 꿈이라서 절벽에서 뛰어내리곤 한대요.' },
+  { n: 384, ko: '레쿠쟈', en: 'Rayquaza', t: ['드래곤', '비행'], r: 'legend', h: 7.0, w: 206.5, a: '에어록', d: '구름 위 하늘을 지키는 전설의 포켓몬이에요.' },
+  { n: 387, ko: '모부기', en: 'Turtwig', t: ['풀'], r: 'normal', h: 0.4, w: 10.2, a: '심록', d: '등의 껍질로 햇빛을 받아서 힘을 내요.' },
+  { n: 390, ko: '불꽃숭이', en: 'Chimchar', t: ['불꽃'], r: 'normal', h: 0.5, w: 6.2, a: '맹화', d: '불꽃을 입에 머금고 있다가 위험할 때 힘껏 뿜어요.' },
+  { n: 393, ko: '팽도리', en: 'Piplup', t: ['물'], r: 'normal', h: 0.4, w: 5.2, a: '급류', d: '걷는 걸 좋아하지 않아서 넘어져도 끝까지 걸으려고 해요.' },
+  { n: 447, ko: '리오르', en: 'Riolu', t: ['격투'], r: 'rare', h: 0.7, w: 20.2, a: '불굴의마음', d: '감정의 파동을 읽어요. 기쁨과 슬픔을 멀리서도 느낄 수 있어요.' },
+  { n: 448, ko: '루카리오', en: 'Lucario', t: ['격투', '강철'], r: 'super', h: 1.2, w: 54.0, a: '불굴의마음', d: '상대의 마음과 위치를 파동으로 알아요. 아주 충직한 포켓몬이에요.' },
+  { n: 470, ko: '리피아', en: 'Leafeon', t: ['풀'], r: 'rare', h: 1.0, w: 25.5, a: '리프가드', d: '햇빛을 받으면 깨끗한 공기를 만들어 내요.' },
+  { n: 471, ko: '글레이시아', en: 'Glaceon', t: ['얼음'], r: 'rare', h: 0.8, w: 25.9, a: '눈숨기', d: '털이 얼음 결정처럼 변해서 작은 눈보라를 만들어요.' },
+  { n: 495, ko: '주리비얀', en: 'Snivy', t: ['풀'], r: 'normal', h: 0.6, w: 8.1, a: '심록', d: '꼬리의 잎으로 햇빛을 받으면 몸이 가벼워져요.' },
+  { n: 501, ko: '수댕이', en: 'Oshawott', t: ['물'], r: 'normal', h: 0.5, w: 5.9, a: '급류', d: '배에 있는 조개 껍데기를 칼처럼 써요.' },
+  { n: 570, ko: '조로아', en: 'Zorua', t: ['악'], r: 'normal', h: 0.7, w: 12.5, a: '일루전', d: '환영을 보여 주어 모습을 숨겨요. 수줍음이 많아요.' },
+  { n: 571, ko: '조로아크', en: 'Zoroark', t: ['악'], r: 'rare', h: 1.6, w: 81.1, a: '일루전', d: '환영으로 무리를 지켜요. 그 모습은 아름답기로 유명해요.' },
+  { n: 587, ko: '에몽가', en: 'Emolga', t: ['전기', '비행'], r: 'normal', h: 0.4, w: 5.0, a: '정전기', d: '날개막으로 하늘을 날고, 볼에 전기를 모아요.' },
+  { n: 653, ko: '푸호꼬', en: 'Fennekin', t: ['불꽃'], r: 'normal', h: 0.4, w: 9.4, a: '맹화', d: '큰 귀로 열기를 느껴요. 뜨거운 불꽃을 뿜을 수 있어요.' },
+  { n: 656, ko: '개구마르', en: 'Froakie', t: ['물'], r: 'normal', h: 0.3, w: 7.0, a: '급류', d: '거품으로 몸을 감싸서 공격을 막아요.' },
+  { n: 658, ko: '개굴닌자', en: 'Greninja', t: ['물', '악'], r: 'super', h: 1.5, w: 40.0, a: '급류', d: '물수리검을 만들어 던져요. 너무 빨라서 눈으로 보기 어려워요.' },
+  { n: 700, ko: '님피아', en: 'Sylveon', t: ['페어리'], r: 'super', h: 1.0, w: 23.5, a: '미인계', d: '리본 같은 촉수로 좋아하는 마음을 전해요.' },
+  { n: 722, ko: '나몰빼미', en: 'Rowlet', t: ['풀', '비행'], r: 'normal', h: 0.3, w: 1.5, a: '심록', d: '부드러운 깃털로 소리 없이 날아요. 낮에는 잠을 자요.' },
+  { n: 725, ko: '냐오불', en: 'Litten', t: ['불꽃'], r: 'normal', h: 0.4, w: 4.3, a: '맹화', d: '털을 핥아 정리해요. 불꽃을 뿜을 때 털은 타지 않아요.' },
+  { n: 778, ko: '따라큐', en: 'Mimikyu', t: ['고스트', '페어리'], r: 'super', h: 0.2, w: 0.7, a: '탈', d: '천으로 만든 모습 뒤에 숨었어요. 정말 모습을 보면 병이 난대요.' },
+  { n: 813, ko: '염버니', en: 'Scorbunny', t: ['불꽃'], r: 'normal', h: 0.3, w: 4.5, a: '맹화', d: '가슴의 불꽃 주머니 덕분에 아주 뜨겁게 달릴 수 있어요.' },
+  { n: 816, ko: '울머기', en: 'Sobble', t: ['물'], r: 'normal', h: 0.3, w: 4.0, a: '급류', d: '울면 눈물이 독처럼 변해요. 그래서 자주 우는 편이에요.' }
 ];
-var FURNITURE = [
-  { id: 'cushion', name: '포켓몬 방석', emoji: '🟪', price: 15 },
-  { id: 'plant', name: '나무열매 화분', emoji: '🪴', price: 12 },
-  { id: 'lamp', name: '별 무드등', emoji: '⭐', price: 20 },
-  { id: 'shelf', name: '미니 책장', emoji: '📚', price: 25 },
-  { id: 'pool', name: '미니 수영장', emoji: '🛁', price: 40 },
-  { id: 'sofa', name: '포근 소파', emoji: '🛋️', price: 0, synth: true },
-  { id: 'garden', name: '열매 정원', emoji: '🌷', price: 0, synth: true },
-  { id: 'starlight', name: '피카츄 조명', emoji: '⚡', price: 0, synth: true },
-  { id: 'library', name: '작은 도서관', emoji: '🏛️', price: 0, synth: true }
-];
-var RECIPES = [
-  { a: 'banana', out: 'icecream', kind: 'snack' },
-  { a: 'razz', out: 'razzjuice', kind: 'snack' },
-  { a: 'pinap', out: 'pinejuice', kind: 'snack' },
-  { a: 'candy', out: 'supercandy', kind: 'snack' },
-  { a: 'icecream', out: 'parfait', kind: 'snack' },
-  { a: 'supercandy', out: 'royalcandy', kind: 'snack' },
-  { a: 'cushion', out: 'sofa', kind: 'furniture' },
-  { a: 'plant', out: 'garden', kind: 'furniture' },
-  { a: 'lamp', out: 'starlight', kind: 'furniture' },
-  { a: 'shelf', out: 'library', kind: 'furniture' }
-];
-var STAGES = [
-  { lv: 1, mon: 0, name: '신비한 포켓몬 알', color: '#EBD9BC', need: 30 },
-  { lv: 2, mon: 172, name: '피츄', color: '#FFD84D', need: 60 },
-  { lv: 3, mon: 25, name: '피카츄', color: '#FFD84D', need: 100 },
-  { lv: 4, mon: 26, name: '라이츄', color: '#F2C14A', need: 150 },
-  { lv: 5, mon: 133, name: '이브이', color: '#C79A6B', need: 210 },
-  { lv: 6, mon: 196, name: '에브이', color: '#8A7CB8', need: 280 },
-  { lv: 7, mon: 470, name: '리피아', color: '#8CC97B', need: 360 },
-  { lv: 8, mon: 700, name: '님피아', color: '#E7A6C8', need: 460 },
-  { lv: 9, mon: 151, name: '뮤', color: '#F0B7D8', need: 580 },
-  { lv: 10, mon: 150, name: '뮤츠 · 전설의 수호펫', color: '#C9A6E0', need: null }
-];
-var ITEMS = {};
-SNACKS.forEach(function (s) { s.kind = 'snack'; ITEMS[s.id] = s; });
-FURNITURE.forEach(function (f) { f.kind = 'furniture'; ITEMS[f.id] = f; });
+var RARITY = {
+  normal: { label: '노멀', weight: 70, color: '#9AA7B4' },
+  rare: { label: '레어', weight: 21, color: '#4C93D6' },
+  super: { label: '슈퍼레어', weight: 7.5, color: '#9B6AD6' },
+  legend: { label: '전설', weight: 1.5, color: '#DE9E1B' }
+};
+var TYPE_COLOR = {
+  '풀': '#63B67F', '독': '#A46BBF', '불꽃': '#EE8B45', '물': '#5AA6E0', '벌레': '#9BB83F',
+  '비행': '#8FA9E0', '노말': '#A79C8E', '전기': '#E8B93C', '땅': '#C79A5B', '페어리': '#E893BE',
+  '에스퍼': '#E4779B', '격투': '#CC6C5A', '바위': '#B0A16B', '강철': '#8CA3B0', '고스트': '#7C6FBE',
+  '얼음': '#77C4D6', '드래곤': '#6E7FD6', '악': '#7B6A63'
+};
+var DEX_BY_NO = {};
+DEX.forEach(function (p) { DEX_BY_NO[p.n] = p; });
 
 /* ---------- 포켓몬 아트 (스프라이트 + 오프라인 SVG 폴백) ---------- */
 var SPRITE_SMALL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
@@ -1871,8 +2311,60 @@ function avatarHTML(key, size, opts) {
   return monArt(f.mon, f.color, size || 24, f.monName || f.name, opts);
 }
 
-function stageArt(stage, size, opts) {
+function stageArt(stage, size, opts) { /* 옛 코드 호환용 */
   return monArt(stage.mon || 0, stage.color, size, stage.name, opts || {});
+}
+
+/* ---------- 도감 · 포켓몬볼 아트 ---------- */
+function dexOf(no) { return DEX_BY_NO[Number(no)] || null; }
+function dexRecord(no) {
+  if (!state || !state.pokedex) return null;
+  return state.pokedex[String(no)] || null;
+}
+function dexCaughtCount(no) { var r = dexRecord(no); return r ? Number(r.count || 0) : 0; }
+function dexCollectedCount() {
+  var n = 0;
+  DEX.forEach(function (p) { if (dexCaughtCount(p.n) > 0) n++; });
+  return n;
+}
+function dexPartner() {
+  var no = state && state.partner;
+  return no ? dexOf(no) : null;
+}
+/* 오프라인에서도 도감이 비지 않게: 타입 색으로 그리는 작은 SVG 포켓몬 */
+function dexFallbackSvg(p) {
+  var c = TYPE_COLOR[p.t[0]] || '#A79C8E';
+  var c2 = TYPE_COLOR[p.t[1] || p.t[0]] || c;
+  return '<svg viewBox="0 0 64 64" aria-hidden="true">' +
+    '<path d="M22 16l4-9 6 7zM42 16l-4-9-6 7z" fill="' + c2 + ' "></path>' +
+    '<circle cx="32" cy="36" r="20" fill="' + c + '"></circle>' +
+    '<circle cx="32" cy="42" r="14" fill="#FFFDF8" opacity=".92"></circle>' +
+    '<circle cx="25" cy="31" r="3.4" fill="#FFFDF8"></circle>' +
+    '<circle cx="39" cy="31" r="3.4" fill="#FFFDF8"></circle>' +
+    '<circle cx="25" cy="31.5" r="1.6" fill="#4A3F35"></circle>' +
+    '<circle cx="39" cy="31.5" r="1.6" fill="#4A3F35"></circle>' +
+    '<path d="M28 40q4 3 8 0" stroke="#4A3F35" stroke-width="1.6" fill="none" stroke-linecap="round"></path>' +
+    '<text x="32" y="58" text-anchor="middle" font-size="12" font-weight="800" fill="#8B7059" font-family="inherit">' + esc(p.ko.charAt(0)) + '</text>' +
+    '</svg>';
+}
+function dexArt(p, size, opts) {
+  opts = opts || {};
+  if (!p) return '';
+  var cls = 'art dex-art' + (opts.cls ? ' ' + opts.cls : '') + (opts.silhouette ? ' is-sil' : '');
+  var src = (opts.small ? SPRITE_SMALL : SPRITE_ART) + p.n + '.png';
+  return '<span class="' + cls + '" style="width:' + size + 'px;height:' + size + 'px">' +
+    '<span class="art-fb">' + dexFallbackSvg(p) + '</span>' +
+    '<img src="' + src + '" alt="' + esc(opts.silhouette ? '???' : p.ko) + '" loading="lazy" decoding="async"' +
+    ' referrerpolicy="no-referrer" onerror="artFail(this)">' +
+    '</span>';
+}
+function typeBadgesHTML(types) {
+  return (types || []).map(function (t) {
+    return '<span class="type-badge" style="background:' + (TYPE_COLOR[t] || '#A79C8E') + '">' + esc(t) + '</span>';
+  }).join('');
+}
+function ballIcon(size, cls) {
+  return '<span class="ball-ic ' + (cls || '') + '" style="width:' + size + 'px;height:' + size + 'px" aria-hidden="true">' + pokeballSvg('#EE5B5B') + '</span>';
 }
 
 /* ---------- DOM 도우미 ---------- */
@@ -1986,13 +2478,18 @@ function seedState() {
       entries: []
     },
     mail: { rooms: { all: [], ujin: [], eunwoo: [], taeon: [] } },
-    pet: {
-      name: '콩콩',
-      stage: 1,
-      exp: 0,
-      inv: {},
-      placed: []
-    },
+    /* 날마다 새로 생기는 비고정 숙제: {id, date, text, tag, memo, done, doneAt, ts} */
+    homeworkTasks: [],
+    /* 고정 공부 과목 (요일별 시간표): {id, name, book, time, days:[0~6], memo, ts} */
+    studySubjects: [],
+    /* 날짜별 공부 완료 기록: { 'YYYY-MM-DD': [subjectId, ...] } */
+    studyDone: {},
+    /* 포켓몬볼: 보유 수 · 날짜별 수령 기록 · 받은 기록 */
+    pokeball: { count: 0, claims: {}, log: [] },
+    /* 도감 등록 기록: { '25': { count, first, last } } */
+    pokedex: {},
+    /* 대표 파트너 포켓몬 도감 번호 */
+    partner: null,
     reading: [],
     growth: [],
     events: [],
@@ -2043,7 +2540,6 @@ var ui = {
   period: null,
   routineTab: 'morning',
   mailRoom: 'all',
-  shopTab: 'snacks',
   readTab: 'all',
   calY: new Date().getFullYear(),
   calM: new Date().getMonth(),
@@ -2051,12 +2547,22 @@ var ui = {
   homeCalY: new Date().getFullYear(),
   homeCalM: new Date().getMonth(),
   homeCalSel: todayISO(),
-  decorate: false,
   gameSpinning: false,
   wheelRot: 0,
   eventEditId: null,
   routineEditId: null,
-  planEditId: null
+  planEditId: null,
+  /* 숙제 탭: 보고 있는 날짜 · 수정 중인 숙제 */
+  hwDate: null,
+  hwEditId: null,
+  /* 공부 탭: 수정 중인 과목 · 추가하려는 요일 */
+  studyEditId: null,
+  studyDayDow: null,
+  /* 도감: 필터 · 상세로 연 도감 번호 · 뽽기 진행 중 여부 */
+  dexFilter: 'all',
+  dexType: 'all',
+  dexNo: null,
+  ballBusy: false
 };
 var parentOn = false;
 var pinBuffer = '';
@@ -2323,19 +2829,85 @@ function supplementMissing() {
   return out;
 }
 
-/* ---------- 펫 도우미 ---------- */
-function petStage() {
-  var lv = clamp(state.pet.stage || 1, 1, 10);
-  return STAGES[lv - 1];
+/* ---------- 비고정 숙제 도우미 ---------- */
+function hwTaskList() {
+  if (!Array.isArray(state.homeworkTasks)) state.homeworkTasks = [];
+  return state.homeworkTasks;
 }
-function petNeed() { var s = petStage(); return s.need || 0; }
-function petExpPct() {
-  var need = petNeed();
-  if (!need) return 100;
-  return clamp(Math.round(state.pet.exp / need * 100), 0, 100);
+function hwTasksOn(dateStr) {
+  return hwTaskList().filter(function (t) { return t.date === dateStr; });
 }
-function itemOf(id) { return ITEMS[id] || { id: id, name: id, emoji: '🍬', kind: 'snack', exp: 5 }; }
-function invCount(id) { return state.pet.inv[id] || 0; }
+function hwTaskStats(dateStr) {
+  var list = hwTasksOn(dateStr);
+  var done = list.filter(function (t) { return t.done; }).length;
+  return { total: list.length, done: done, left: list.length - done, pct: pctOf(done, list.length) };
+}
+function findHwTask(id) {
+  var out = null;
+  hwTaskList().forEach(function (t) { if (t.id === id) out = t; });
+  return out;
+}
+
+/* ---------- 공부(고정 과목) 도우미 ---------- */
+function studySubjectList() {
+  if (!Array.isArray(state.studySubjects)) state.studySubjects = [];
+  return state.studySubjects;
+}
+function findStudySubject(id) {
+  var out = null;
+  studySubjectList().forEach(function (s) { if (s.id === id) out = s; });
+  return out;
+}
+function studySubjectsOn(dow) {
+  return studySubjectList().filter(function (s) { return (s.days || []).indexOf(Number(dow)) >= 0; });
+}
+function studyDoneList(dateStr) {
+  if (!state.studyDone) state.studyDone = {};
+  if (!Array.isArray(state.studyDone[dateStr])) state.studyDone[dateStr] = [];
+  return state.studyDone[dateStr];
+}
+function isStudyDone(dateStr, id) { return studyDoneList(dateStr).indexOf(id) >= 0; }
+function setStudyDone(dateStr, id, on) {
+  var arr = studyDoneList(dateStr);
+  var idx = arr.indexOf(id);
+  if (on && idx < 0) arr.push(id);
+  if (!on && idx >= 0) arr.splice(idx, 1);
+}
+/* 오늘의 공부 = 요일별 고정 과목 + 교재·쪽수 계획(옛 숙제 계획)의 오늘 몫 */
+function studyTodayItems(dateStr) {
+  var d = parseISO(dateStr);
+  var out = [];
+  studySubjectsOn(d.getDay()).forEach(function (s) {
+    out.push({
+      key: 's:' + s.id, type: 'subject', id: s.id, title: s.name,
+      sub: [s.book, s.time].filter(Boolean).join(' · '),
+      done: isStudyDone(dateStr, s.id)
+    });
+  });
+  homeworkOn(d).forEach(function (x) {
+    out.push({
+      key: 'p:' + x.plan.id, type: 'plan', id: x.plan.id, title: x.plan.book,
+      sub: [x.plan.subject, pageLabel(x.a)].filter(Boolean).join(' · '),
+      done: x.done, date: x.date
+    });
+  });
+  return out;
+}
+function studyStats(dateStr) {
+  var items = studyTodayItems(dateStr);
+  var done = items.filter(function (x) { return x.done; }).length;
+  return { total: items.length, done: done, left: items.length - done, pct: pctOf(done, items.length), items: items };
+}
+/* 그날 해야 할 공부와 숙제를 모두 끝냈는지 (포켓몬볼 지급 조건) */
+function dailyRewardStatus(dateStr) {
+  var st = studyStats(dateStr);
+  var hw = hwTaskStats(dateStr);
+  var has = st.total > 0 || hw.total > 0;
+  var ready = has &&
+    (st.total === 0 || st.done >= st.total) &&
+    (hw.total === 0 || hw.done >= hw.total);
+  return { ready: ready, has: has, claimed: !!(state.pokeball && state.pokeball.claims && state.pokeball.claims[dateStr]), study: st, hw: hw };
+}
 
 /* ---------- 용돈 도우미 ---------- */
 function allowanceBalance() {
@@ -2846,15 +3418,16 @@ function renderFamilyCards() {
 
     if (key === 'taeon') {
       var rStats = routineStats(today);
-      var hw = homeworkOn(now);
-      var hwDone = hw.filter(function (x) { return x.done; }).length;
-      var all = rStats.total + hw.length;
-      var pct = pctOf(rStats.done + hwDone, all);
+      var stoday = studyStats(today);
+      var hwt = hwTaskStats(today);
+      var reward = dailyRewardStatus(today);
+      var all = rStats.total + stoday.total + hwt.total;
+      var pct = pctOf(rStats.done + stoday.done + hwt.done, all);
       badge = '<span class="chip butter">오늘 ' + pct + '%</span>';
       blocks += '<div class="fam-block">' +
-        '<div class="fam-block-head"><b>✅ 오늘 루틴 · 숙제</b>' +
-        '<span class="card-sub">' + (rStats.done + hwDone) + '/' + all + ' · 체크하면 ★</span></div>' +
-        bar(pct, 'mint') +
+        '<div class="fam-block-head"><b>✅ 오늘 루틴</b>' +
+        '<span class="card-sub">' + rStats.done + '/' + rStats.total + ' · 체크하면 ★</span></div>' +
+        bar(rStats.pct, 'mint') +
         '<div class="fam-check mt10">' +
         PERIODS.map(function (p) {
           return routineItems(p.id).map(function (it) {
@@ -2865,12 +3438,33 @@ function renderFamilyCards() {
               '<span class="fam-item-tag">' + p.emoji + '</span></button>';
           }).join('');
         }).join('') +
-        hw.map(function (x) {
-          return '<button class="fam-item" data-action="hw-toggle" data-plan="' + x.plan.id + '" data-date="' + x.date + '" type="button">' +
-            '<span class="check ' + (x.done ? 'on' : '') + '">' + (x.done ? '✓' : '') + '</span>' +
-            '<span class="fam-item-text ' + (x.done ? 'done' : '') + '">' + esc(x.plan.book) + ' ' + pageLabel(x.a) + '</span>' +
+        '</div></div>' +
+        '<div class="fam-block">' +
+        '<div class="fam-block-head"><b>📖 오늘의 공부 · 📝 숙제</b>' +
+        (reward.claimed
+          ? '<span class="chip mint" style="font-size:9.5px;padding:3px 7px">🎁 볼 받음</span>'
+          : '<span class="chip butter" style="font-size:9.5px;padding:3px 7px">🎁 다 하면 +1</span>') +
+        '</div>' +
+        bar(pctOf(stoday.done + hwt.done, stoday.total + hwt.total), pctOf(stoday.done + hwt.done, stoday.total + hwt.total) >= 100 ? 'mint' : '') +
+        '<div class="fam-check mt10">' +
+        stoday.items.map(function (it) {
+          return '<button class="fam-item" data-action="study-toggle" data-date="' + today + '" data-type="' + it.type + '" data-id="' + it.id + '" type="button">' +
+            '<span class="check ' + (it.done ? 'on' : '') + '">' + (it.done ? '✓' : '') + '</span>' +
+            '<span class="fam-item-text ' + (it.done ? 'done' : '') + '">' + esc(it.title) + '</span>' +
+            '<span class="fam-item-tag">' + (it.type === 'plan' ? '교재' : '공부') + '</span></button>';
+        }).join('') +
+        (stoday.items.length ? '' : '<div class="fam-empty" style="font-size:10px">오늘 공부 없음</div>') +
+        hwTasksOn(today).map(function (t) {
+          return '<button class="fam-item" data-action="hw-task-toggle" data-id="' + t.id + '" type="button">' +
+            '<span class="check ' + (t.done ? 'on' : '') + '">' + (t.done ? '✓' : '') + '</span>' +
+            '<span class="fam-item-text ' + (t.done ? 'done' : '') + '">' + esc(t.text) + '</span>' +
             '<span class="fam-item-tag">숙제</span></button>';
         }).join('') +
+        (hwt.total ? '' : '<div class="fam-empty" style="font-size:10px">오늘 숙제 없음 · <b>＋</b>로 추가</div>') +
+        '</div>' +
+        '<div class="fam-note">' +
+        '<button class="chip line" data-action="hw-task-add" type="button">📝 숙제 추가</button>' +
+        '<button class="chip line" data-action="go-dex" type="button">🔴 포켓몬볼 ' + (state.pokeball ? state.pokeball.count : 0) + '개</button>' +
         '</div></div>';
     } else {
       badge = '<span class="chip ' + (st.total && !st.left ? 'mint' : 'line') + '">' + st.done + '/' + st.total + ' 완료</span>';
@@ -2906,13 +3500,16 @@ function renderFamilyCards() {
       '<button class="chip line" data-go="calendar" type="button">📅 달력</button>' +
       (key === 'taeon' ? '<button class="chip line" data-action="open-growth" type="button">📏 성장</button>' : '') +
       (key === 'taeon' ? '<button class="chip line" data-go="routine" type="button">✅ 루틴 관리</button>' : '') +
-      (key === 'taeon' ? '<button class="chip line" data-go="homework" type="button">📚 숙제 관리</button>' : '') +
+      (key === 'taeon' ? '<button class="chip line" data-go="homework" type="button">📝 숙제 관리</button>' : '') +
+      (key === 'taeon' ? '<button class="chip line" data-go="study" type="button">📖 공부 시간표</button>' : '') +
       '</div></div>';
 
+    var partner = key === 'taeon' ? dexPartner() : null;
     return '<article class="fam-card ' + key + '">' +
       '<header class="fam-head">' +
       '<span class="fam-av">' + avatarHTML(key, 40) + '</span>' +
       '<span class="fam-name"><b>' + m.name + '</b><span>' + m.role + ' · ' + m.monName + '</span></span>' +
+      (partner ? '<span class="fam-partner" title="대표 파트너 · ' + esc(partner.ko) + '">' + dexArt(partner, 30, { small: true }) + '</span>' : '') +
       badge + '</header>' + blocks + '</article>';
   }).join('');
   if (keep) {
@@ -2930,32 +3527,38 @@ function renderFamilyCards() {
 function renderHomeQuick() {
   var el = $('#homeQuick');
   if (!el) return;
-  var st = petStage();
+  var balls = state.pokeball ? Number(state.pokeball.count || 0) : 0;
   var pending = state.requests.filter(function (r) { return r.status === 'pending'; }).length;
   var wk = weekSummary();
+  var collected = dexCollectedCount();
   el.innerHTML =
     '<button class="q" data-go="timer" type="button">⏱️ 집중 타이머 <b>' + fmtMMSS(timerRemaining()) + '</b></button>' +
-    '<button class="q" data-go="pet" type="button">🐣 ' + esc(state.pet.name) + ' <b>' + st.lv + '단계</b></button>' +
+    '<button class="q" data-go="dex" type="button">🔴 포켓몬볼 <b>' + balls + '</b></button>' +
+    '<button class="q" data-go="dex" type="button">🎮 도감 <b>' + collected + '/' + DEX.length + '</b></button>' +
     '<button class="q" data-go="timer" type="button">💌 확인 대기 <b>' + pending + '건</b></button>' +
     '<button class="q" data-go="stats" type="button">📊 이번 주 <b>' + wk.overall + '%</b></button>';
 }
 
 function renderHome() {
-  var now = new Date();
-  var rStats = routineStats(todayISO());
-  var hw = homeworkOn(now);
-  var hwDone = hw.filter(function (x) { return x.done; }).length;
+  var today = todayISO();
+  var rStats = routineStats(today);
+  var st = studyStats(today);
+  var hw = hwTaskStats(today);
+  var reward = dailyRewardStatus(today);
   var pending = state.requests.filter(function (r) { return r.status === 'pending'; });
-  var todayPct = pctOf(rStats.done + hwDone, rStats.total + hw.length);
+  var totalAll = rStats.total + st.total + hw.total;
+  var doneAll = rStats.done + st.done + hw.done;
+  var todayPct = pctOf(doneAll, totalAll);
   var sched = homeScheduleItems();
+  var balls = state.pokeball ? Number(state.pokeball.count || 0) : 0;
 
   var el;
   el = $('#heroGreeting'); if (el) el.textContent = greetingText();
   el = $('#heroTitle'); if (el) el.textContent = '우리 가족 공용 홈';
   el = $('#heroSub');
   if (el) {
-    el.textContent = '오늘 루틴 ' + rStats.done + '/' + rStats.total + ' · 숙제 ' + hwDone + '/' + hw.length +
-      ' · 가까운 일정 ' + sched.length + '개를 가족이 함께 봐요.';
+    el.textContent = '오늘 루틴 ' + rStats.done + '/' + rStats.total + ' · 공부 ' + st.done + '/' + st.total +
+      ' · 숙제 ' + hw.done + '/' + hw.total + ' · 포켓몬볼 ' + balls + '개';
   }
 
   el = $('#heroChips');
@@ -2966,7 +3569,11 @@ function renderHome() {
       (wx ? '<span class="chip sky">' + wx + '</span>' : '') +
       '<span class="chip peach">' + pm.emoji + ' 지금은 ' + pm.label + ' 루틴</span>' +
       '<span class="chip mint">✅ 루틴 ' + rStats.done + '/' + rStats.total + '</span>' +
-      '<span class="chip sky">📚 숙제 ' + hwDone + '/' + hw.length + '</span>' +
+      '<span class="chip sky">📖 공부 ' + st.done + '/' + st.total + '</span>' +
+      '<span class="chip peach">📝 숙제 ' + hw.done + '/' + hw.total + '</span>' +
+      (reward.claimed
+        ? '<span class="chip mint">🎁 오늘 몬스터볼 받았어요</span>'
+        : (reward.ready ? '<span class="chip butter">🎁 몬스터볼 +1 받을 수 있어요!</span>' : '<span class="chip butter">🔴 포켓몬볼 ' + balls + '개</span>')) +
       (pending.length ? '<span class="chip butter">💌 확인 대기 ' + pending.length + '건</span>' : '') +
       (unreadTotal(state.viewer) ? '<span class="chip pink">📮 안 읽은 쪽지 ' + unreadTotal(state.viewer) + '</span>' : '');
   }
@@ -3085,40 +3692,187 @@ function renderRoutine() {
   }
 }
 
-/* ---------- 숙제 ---------- */
+/* ---------- 숙제 (그날그날 비고정 숙제) ---------- */
+function hwTaskRowHTML(t) {
+  return '<div class="task-item' + (t.done ? ' is-done' : '') + '">' +
+    '<button class="check ' + (t.done ? 'on' : '') + '" data-action="hw-task-toggle" data-id="' + t.id + '" type="button" aria-label="' + esc(t.text) + ' 완료">' + (t.done ? '✓' : '') + '</button>' +
+    '<div class="task-body">' +
+    '<div class="task-text ' + (t.done ? 'done' : '') + '">' + esc(t.text) + '</div>' +
+    '<div class="task-meta">' +
+    (t.tag ? '<span class="task-tag">' + esc(t.tag) + '</span>' : '') +
+    (t.memo ? '<span class="task-memo">' + esc(t.memo) + '</span>' : '') +
+    '</div></div>' +
+    '<span class="item-acts">' +
+    '<button class="act-btn" data-action="hw-task-edit" data-id="' + t.id + '" type="button" aria-label="숙제 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+    '<button class="act-btn del" data-action="hw-task-del" data-id="' + t.id + '" type="button" aria-label="숙제 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+    '</span></div>';
+}
+
 function renderHomework() {
-  var now = new Date();
-  var hw = homeworkOn(now);
-  var el = $('#hwTodayDate');
-  if (el) el.textContent = korDate(now, true);
-  el = $('#hwToday');
+  var ds = ui.hwDate || todayISO();
+  var d = parseISO(ds);
+  var isToday = ds === todayISO();
+  var st = hwTaskStats(ds);
+  var reward = dailyRewardStatus(ds);
+
+  var el = $('#hwTaskDate');
+  if (el) el.textContent = korDate(d, true) + (isToday ? ' · 오늘' : '');
+  el = $('#hwTaskTodayBtn');
+  if (el) el.style.display = isToday ? 'none' : 'inline-flex';
+
+  el = $('#hwTaskProgress');
   if (el) {
-    if (!hw.length) {
-      el.innerHTML = emptyBox('🌤️', '오늘은 계획된 숙제가 없어요.<br>＋ 숙제 추가로 주간 계획을 넣어 보세요.');
+    el.innerHTML =
+      '<span class="chip ' + (st.total && st.done === st.total ? 'mint' : 'butter') + '">' +
+      (st.total ? '✓ ' + st.done + ' / ' + st.total + ' 완료' : '📝 숙제 0건') + '</span>' +
+      (!st.total ? '<span class="chip line">오늘은 숙제가 없어요</span>'
+        : (st.done === st.total
+          ? (reward.claimed ? '<span class="chip mint">🎁 몬스터볼 받았어요</span>' : '<span class="chip mint">🎉 모두 끝냈어요!</span>')
+          : '<span class="chip line">' + (st.total - st.done) + '개 남았어요</span>')) +
+      (reward.claimed
+        ? '<span class="chip mint">🎁 몬스터볼 수령 완료</span>'
+        : (reward.study.total === 0 ? '<span class="chip butter">다 끝내면 몬스터볼 +1</span>' : ''));
+  }
+
+  el = $('#hwTaskList');
+  if (el) {
+    var list = hwTasksOn(ds).slice().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
+    var todo = list.filter(function (t) { return !t.done; });
+    var done = list.filter(function (t) { return t.done; });
+    if (!list.length) {
+      el.innerHTML = emptyBox('📝', '이 날은 아직 숙제가 없어요.<br>＋ 숙제 추가로 알림장·학원 숙제·준비물을 하나씩 넣어 보세요.');
     } else {
-      var doneN = hw.filter(function (x) { return x.done; }).length;
-      el.innerHTML = '<div class="stack">' + hw.map(function (x) {
-        return '<div class="today-hw">' +
-          '<div class="row" style="justify-content:space-between;gap:8px">' +
-          '<div><h3>' + esc(x.plan.book) + '</h3><div class="pages">' + pageLabel(x.a) + '</div></div>' +
-          '<button class="check ' + (x.done ? 'on' : '') + '" data-action="hw-toggle" data-plan="' + x.plan.id + '" data-date="' + x.date + '" type="button" aria-label="숙제 완료">' + (x.done ? '✓' : '') + '</button>' +
-          '</div>' +
-          '<div class="row mt10" style="justify-content:space-between">' +
-          '<span class="chip ' + (x.done ? 'mint' : 'peach') + '">' + esc(x.plan.subject) + '</span>' +
-          '<span class="chip ' + (x.done ? 'mint' : 'line') + '">' + (x.done ? '★+2 완료' : '끝내면 ★+2') + '</span>' +
-          '</div></div>';
-      }).join('') + '</div>' +
-        '<div class="row mt14" style="justify-content:space-between"><span class="chip ' + (doneN === hw.length ? 'mint' : 'butter') + '">' +
-        (doneN === hw.length ? '🎉 오늘 숙제 모두 완료!' : doneN + ' / ' + hw.length + ' 완료') + '</span>' +
-        '<button class="link-btn" data-action="go" data-view="timer" type="button">타이머로 집중하기</button></div>';
+      el.innerHTML =
+        '<div class="task-group">' +
+        '<div class="task-group-head"><b>아직 남은 숙제</b><span>' + todo.length + '개</span></div>' +
+        (todo.length ? todo.map(hwTaskRowHTML).join('') : '<div class="fam-empty">남은 숙제가 없어요. 아주 잘했어요! 🌟</div>') +
+        '</div>' +
+        (done.length
+          ? '<div class="task-group done-group mt14">' +
+          '<div class="task-group-head"><b>✓ 끝낸 숙제</b><span>' + done.length + '개</span></div>' +
+          done.map(hwTaskRowHTML).join('') + '</div>'
+          : '');
     }
   }
 
+  /* 이번 주 숙제 현황 (날짜를 눌러 다른 날 숙제도 볼 수 있어요) */
+  el = $('#hwWeekStrip');
+  if (el) {
+    el.innerHTML = weekDates(new Date()).map(function (day) {
+      var dayIso = isoDate(day);
+      var s = hwTaskStats(dayIso);
+      return '<button class="hw-day ' + (dayIso === ds ? 'is-sel ' : '') + (dayIso === todayISO() ? 'is-today' : '') +
+        '" data-action="hw-day" data-date="' + dayIso + '" type="button">' +
+        '<b>' + DOW[day.getDay()] + '</b><span>' + day.getDate() + '</span>' +
+        '<i class="' + (s.total && s.done === s.total ? 'all' : (s.done ? 'part' : '')) + '"></i>' +
+        '<small>' + (s.total ? s.done + '/' + s.total : '–') + '</small></button>';
+    }).join('');
+  }
+
+  /* 다 했을 때 보상 안내 */
+  el = $('#hwTaskReward');
+  if (el) {
+    var r = dailyRewardStatus(ds);
+    el.innerHTML = r.claimed
+      ? '🎁 이 날은 이미 <b>포켓몬볼 1개</b>를 받았어요. 하나를 풀어도 받은 볼은 그대로예요.'
+      : (!r.has
+        ? '아직 오늘 할 일이 없어요. 공부나 숙제를 넣으면, 다 끝냈을 때 <b>포켓몬볼</b>을 받아요.'
+        : (r.ready ? '🎁 지금 <b>포켓몬볼 +1</b>을 받을 수 있어요!' :
+          '오늘의 <b>공부 ' + r.study.done + '/' + r.study.total + '</b> · <b>숙제 ' + r.hw.done + '/' + r.hw.total +
+          '</b>를 모두 끝내면 <b>포켓몬볼 +1</b>을 받아요.'));
+  }
+}
+
+/* ---------- 공부 (고정 과목 · 요일 시간표) ---------- */
+function studyChipHTML(it, dateStr) {
+  return '<button class="study-chip ' + (it.done ? 'is-on' : '') + '" data-action="study-toggle" data-date="' + dateStr + '" data-type="' + it.type + '" data-id="' + it.id + '" type="button">' +
+    '<span class="study-chip-check">' + (it.done ? '✓' : '') + '</span>' +
+    '<span class="study-chip-text"><b>' + esc(it.title) + '</b>' +
+    (it.sub ? '<small>' + esc(it.sub) + '</small>' : '') + '</span>' +
+    (it.type === 'plan' ? '<span class="study-chip-tag">교재</span>' : '') +
+    '</button>';
+}
+
+function timetableCellHTML(s, dateStr) {
+  var done = isStudyDone(dateStr, s.id);
+  return '<div class="tt-sub' + (done ? ' is-done' : '') + '">' +
+    '<button class="tt-main" data-action="study-toggle" data-date="' + dateStr + '" data-type="subject" data-id="' + s.id + '" type="button">' +
+    '<span class="tt-check">' + (done ? '✓' : '') + '</span>' +
+    '<span class="tt-texts"><b>' + esc(s.name) + '</b>' +
+    ((s.book || s.time) ? '<small>' + esc([s.book, s.time].filter(Boolean).join(' · ')) + '</small>' : '') +
+    '</span></button>' +
+    '<span class="tt-acts">' +
+    '<button data-action="study-edit" data-id="' + s.id + '" type="button" aria-label="과목 수정" title="과목 수정">✏️</button>' +
+    '<button data-action="study-del-day" data-id="' + s.id + '" data-date="' + dateStr + '" type="button" aria-label="이 요일에서 빼기" title="이 요일에서 빼기">🗑️</button>' +
+    '</span></div>';
+}
+
+function renderStudy() {
+  var today = todayISO();
+  var td = parseISO(today);
+  var st = studyStats(today);
+  var reward = dailyRewardStatus(today);
+
+  var el = $('#studyTodayDate');
+  if (el) el.textContent = korDate(td, true) + ' · 오늘';
+
+  el = $('#studyTodayHead');
+  if (el) {
+    el.innerHTML = '<span class="chip ' + (st.total && st.done === st.total ? 'mint' : 'line') + '">' +
+      st.done + ' / ' + st.total + '</span>' +
+      (reward.claimed
+        ? '<span class="chip mint">🎁 몬스터볼 받았어요</span>'
+        : '<span class="chip butter">모두 체크하면 몬스터볼 +1</span>');
+  }
+
+  el = $('#studyTodayChips');
+  if (el) {
+    if (!st.items.length) {
+      el.innerHTML = '<div class="study-empty">오늘 예정된 공부가 없어요. 아래 시간표의 요일 칸에서 ＋를 눌러 과목을 넣어 보세요.</div>';
+    } else {
+      el.innerHTML = st.items.map(function (it) { return studyChipHTML(it, today); }).join('');
+    }
+  }
+  el = $('#studyTodayBar');
+  if (el) el.innerHTML = bar(st.pct, st.pct >= 100 ? 'mint' : '');
+
+  /* 주간 시간표: 월~일 */
+  el = $('#studyTimetable');
+  if (el) {
+    var dates = weekDates(new Date());
+    el.innerHTML = dates.map(function (d) {
+      var dow = d.getDay();
+      var ds = isoDate(d);
+      var subs = studySubjectsOn(dow);
+      var doneN = subs.filter(function (s) { return isStudyDone(ds, s.id); }).length;
+      var planItems = homeworkOn(d);
+      return '<div class="tt-day' + (ds === today ? ' is-today' : '') + (subs.length ? '' : ' is-empty') + '">' +
+        '<div class="tt-head">' +
+        '<span class="tt-dow">' + DOW[dow] + '</span><span class="tt-date">' + (d.getMonth() + 1) + '/' + d.getDate() + '</span>' +
+        '<button class="tt-add" data-action="study-add" data-dow="' + dow + '" type="button" aria-label="' + DOW[dow] + '요일 과목 추가" title="' + DOW[dow] + '요일 과목 추가">＋</button>' +
+        '</div>' +
+        '<div class="tt-body">' +
+        (subs.length
+          ? subs.map(function (s) { return timetableCellHTML(s, ds); }).join('')
+          : '<div class="tt-empty">＋ 로 추가</div>') +
+        (planItems.length
+          ? planItems.map(function (x) {
+            return '<div class="tt-plan">📕 ' + esc(x.plan.book) + ' <small>' + pageLabel(x.a) + '</small></div>';
+          }).join('')
+          : '') +
+        '</div>' +
+        (subs.length ? '<div class="tt-foot">✓ ' + doneN + '/' + subs.length + '</div>' : '') +
+        '</div>';
+    }).join('');
+  }
+
+  /* 교재 · 쪽수 주간 계획 (옛 숙제 탭의 계획) */
   el = $('#hwPlans');
   if (el) {
     if (!state.plans.length) {
-      el.innerHTML = emptyBox('📒', '등록된 주간 계획이 없어요.<br>＋ 숙제 추가로 첫 계획을 만들어 보세요.');
+      el.innerHTML = emptyBox('📒', '등록된 교재 계획이 없어요.<br>쪽수로 나눠 하는 교재가 있다면 ＋ 계획 추가로 넣어 보세요.');
     } else {
+      var now = new Date();
       el.innerHTML = state.plans.map(function (p) {
         var assigns = planAssignments(p);
         var cells = DOW_ORDER.map(function (dow) {
@@ -3135,8 +3889,8 @@ function renderHomework() {
           '<div class="plan-head"><div style="min-width:0"><div class="plan-name">' + esc(p.book) + '</div>' +
           '<div class="card-sub">' + esc(p.subject) + ' · ' + p.start + '~' + p.end + '쪽 · ' + p.days.length + '일</div></div>' +
           '<span class="plan-acts">' +
-          '<button class="act-btn" data-action="plan-edit" data-id="' + p.id + '" type="button" aria-label="숙제 계획 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
-          '<button class="act-btn del" data-action="plan-del" data-id="' + p.id + '" type="button" aria-label="숙제 계획 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
+          '<button class="act-btn" data-action="plan-edit" data-id="' + p.id + '" type="button" aria-label="교재 계획 수정"><i class="em">✏️</i><span class="lbl">수정</span></button>' +
+          '<button class="act-btn del" data-action="plan-del" data-id="' + p.id + '" type="button" aria-label="교재 계획 삭제"><i class="em">🗑️</i><span class="lbl">삭제</span></button>' +
           '</span></div>' +
           '<div class="week-strip">' + cells + '</div>' +
           '</div>';
@@ -3144,11 +3898,12 @@ function renderHomework() {
     }
   }
 
+  /* 주말 보충 (교재 계획에서 놓친 몫) */
   el = $('#hwSupplement');
   if (el) {
     var supps = (state.supplements || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     if (!supps.length) {
-      el.innerHTML = emptyBox('🌱', '아직 주말 보충수업이 없어요.<br>놓친 숙제는 통계 화면에서 주말로 옮길 수 있어요.');
+      el.innerHTML = emptyBox('🌱', '아직 주말 보충이 없어요.<br>놓친 교재 분량은 통계 화면에서 주말로 옮길 수 있어요.');
     } else {
       el.innerHTML = '<div class="stack">' + supps.map(function (s) {
         var d = parseISO(s.date);
@@ -3165,17 +3920,35 @@ function renderHomework() {
   /* 분배 미리보기 */
   var prev = $('#hwSplitPreview');
   if (prev) {
-    var s = Number(($('#planStart') || {}).value || 0);
-    var e = Number(($('#planEnd') || {}).value || 0);
+    var s0 = Number(($('#planStart') || {}).value || 0);
+    var e0 = Number(($('#planEnd') || {}).value || 0);
     var days = selectedPlanDays();
-    if (s > 0 && e >= s && days.length) {
-      var demo = planAssignments({ start: s, end: e, days: days });
-      prev.innerHTML = '<b>' + (e - s + 1) + '쪽</b>을 ' + days.length + '일로 나눠요 → ' +
+    if (s0 > 0 && e0 >= s0 && days.length) {
+      var demo = planAssignments({ start: s0, end: e0, days: days });
+      prev.innerHTML = '<b>' + (e0 - s0 + 1) + '쪽</b>을 ' + days.length + '일로 나눠요 → ' +
         demo.map(function (a) { return DOW[a.dow] + ' ' + pageLabel(a); }).join(' · ');
     } else {
       prev.textContent = '요일을 고르면 쪽수가 자동으로 나뉘어요.';
     }
   }
+
+  /* 좁은 화면: 오늘 요일 칸이 보이게 가로 위치를 맞춤 */
+  var ttWrap = $('#studyTimetable');
+  if (ttWrap && ttWrap.scrollWidth > ttWrap.clientWidth + 4) {
+    var todayCol = ttWrap.querySelector('.tt-day.is-today');
+    if (todayCol) {
+      var wr = ttWrap.getBoundingClientRect();
+      var cr = todayCol.getBoundingClientRect();
+      if (cr.left < wr.left || cr.right > wr.right) {
+        ttWrap.scrollLeft += (cr.left - wr.left) - 10;
+      }
+    }
+  }
+
+  /* 시간표 비어 있을 때 안내 */
+  var hintBox = $('#studyEmptyHint');
+  if (hintBox) hintBox.style.display = studySubjectList().length ? 'none' : 'flex';
+
   renderPlanDays();
   renderPlanFormUI();
 }
@@ -3327,125 +4100,171 @@ function completeFocus(minutes, auto) {
   toast(auto ? '⏰ 시간이 다 됐어요! 엄마 확인을 기다려요 💌' : '🙋 숙제 완료! 엄마 확인을 기다려요 💌', 3200);
 }
 
-/* ---------- 펫 ---------- */
-function renderPet() {
-  var st = petStage();
-  var el = $('#petStageName'); if (el) el.textContent = st.lv + '단계 · ' + st.name;
-  el = $('#petNameTag'); if (el) el.textContent = esc(state.pet.name);
-  el = $('#petRoomPet'); if (el) el.innerHTML = stageArt(st, 140, { big: true, eager: true });
-  el = $('#petExpText');
-  if (el) el.textContent = 'EXP ' + state.pet.exp + ' / ' + (petNeed() || 'MAX');
-  el = $('#petStageHint');
-  if (el) el.textContent = petNeed() ? '다음 단계까지 ' + Math.max(0, petNeed() - state.pet.exp) : '최종 단계예요!';
-  el = $('#petExpBar');
-  if (el) el.style.width = petExpPct() + '%';
+/* ---------- 포켓몬 도감 ---------- */
+function pad3(n) { n = String(n); while (n.length < 3) n = '0' + n; return n; }
 
-  el = $('#petStageRoad');
+function rollPokemon() {
+  var keys = Object.keys(RARITY);
+  var byR = {};
+  DEX.forEach(function (p) { (byR[p.r] = byR[p.r] || []).push(p); });
+  var total = 0;
+  keys.forEach(function (k) { total += RARITY[k].weight; });
+  var r = Math.random() * total;
+  var pick = keys[keys.length - 1];
+  for (var i = 0; i < keys.length; i++) {
+    r -= RARITY[keys[i]].weight;
+    if (r <= 0) { pick = keys[i]; break; }
+  }
+  var pool = (byR[pick] && byR[pick].length) ? byR[pick] : DEX;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function dexFilterList() {
+  var list = DEX.slice();
+  if (ui.dexFilter === 'got') list = list.filter(function (p) { return dexCaughtCount(p.n) > 0; });
+  if (ui.dexFilter === 'missing') list = list.filter(function (p) { return dexCaughtCount(p.n) === 0; });
+  if (ui.dexType !== 'all') list = list.filter(function (p) { return p.t.indexOf(ui.dexType) >= 0; });
+  return list;
+}
+
+function dexCardHTML(p) {
+  var cnt = dexCaughtCount(p.n);
+  var got = cnt > 0;
+  return '<button class="dex-card ' + (got ? 'is-got' : 'is-lock') + '" data-action="dex-open" data-no="' + p.n + '" type="button" aria-label="' + (got ? esc(p.ko) : '미발견 포켓몬') + '">' +
+    '<span class="dex-card-no">No.' + pad3(p.n) + '</span>' +
+    '<span class="dex-card-pic">' + (got ? dexArt(p, 64, { small: true }) : dexArt(p, 64, { small: true, silhouette: true })) + '</span>' +
+    '<span class="dex-card-name">' + (got ? esc(p.ko) : '???') + '</span>' +
+    '<span class="dex-card-foot">' +
+    (got
+      ? '<span class="type-dots">' + p.t.map(function (t) { return '<i style="background:' + (TYPE_COLOR[t] || '#AAA') + '" title="' + esc(t) + '"></i>'; }).join('') + '</span>' +
+        (cnt > 1 ? '<span class="dex-dupe">×' + cnt + '</span>' : '<span class="rarity-txt" style="color:' + RARITY[p.r].color + '">' + RARITY[p.r].label + '</span>')
+      : '<span class="rarity-txt" style="color:#C9BCAD">???</span>') +
+    '</span></button>';
+}
+
+function renderDex() {
+  var balls = state.pokeball ? Number(state.pokeball.count || 0) : 0;
+  var caught = dexCollectedCount();
+  var total = DEX.length;
+  var today = todayISO();
+  var reward = dailyRewardStatus(today);
+
+  var el = $('#dexBallCount');
+  if (el) el.textContent = balls;
+  el = $('#dexBallHint');
   if (el) {
-    el.innerHTML = STAGES.map(function (s) {
-      var cls = s.lv === st.lv ? 'now' : (s.lv < st.lv ? 'on' : '');
-      return '<span class="stage-dot ' + cls + '" title="' + s.lv + '단계 · ' + s.name + '">' + stageArt(s, 26) + '</span>';
-    }).join('');
+    el.innerHTML = reward.claimed
+      ? '오늘 몬스터볼은 이미 받았어요.<br>내일 또 받을 수 있어요!'
+      : '오늘의 공부 <b>' + reward.study.done + '/' + reward.study.total + '</b> · 숙제 <b>' + reward.hw.done + '/' + reward.hw.total + '</b>' +
+        '<br>모두 끝내면 몬스터볼 <b>+1</b>';
+  }
+  el = $('#dexOpenBtn');
+  if (el) {
+    el.disabled = balls <= 0 || ui.ballBusy;
+    el.textContent = ui.ballBusy ? '몬스터볼 여는 중…' : (balls > 0 ? '몬스터볼 열기!' : '볼이 없어요');
   }
 
-  el = $('#roomFloor');
+  /* 대표 파트너 */
+  el = $('#dexPartner');
   if (el) {
-    var placed = state.pet.placed || [];
-    if (!placed.length) {
-      el.innerHTML = '<span class="card-sub">아직 방이 비어 있어요. 가구를 놓아 꾸며 주세요.</span>';
-    } else {
-      el.innerHTML = placed.map(function (id, i) {
-        var it = itemOf(id);
-        return '<span class="room-item ' + (ui.decorate ? 'is-removable' : '') + '" ' +
-          (ui.decorate ? 'data-action="unplace" data-id="' + id + '" data-idx="' + i + '" title="눌러서 치우기"' : '') + '>' + it.emoji + '</span>';
-      }).join('');
-    }
+    var partner = dexPartner();
+    el.innerHTML = partner
+      ? '<span class="dex-partner-label">대표 파트너</span>' +
+        '<span class="dex-partner-pic">' + dexArt(partner, 52, { small: true }) + '</span>' +
+        '<span class="dex-partner-body"><b>' + esc(partner.ko) + '</b><small>' + partner.t.join(' · ') + ' · 포획 ' + dexCaughtCount(partner.n) + '번</small></span>' +
+        '<span class="type-row">' + typeBadgesHTML(partner.t) + '</span>' +
+        '<button class="link-btn" data-action="dex-partner-clear" type="button">파트너 해제</button>'
+      : '<span class="dex-partner-label">대표 파트너</span>' +
+        '<span class="dex-partner-body"><b>아직 정하지 않았어요</b><small>도감에서 마음에 드는 포켓몬을 눌러 태온이의 파트너로 정해 보세요.</small></span>';
   }
 
-  el = $('#decorateBox');
+  /* 수집률 */
+  el = $('#dexProgress');
   if (el) {
-    if (!ui.decorate) {
-      el.innerHTML = '';
-    } else {
-      var owned = (state.pet.inv ? Object.keys(state.pet.inv) : []).filter(function (id) {
-        return ITEMS[id] && ITEMS[id].kind === 'furniture' && invCount(id) > 0;
-      });
-      el.innerHTML = '<div class="parent-block" style="background:#FFFBF4;border-color:#F0DCC0;margin-top:0">' +
-        '<div class="pb-head" style="color:#A9673A">🛋️ 꾸미기 모드 · 가구를 눌러 방에 놓아요</div>' +
-        (owned.length ? '<div class="row wrap">' + owned.map(function (id) {
-          var it = itemOf(id);
-          var isPlaced = (state.pet.placed || []).indexOf(id) >= 0;
-          return '<button class="inv-chip" data-action="' + (isPlaced ? 'unplace' : 'place') + '" data-id="' + id + '" type="button" style="cursor:pointer">' +
-            it.emoji + ' ' + esc(it.name) + ' <b>' + (isPlaced ? '빼기' : '놓기') + '</b></button>';
-        }).join('') + '</div>' : '<div class="hint">보유한 가구가 없어요. 상점에서 사거나 합성해 보세요.</div>') +
-        '<button class="btn ghost tiny mt10" data-action="decorate-off" type="button">꾸미기 끝내기</button></div>';
-    }
+    el.innerHTML = '<div class="prog-row"><span>수집 <b>' + caught + '</b> / ' + total + '마리</span>' +
+      '<small>' + pctOf(caught, total) + '%</small></div>' + bar(pctOf(caught, total), 'lav');
   }
 
-  el = $('#shopTabs');
+  /* 필터 */
+  el = $('#dexFilters');
   if (el) {
-    var tabs = [
-      { id: 'snacks', label: '🍌 간식 상점' },
-      { id: 'furniture', label: '🛋️ 가구 상점' },
-      { id: 'recipes', label: '✨ 합성' },
-      { id: 'bag', label: '🎒 내 가방' }
+    var got = DEX.filter(function (p) { return dexCaughtCount(p.n) > 0; }).length;
+    var list = [
+      { id: 'all', label: '전체 ' + total },
+      { id: 'got', label: '수집함 ' + got },
+      { id: 'missing', label: '미수집 ' + (total - got) }
     ];
-    el.innerHTML = tabs.map(function (t) {
-      return '<button class="shop-tab ' + (ui.shopTab === t.id ? 'is-on' : '') + '" data-action="shop-tab" data-tab="' + t.id + '" type="button">' + t.label + '</button>';
+    el.innerHTML = list.map(function (f) {
+      return '<button class="dex-filter ' + (ui.dexFilter === f.id ? 'is-on' : '') + '" data-action="dex-filter" data-f="' + f.id + '" type="button">' + f.label + '</button>';
     }).join('');
   }
-
-  el = $('#shopBody');
+  el = $('#dexTypes');
   if (el) {
-    if (ui.shopTab === 'snacks') {
-      el.innerHTML = '<div class="hint" style="margin-bottom:10px">별을 써서 간식을 사요. 간식을 주면 펫이 자라요.</div>' +
-        '<div class="shop-grid">' + SNACKS.filter(function (s) { return s.price > 0; }).map(function (s) {
-          return '<div class="shop-item"><div class="si-emoji">' + s.emoji + '</div><div class="si-name">' + s.name + '</div>' +
-            '<div class="si-price">★' + s.price + ' · EXP+' + s.exp + '</div>' +
-            '<div class="card-sub" style="font-size:10px">보유 ' + invCount(s.id) + '개</div>' +
-            '<button class="btn primary tiny mt10" data-action="buy" data-id="' + s.id + '" type="button">사기</button></div>';
-        }).join('') + '</div>';
-    } else if (ui.shopTab === 'furniture') {
-      el.innerHTML = '<div class="hint" style="margin-bottom:10px">펫 방을 꾸밀 가구예요. 산 가구는 <b>내 가방</b>에서 놓을 수 있어요.</div>' +
-        '<div class="shop-grid">' + FURNITURE.filter(function (f) { return f.price > 0; }).map(function (f) {
-          return '<div class="shop-item"><div class="si-emoji">' + f.emoji + '</div><div class="si-name">' + f.name + '</div>' +
-            '<div class="si-price">★' + f.price + '</div>' +
-            '<div class="card-sub" style="font-size:10px">보유 ' + invCount(f.id) + '개</div>' +
-            '<button class="btn primary tiny mt10" data-action="buy" data-id="' + f.id + '" type="button">사기</button></div>';
-        }).join('') + '</div>';
-    } else if (ui.shopTab === 'recipes') {
-      el.innerHTML = '<div class="hint" style="margin-bottom:10px">같은 아이템 <b>2개</b>를 합치면 더 좋은 아이템이 돼요. 예: 바나나 2개 → 바나나아이스크림 🍦</div>' +
-        '<div class="stack">' + RECIPES.map(function (r) {
-          var a = itemOf(r.a), o = itemOf(r.out);
-          var can = invCount(r.a) >= 2;
-          return '<div class="recipe">' +
-            '<div class="r-item"><span class="r-emoji">' + a.emoji + '</span><span class="r-name">' + a.name + '</span><span class="r-count">보유 ' + invCount(r.a) + '</span></div>' +
-            '<span class="r-arrow">×2 ➜</span>' +
-            '<div class="r-item"><span class="r-emoji">' + o.emoji + '</span><span class="r-name">' + o.name + '</span><span class="r-count">보유 ' + invCount(r.out) + '</span></div>' +
-            '<span class="spacer"></span>' +
-            '<button class="btn ' + (can ? 'mint' : 'ghost') + ' tiny" data-action="synth" data-a="' + r.a + '" type="button"' + (can ? '' : ' disabled') + '>합성</button>' +
-            '</div>';
-        }).join('') + '</div>';
+    var types = [];
+    DEX.forEach(function (p) { p.t.forEach(function (t) { if (types.indexOf(t) < 0) types.push(t); }); });
+    el.innerHTML = '<button class="type-chip ' + (ui.dexType === 'all' ? 'is-on' : '') + '" data-action="dex-type" data-t="all" type="button">모든 타입</button>' +
+      types.map(function (t) {
+        return '<button class="type-chip ' + (ui.dexType === t ? 'is-on' : '') + '" data-action="dex-type" data-t="' + esc(t) + '" type="button" ' +
+          'style="--tc:' + (TYPE_COLOR[t] || '#AAA') + '">' + esc(t) + '</button>';
+      }).join('');
+  }
+
+  /* 도감 카드 */
+  el = $('#dexGrid');
+  if (el) {
+    var shown = dexFilterList();
+    if (!shown.length) {
+      el.innerHTML = emptyBox('🔍', '조건에 맞는 포켓몬이 없어요.<br>필터를 바꿔 보세요.');
     } else {
-      var ids = Object.keys(state.pet.inv || {}).filter(function (id) { return invCount(id) > 0; });
-      if (!ids.length) {
-        el.innerHTML = emptyBox('🎒', '가방이 비었어요.<br>상점에서 간식과 가구를 사 보세요.');
-      } else {
-        el.innerHTML = '<div class="stack">' + ids.map(function (id) {
-          var it = itemOf(id);
-          var isFur = it.kind === 'furniture';
-          var placed = (state.pet.placed || []).indexOf(id) >= 0;
-          return '<div class="item"><div class="item-emoji">' + it.emoji + '</div>' +
-            '<div class="item-body"><div class="item-title">' + esc(it.name) + ' <span class="chip line">' + invCount(id) + '개</span></div>' +
-            '<div class="item-meta">' + (isFur ? '가구 · 방에 놓을 수 있어요' : '간식 · EXP +' + it.exp) + '</div></div>' +
-            (isFur
-              ? '<button class="btn ghost tiny" data-action="' + (placed ? 'unplace' : 'place') + '" data-id="' + id + '" type="button">' + (placed ? '빼기' : '놓기') + '</button>'
-              : '<button class="btn primary tiny" data-action="feed" data-id="' + id + '" type="button">먹이기</button>') +
-            '</div>';
-        }).join('') + '</div>';
-      }
+      el.innerHTML = shown.map(dexCardHTML).join('');
     }
   }
+}
+
+function renderDexDetail() {
+  var body = $('#dexDetailBody');
+  if (!body) return;
+  var p = dexOf(ui.dexNo);
+  if (!p) {
+    body.innerHTML = emptyBox('❓', '도감 정보를 찾지 못했어요.');
+    return;
+  }
+  var rec = dexRecord(p.n);
+  var got = !!rec && Number(rec.count || 0) > 0;
+  var isPartner = Number(state.partner) === Number(p.n);
+  if (!got) {
+    body.innerHTML =
+      '<div class="dex-detail-top">' +
+      '<div class="dex-detail-art">' + dexArt(p, 160, { silhouette: true }) + '</div>' +
+      '<div class="dex-detail-info">' +
+      '<div class="dex-detail-no">No.' + pad3(p.n) + '</div>' +
+      '<h4 class="dex-detail-name">???</h4>' +
+      '<p class="hint mt10">아직 만나지 못한 포켓몬이에요.<br>오늘 할 일을 모두 끝내 몬스터볼을 받고 열어 보세요!</p>' +
+      '</div></div>';
+    return;
+  }
+  body.innerHTML =
+    '<div class="dex-detail-top">' +
+    '<div class="dex-detail-art">' + dexArt(p, 160) + '</div>' +
+    '<div class="dex-detail-info">' +
+    '<div class="dex-detail-no">No.' + pad3(p.n) + ' · ' + esc(p.en) + '</div>' +
+    '<h4 class="dex-detail-name">' + esc(p.ko) + '</h4>' +
+    '<div class="type-row mt10">' + typeBadgesHTML(p.t) +
+    '<span class="rarity-badge" style="color:' + RARITY[p.r].color + ';border-color:' + RARITY[p.r].color + '33">' + RARITY[p.r].label + '</span></div>' +
+    '<div class="dex-detail-stats">' +
+    '<span>키 <b>' + p.h + 'm</b></span><span>몸무게 <b>' + p.w + 'kg</b></span><span>특성 <b>' + esc(p.a) + '</b></span>' +
+    '</div></div></div>' +
+    '<p class="dex-desc">' + esc(p.d) + '</p>' +
+    '<div class="dex-catch">' +
+    '<span>포획 <b>' + rec.count + '번</b></span>' +
+    '<span>최초 포획 <b>' + esc(rec.first || '-') + '</b></span>' +
+    '<span>친밀도 <b>' + Math.min(100, 10 + Number(rec.count || 0) * 10) + '%</b></span>' +
+    '</div>' +
+    '<div class="btn-group mt14">' +
+    (isPartner
+      ? '<button class="btn mint" type="button" data-action="dex-partner-clear">✓ 대표 파트너 · 해제하기</button>'
+      : '<button class="btn primary" type="button" data-action="dex-partner" data-no="' + p.n + '">대표 파트너로 지정</button>') +
+    '</div>';
 }
 
 /* ---------- 용돈 ---------- */
@@ -3716,18 +4535,23 @@ function onGrowthModalSubmit(e) {
 function weekSummary() {
   var dates = weekDates(new Date());
   var today = parseISO(todayISO());
-  var routineTotal = 0, routineDone = 0, hwTotal = 0, hwDone = 0;
+  var routineTotal = 0, routineDone = 0, studyTotal = 0, studyDone = 0, taskTotal = 0, taskDone = 0;
   dates.forEach(function (d) {
     if (d > today) return;
     var ds = isoDate(d);
     var rs = routineStats(ds);
     routineTotal += rs.total; routineDone += rs.done;
-    var hw = homeworkOn(d);
-    hwTotal += hw.length;
-    hwDone += hw.filter(function (x) { return x.done; }).length;
+    var st = studyStats(ds);
+    studyTotal += st.total; studyDone += st.done;
+    var ht = hwTaskStats(ds);
+    taskTotal += ht.total; taskDone += ht.done;
   });
-  var overall = pctOf(routineDone + hwDone, routineTotal + hwTotal);
-  return { overall: overall, routineDone: routineDone, routineTotal: routineTotal, hwDone: hwDone, hwTotal: hwTotal, dates: dates };
+  var overall = pctOf(routineDone + studyDone + taskDone, routineTotal + studyTotal + taskTotal);
+  return {
+    overall: overall, routineDone: routineDone, routineTotal: routineTotal,
+    studyDone: studyDone, studyTotal: studyTotal, taskDone: taskDone, taskTotal: taskTotal,
+    hwDone: studyDone, hwTotal: studyTotal, dates: dates
+  };
 }
 
 function renderStats() {
@@ -3745,8 +4569,10 @@ function renderStats() {
   el = $('#statsSummary');
   if (el) {
     el.innerHTML = '<span class="chip mint">✅ 루틴 ' + wk.routineDone + '/' + wk.routineTotal + '</span>' +
-      '<span class="chip sky">📚 숙제 ' + wk.hwDone + '/' + wk.hwTotal + '</span>' +
-      '<span class="chip butter">★ 주간 획득 ' + state.starLog.filter(function (s) { return Date.now() - s.ts < 86400000 * 7 && s.n > 0; }).reduce(function (a, s) { return a + s.n; }, 0) + '</span>';
+      '<span class="chip sky">📖 공부 ' + wk.studyDone + '/' + wk.studyTotal + '</span>' +
+      '<span class="chip peach">📝 숙제 ' + wk.taskDone + '/' + wk.taskTotal + '</span>' +
+      '<span class="chip butter">★ 주간 획득 ' + state.starLog.filter(function (s) { return Date.now() - s.ts < 86400000 * 7 && s.n > 0; }).reduce(function (a, s) { return a + s.n; }, 0) + '</span>' +
+      '<span class="chip lav">🔴 포켓몬볼 ' + (state.pokeball ? state.pokeball.count : 0) + '개</span>';
   }
 
   el = $('#statsDays');
@@ -3754,16 +4580,16 @@ function renderStats() {
     el.innerHTML = dates.map(function (d) {
       var ds = isoDate(d);
       var rs = routineStats(ds);
-      var hw = homeworkOn(d);
-      var hwDone = hw.filter(function (x) { return x.done; }).length;
+      var st2 = studyStats(ds);
+      var ht2 = hwTaskStats(ds);
       var future = d > today;
-      var total = rs.total + hw.length, done = rs.done + hwDone;
+      var total = rs.total + st2.total + ht2.total, done = rs.done + st2.done + ht2.done;
       var p = pctOf(done, total);
       return '<div class="day-row ' + (ds === todayISO() ? 'is-today' : '') + '">' +
         '<div class="dname">' + DOW[d.getDay()] + '</div>' +
         '<div>' + bar(future ? 0 : p, p >= 80 ? 'mint' : (p > 0 ? '' : 'sky')) + '</div>' +
-        '<div style="font-size:11px;font-weight:800;color:var(--muted);min-width:78px;text-align:right">' +
-        (future ? '예정' : (hw.length ? '숙제 ' + hwDone + '/' + hw.length + ' · ' + p + '%' : '루틴 ' + rs.done + '/' + rs.total)) +
+        '<div style="font-size:11px;font-weight:800;color:var(--muted);min-width:96px;text-align:right">' +
+        (future ? '예정' : ('공부 ' + st2.done + '/' + st2.total + ' · 숙제 ' + ht2.done + '/' + ht2.total)) +
         '</div></div>';
     }).join('');
   }
@@ -4015,8 +4841,9 @@ function renderAll() {
   renderHome();
   renderRoutine();
   renderHomework();
+  renderStudy();
   renderTimer();
-  renderPet();
+  renderDex();
   renderAllowance();
   renderMail();
   renderReading();
@@ -4024,7 +4851,10 @@ function renderAll() {
   renderStats();
   renderGame();
   renderCalendar();
-  if (document.getElementById('growthModal').classList.contains('is-open')) renderGrowthModal();
+  var gm = document.getElementById('growthModal');
+  if (gm && gm.classList.contains('is-open')) renderGrowthModal();
+  var dm = document.getElementById('dexDetailModal');
+  if (dm && dm.classList.contains('is-open')) renderDexDetail();
   updateSyncUI();
 }
 
@@ -4049,6 +4879,9 @@ function go(view) {
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   }
   if (view === 'mail') { markRoomRead(ui.mailRoom, state.viewer); renderMail(); }
+  if (view === 'study') renderStudy();
+  if (view === 'homework') renderHomework();
+  if (view === 'dex') renderDex();
 }
 
 /* ---------- 동기화 ---------- */
@@ -4337,73 +5170,187 @@ function focusDone() {
   completeFocus(usedMin, false);
 }
 
-/* ---------- 펫 ---------- */
-function buyItem(id) {
-  var it = itemOf(id);
-  var price = Number(it.price || 0);
-  if (!price) { toast('이 아이템은 합성으로만 만들 수 있어요.'); return; }
-  if (state.stars.balance < price) { toast('별이 ' + (price - state.stars.balance) + '개 부족해요. 숙제로 모아 볼까요?'); return; }
-  addStars(-price, '펫 상점 · ' + it.name, 'buy-' + uid());
-  state.pet.inv[id] = invCount(id) + 1;
+/* ---------- 포켓몬볼 보상 ---------- */
+function tryPokeballReward(dateStr) {
+  dateStr = dateStr || todayISO();
+  if (!state.pokeball) state.pokeball = { count: 0, claims: {}, log: [] };
+  if (!state.pokeball.claims) state.pokeball.claims = {};
+  var s = dailyRewardStatus(dateStr);
+  if (!s.ready || s.claimed) return false;
+  state.pokeball.claims[dateStr] = Date.now();
+  state.pokeball.count = Number(state.pokeball.count || 0) + 1;
+  state.pokeball.log = state.pokeball.log || [];
+  state.pokeball.log.unshift({ id: uid(), ts: Date.now(), date: dateStr, kind: 'daily' });
+  if (state.pokeball.log.length > 60) state.pokeball.log = state.pokeball.log.slice(0, 60);
   touch();
   renderAll();
-  toast(it.emoji + ' ' + it.name + ' 구매 완료! 별 -' + price);
+  celebratePokeball();
+  return true;
 }
 
-function feedPet(id) {
-  if (invCount(id) <= 0) { toast('간식이 없어요. 상점에서 사 보세요.'); return; }
-  var it = itemOf(id);
-  state.pet.inv[id] = invCount(id) - 1;
-  state.pet.exp += Number(it.exp || 5);
-  var leveled = false;
-  while (state.pet.stage < 10) {
-    var need = petNeed();
-    if (!need || state.pet.exp < need) break;
-    state.pet.exp -= need;
-    state.pet.stage += 1;
-    leveled = true;
+function celebratePokeball() {
+  var el = $('#ballRewardText');
+  if (el) {
+    el.innerHTML = '오늘의 <b>공부</b>와 <b>숙제</b>를 모두 끝냈어요!<br>' +
+      '<span class="reward-line">' + ballIcon(34) + ' 포켓몬볼 <b>+1</b> · 지금 <b>' + state.pokeball.count + '개</b></span>';
   }
-  if (state.pet.stage >= 10) {
-    state.pet.stage = 10;
-    state.pet.exp = Math.min(state.pet.exp, 999);
-  }
-  touch();
-  renderAll();
-  if (leveled) {
-    var st = petStage();
-    toast('🎉 축하해요! ' + st.lv + '단계 ' + st.name + '(으)로 진화했어요!', 3400);
-    confettiBurst();
-  } else {
-    toast(it.emoji + ' 맛있게 먹었어요! EXP +' + it.exp);
-  }
-}
-
-function synthesize(a) {
-  var recipe = RECIPES.filter(function (r) { return r.a === a; })[0];
-  if (!recipe) return;
-  if (invCount(a) < 2) { toast('같은 아이템이 2개 필요해요.'); return; }
-  state.pet.inv[a] = invCount(a) - 2;
-  state.pet.inv[recipe.out] = invCount(recipe.out) + 1;
-  touch();
-  renderAll();
-  var out = itemOf(recipe.out);
-  toast('✨ ' + itemOf(a).name + ' 2개 → ' + out.name + ' 완성!');
+  openModal('ballRewardModal');
   confettiBurst();
+  chime();
 }
 
-function placeItem(id) {
-  if (invCount(id) <= 0) { toast('보유한 가구가 없어요.'); return; }
-  if (!state.pet.placed) state.pet.placed = [];
-  if (state.pet.placed.indexOf(id) >= 0) return;
-  state.pet.placed.push(id);
-  touch();
-  renderPet();
+function ballResultHTML(p, isNew) {
+  var rec = dexRecord(p.n) || { count: 1, first: todayISO() };
+  var left = Number(state.pokeball.count || 0);
+  return '<div class="ball-stage is-done">' +
+    (isNew ? '<span class="new-badge">NEW! 도감 등록!</span>' : '<span class="again-badge">또 만났어요!</span>') +
+    '<div class="ball-result-art">' + dexArt(p, 168) + '</div>' +
+    '<h4 class="ball-result-name">' + esc(p.ko) + '</h4>' +
+    '<div class="type-row">' + typeBadgesHTML(p.t) +
+    '<span class="rarity-badge" style="color:' + RARITY[p.r].color + '">' + RARITY[p.r].label + '</span></div>' +
+    '<p class="ball-result-desc">' + esc(p.d) + '</p>' +
+    '<div class="dex-catch">' +
+    '<span>포획 <b>' + rec.count + '번</b></span><span>키 <b>' + p.h + 'm</b></span><span>몸무게 <b>' + p.w + 'kg</b></span>' +
+    '</div>' +
+    '<div class="btn-group mt14" style="justify-content:center">' +
+    (left > 0
+      ? '<button class="btn primary" type="button" data-action="ball-open">한 번 더 열기 (' + left + '개 남음)</button>'
+      : '<button class="btn ghost" type="button" data-close="ballOpenModal">볼을 다 열었어요</button>') +
+    '<button class="btn ghost" type="button" data-action="dex-detail" data-no="' + p.n + '">도감에서 보기</button>' +
+    '</div></div>';
 }
-function unplaceItem(id) {
-  if (!state.pet.placed) return;
-  state.pet.placed = state.pet.placed.filter(function (x) { return x !== id; });
+
+function openPokeball() {
+  if (ui.ballBusy) return;
+  if (!state.pokeball || Number(state.pokeball.count || 0) <= 0) {
+    toast('포켓몬볼이 없어요. 오늘의 공부와 숙제를 모두 끝내면 1개를 받아요!');
+    return;
+  }
+  ui.ballBusy = true;
+  state.pokeball.count = Number(state.pokeball.count || 0) - 1;
+  var p = rollPokemon();
+  var body = $('#ballOpenBody');
+  var hint = $('#ballOpenHint');
+  if (hint) hint.textContent = '몬스터볼이 흔들리고 있어요… 두근두근!';
+  if (body) {
+    body.innerHTML = '<div class="ball-stage"><div class="ball-shake">' + ballIcon(150) + '</div>' +
+      '<p class="ball-caption">몬스터볼이 흔들리고 있어요…</p></div>';
+  }
+  openModal('ballOpenModal');
+  renderDex();
+  chime();
+  setTimeout(function () {
+    var rec = dexRecord(p.n) || { count: 0, first: null };
+    var isNew = Number(rec.count || 0) === 0;
+    if (!state.pokedex) state.pokedex = {};
+    state.pokedex[String(p.n)] = {
+      count: Number(rec.count || 0) + 1,
+      first: rec.first || todayISO(),
+      last: todayISO()
+    };
+    ui.ballBusy = false;
+    touch();
+    renderAll();
+    if (hint) hint.textContent = isNew ? '새로운 포켓몬을 도감에 등록했어요!' : '이미 만난 친구를 또 만났어요!';
+    if (body) body.innerHTML = ballResultHTML(p, isNew);
+    confettiBurst();
+    chime();
+  }, 1900);
+}
+
+function setDexPartner(no) {
+  var p = dexOf(no);
+  if (!p) return;
+  if (dexCaughtCount(no) <= 0) { toast('아직 만나지 못한 포켓몬이에요.'); return; }
+  state.partner = Number(no);
   touch();
-  renderPet();
+  renderAll();
+  toast('⭐ ' + p.ko + '를 태온이의 대표 파트너로 정했어요!');
+}
+
+function clearDexPartner() {
+  state.partner = null;
+  touch();
+  renderAll();
+  toast('대표 파트너를 해제했어요');
+}
+
+/* ---------- 숙제 추가 · 수정 모달 ---------- */
+function openHwTaskModal(id, presetDate) {
+  var t = id ? findHwTask(id) : null;
+  ui.hwEditId = t ? t.id : null;
+  var title = $('#hwTaskModalTitle');
+  if (title) title.textContent = t ? '✏️ 숙제 수정' : '📝 숙제 추가';
+  var sub = $('#hwTaskModalSub');
+  if (sub) sub.textContent = t ? '내용을 바꾸면 숙제 목록에 바로 반영돼요.' : '알림장·학원 숙제·준비물처럼 그날그날 생기는 숙제를 하나씩 넣어 두세요.';
+  var submit = $('#hwTaskSubmit');
+  if (submit) submit.textContent = t ? '수정 저장' : '숙제 추가하기';
+  var txt = $('#hwTaskText');
+  if (txt) txt.value = t ? t.text : '';
+  var tag = $('#hwTaskTag');
+  if (tag) tag.value = t ? (t.tag || '') : '';
+  var memo = $('#hwTaskMemo');
+  if (memo) memo.value = t ? (t.memo || '') : '';
+  var date = $('#hwTaskInputDate');
+  if (date) date.value = t ? t.date : (presetDate || ui.hwDate || todayISO());
+  openModal('hwTaskModal');
+  if (txt) setTimeout(function () { try { txt.focus(); } catch (e) { } }, 120);
+}
+
+/* ---------- 공부 과목 추가 · 수정 모달 ---------- */
+function renderStudyDays() {
+  var el = $('#studyDays');
+  if (!el) return;
+  el.innerHTML = DOW_ORDER.map(function (dow) {
+    return '<button class="day-toggle" data-sdow="' + dow + '" type="button">' + DOW[dow] + '</button>';
+  }).join('');
+}
+function setStudyDays(days) {
+  renderStudyDays();
+  var want = (days || []).map(Number);
+  $$('#studyDays .day-toggle').forEach(function (b) {
+    b.classList.toggle('is-on', want.indexOf(Number(b.getAttribute('data-sdow'))) >= 0);
+  });
+}
+function selectedStudyDays() {
+  var out = [];
+  $$('#studyDays .day-toggle').forEach(function (b) {
+    if (b.classList.contains('is-on')) out.push(Number(b.getAttribute('data-sdow')));
+  });
+  return out;
+}
+function openStudyModal(ref) {
+  ref = ref || {};
+  var s = ref.id ? findStudySubject(ref.id) : null;
+  ui.studyEditId = s ? s.id : null;
+  var title = $('#studyModalTitle');
+  if (title) title.textContent = s ? '✏️ 공부 과목 수정' : '📖 공부 과목 추가';
+  var sub = $('#studyModalSub');
+  if (sub) sub.textContent = s ? '이름·교재·요일을 바꾸면 시간표에 바로 반영돼요.' : '요일을 고르면 그 요일 시간표 칸에 바로 들어가요.';
+  var submit = $('#studySubmit');
+  if (submit) submit.textContent = s ? '수정 저장' : '과목 추가하기';
+  var name = $('#studyName');
+  if (name) name.value = s ? s.name : '';
+  var book = $('#studyBook');
+  if (book) book.value = s ? (s.book || '') : '';
+  var time = $('#studyTime');
+  if (time) time.value = s ? (s.time || '') : '';
+  setStudyDays(s ? (s.days || []) : (ref.dow != null ? [Number(ref.dow)] : [new Date().getDay()]));
+  openModal('studyModal');
+  if (name) setTimeout(function () { try { name.focus(); } catch (e) { } }, 120);
+}
+
+function removeStudySubject(id) {
+  var s = findStudySubject(id);
+  if (!s) return;
+  state.studySubjects = studySubjectList().filter(function (x) { return x.id !== id; });
+  Object.keys(state.studyDone || {}).forEach(function (ds) {
+    state.studyDone[ds] = (state.studyDone[ds] || []).filter(function (x) { return x !== id; });
+  });
+  if (ui.studyEditId === id) ui.studyEditId = null;
+  touch();
+  renderAll();
+  toast('🗑️ ' + s.name + ' · 공부 과목을 지웠어요');
 }
 
 /* ---------- 용돈 ---------- */
@@ -4578,14 +5525,14 @@ document.addEventListener('click', function (e) {
     case 'plan-add-open':
       resetPlanForm();
       scrollToEl($('#planFormCard'));
-      toast('새 숙제 계획을 적어 주세요');
+      toast('새 교재 계획을 적어 주세요');
       break;
     case 'plan-edit':
       openPlanEditor(el.getAttribute('data-id'));
       break;
     case 'plan-edit-cancel':
       resetPlanForm();
-      renderHomework();
+      renderStudy();
       toast('수정을 취소했어요');
       break;
     case 'hw-toggle': {
@@ -4601,6 +5548,7 @@ document.addEventListener('click', function (e) {
       else { removeStarsForRef(href); toast('숙제 완료를 취소했어요'); }
       touch();
       renderAll();
+      tryPokeballReward(todayISO());
       break;
     }
     case 'plan-del': {
@@ -4676,31 +5624,143 @@ document.addEventListener('click', function (e) {
       toast('요청을 보류했어요. 다시 해 볼 수 있어요.');
       break;
     }
-    case 'pet-quickfeed':
-      openFeedModal();
+    case 'hw-task-add':
+      openHwTaskModal(null, el.getAttribute('data-date'));
       break;
-    case 'buy':
-      buyItem(el.getAttribute('data-id'));
+    case 'hw-task-edit':
+      openHwTaskModal(el.getAttribute('data-id'));
       break;
-    case 'synth':
-      synthesize(el.getAttribute('data-a'));
+    case 'hw-task-del': {
+      var delTask = findHwTask(el.getAttribute('data-id'));
+      if (!delTask) break;
+      state.homeworkTasks = hwTaskList().filter(function (t) { return t.id !== delTask.id; });
+      removeStarsForRef('task:' + delTask.id);
+      if (ui.hwEditId === delTask.id) ui.hwEditId = null;
+      touch(); renderAll();
+      toast('🗑️ ' + delTask.text + ' · 숙제를 지웠어요');
       break;
-    case 'feed':
-      feedPet(el.getAttribute('data-id'));
+    }
+    case 'hw-task-toggle': {
+      var task = findHwTask(el.getAttribute('data-id'));
+      if (!task) break;
+      task.done = !task.done;
+      task.doneAt = task.done ? Date.now() : null;
+      var taskRef = 'task:' + task.id;
+      if (task.done) { addStars(2, '숙제 · ' + task.text, taskRef); toast('📝 숙제 완료! ★+2'); }
+      else { removeStarsForRef(taskRef); toast('숙제 완료를 취소했어요'); }
+      touch(); renderAll();
+      tryPokeballReward(todayISO());
       break;
-    case 'place':
-      placeItem(el.getAttribute('data-id'));
+    }
+    case 'hw-day':
+      ui.hwDate = el.getAttribute('data-date');
+      renderHomework();
       break;
-    case 'unplace':
-      unplaceItem(el.getAttribute('data-id'));
+    case 'hw-day-prev': {
+      var pv = addDays(parseISO(ui.hwDate || todayISO()), -1);
+      ui.hwDate = isoDate(pv);
+      renderHomework();
       break;
-    case 'decorate-off':
-      ui.decorate = false;
-      renderPet();
+    }
+    case 'hw-day-next': {
+      var nx = addDays(parseISO(ui.hwDate || todayISO()), 1);
+      ui.hwDate = isoDate(nx);
+      renderHomework();
       break;
-    case 'shop-tab':
-      ui.shopTab = el.getAttribute('data-tab');
-      renderPet();
+    }
+    case 'hw-today':
+      ui.hwDate = todayISO();
+      renderHomework();
+      break;
+    case 'study-add':
+      openStudyModal({ dow: el.getAttribute('data-dow') });
+      break;
+    case 'study-edit':
+      openStudyModal({ id: el.getAttribute('data-id') });
+      break;
+    case 'study-del-day': {
+      var dsId = el.getAttribute('data-id');
+      var dsDate = el.getAttribute('data-date') || todayISO();
+      var subj = findStudySubject(dsId);
+      if (!subj) break;
+      var sdow = parseISO(dsDate).getDay();
+      if ((subj.days || []).length > 1) {
+        subj.days = subj.days.filter(function (x) { return Number(x) !== sdow; });
+        Object.keys(state.studyDone || {}).forEach(function (key) {
+          if (parseISO(key).getDay() === sdow) {
+            state.studyDone[key] = (state.studyDone[key] || []).filter(function (x) { return x !== dsId; });
+          }
+        });
+        touch(); renderAll();
+        toast('🗑️ ' + DOW[sdow] + '요일에서 ' + subj.name + '을(를) 뺐어요');
+      } else {
+        removeStudySubject(dsId);
+      }
+      break;
+    }
+    case 'study-toggle': {
+      var stType = el.getAttribute('data-type');
+      var stDate = el.getAttribute('data-date') || todayISO();
+      var stId = el.getAttribute('data-id');
+      if (stType === 'plan') {
+        var stPlan = findPlanById(stId);
+        if (!stPlan) break;
+        var stMap = hwKey(stId);
+        var stWas = !!stMap[stDate];
+        stMap[stDate] = !stWas;
+        var stRef = 'hw:' + stId + ':' + stDate;
+        if (!stWas) { addStars(2, stPlan.book + ' 공부 완료', stRef); toast('📖 ' + stPlan.book + ' 완료! ★+2'); }
+        else { removeStarsForRef(stRef); toast('공부 완료를 취소했어요'); }
+        touch(); renderAll();
+        tryPokeballReward(todayISO());
+        break;
+      }
+      var stSub = findStudySubject(stId);
+      if (!stSub) break;
+      var stOn = isStudyDone(stDate, stId);
+      setStudyDone(stDate, stId, !stOn);
+      var stRef2 = 'study:' + stDate + ':' + stId;
+      if (!stOn) { addStars(1, '공부 · ' + stSub.name, stRef2); toast('📖 ' + stSub.name + ' 완료! ★+1'); }
+      else { removeStarsForRef(stRef2); toast('공부 완료를 취소했어요'); }
+      touch(); renderAll();
+      tryPokeballReward(todayISO());
+      break;
+    }
+    case 'go-dex':
+      go('dex');
+      break;
+    case 'ball-open':
+      openPokeball();
+      break;
+    case 'dex-open': {
+      var dexNo = Number(el.getAttribute('data-no'));
+      if (dexCaughtCount(dexNo) <= 0) { toast('아직 만나지 못한 포켓몬이에요. 몬스터볼로 만나 보세요!'); break; }
+      ui.dexNo = dexNo;
+      renderDexDetail();
+      openModal('dexDetailModal');
+      break;
+    }
+    case 'dex-detail': {
+      ui.dexNo = Number(el.getAttribute('data-no'));
+      closeModal('ballOpenModal');
+      go('dex');
+      renderDexDetail();
+      openModal('dexDetailModal');
+      break;
+    }
+    case 'dex-filter':
+      ui.dexFilter = el.getAttribute('data-f');
+      renderDex();
+      break;
+    case 'dex-type':
+      ui.dexType = el.getAttribute('data-t') || 'all';
+      renderDex();
+      break;
+    case 'dex-partner':
+      setDexPartner(el.getAttribute('data-no'));
+      break;
+    case 'dex-partner-clear':
+      clearDexPartner();
       break;
     case 'allow-del': {
       var aid = el.getAttribute('data-id');
@@ -4925,8 +5985,8 @@ function resetPlanForm() {
   (state.plans || []).forEach(function (p) { lastEnd = Math.max(lastEnd, Number(p.end) || 0); });
   var s = $('#planSubject'); if (s) s.value = '';
   var b = $('#planBook'); if (b) b.value = '';
-  var st = $('#planStart'); if (st) st.value = lastEnd ? lastEnd + 1 : 1;
-  var en = $('#planEnd'); if (en) en.value = lastEnd ? lastEnd + 1 : 1;
+  var st = $('#planStart'); if (st) st.value = '';
+  var en = $('#planEnd'); if (en) en.value = '';
   setPlanDays([1, 2, 3, 4, 5]);
   renderPlanFormUI();
 }
@@ -4945,29 +6005,6 @@ function openPlanEditor(id) {
   toast('✏️ 고칠 내용을 바꾸고 저장을 눌러 주세요');
 }
 
-/* ---------- 먹이기 모달 ---------- */
-function openFeedModal() {
-  renderFeedModal();
-  openModal('feedModal');
-}
-function renderFeedModal() {
-  var body = $('#feedBody');
-  if (!body) return;
-  var ids = SNACKS.map(function (s) { return s.id; }).filter(function (id) { return invCount(id) > 0; });
-  if (!ids.length) {
-    body.innerHTML = emptyBox('🍽️', '먹을 간식이 없어요.<br>펫 상점에서 간식을 사 보세요.');
-    return;
-  }
-  body.innerHTML = '<div class="stack">' + ids.map(function (id) {
-    var it = itemOf(id);
-    return '<div class="item"><div class="item-emoji">' + it.emoji + '</div>' +
-      '<div class="item-body"><div class="item-title">' + esc(it.name) + ' <span class="chip line">' + invCount(id) + '개</span></div>' +
-      '<div class="item-meta">EXP +' + it.exp + '</div></div>' +
-      '<button class="btn primary tiny" data-action="feed" data-id="' + id + '" type="button">먹이기</button></div>';
-  }).join('') + '</div>' +
-    '<p class="hint mt14">지금 ' + esc(state.pet.name) + '는 ' + petStage().lv + '단계 ' + petStage().name + ' · EXP ' + state.pet.exp + ' / ' + (petNeed() || 'MAX') + '</p>';
-}
-
 /* ---------- 폼 제출 ---------- */
 document.addEventListener('submit', function (e) {
   var form = e.target;
@@ -4984,6 +6021,54 @@ document.addEventListener('submit', function (e) {
     touch();
     renderAll();
     toast('📝 ' + (FAMILY[fw] ? FAMILY[fw].name : '가족') + ' 할 일에 넣었어요');
+    return;
+  }
+  if (form.id === 'hwTaskForm') {
+    e.preventDefault();
+    var htText = (($('#hwTaskText') || {}).value || '').trim();
+    var htTag = (($('#hwTaskTag') || {}).value || '').trim();
+    var htMemo = (($('#hwTaskMemo') || {}).value || '').trim();
+    var htDate = ($('#hwTaskInputDate') || {}).value || todayISO();
+    if (!htText) { toast('숙제 내용을 적어 주세요.'); return; }
+    var htEdit = ui.hwEditId ? findHwTask(ui.hwEditId) : null;
+    if (htEdit) {
+      htEdit.text = htText;
+      htEdit.tag = htTag;
+      htEdit.memo = htMemo;
+      htEdit.date = htDate;
+    } else {
+      hwTaskList().push({ id: uid(), ts: Date.now(), date: htDate, text: htText, tag: htTag, memo: htMemo, done: false, doneAt: null });
+    }
+    ui.hwDate = htDate;
+    ui.hwEditId = null;
+    closeModal('hwTaskModal');
+    touch();
+    renderAll();
+    toast(htEdit ? '✏️ 숙제를 수정했어요' : '📝 숙제를 넣었어요');
+    return;
+  }
+  if (form.id === 'studyForm') {
+    e.preventDefault();
+    var sName = (($('#studyName') || {}).value || '').trim();
+    var sBook = (($('#studyBook') || {}).value || '').trim();
+    var sTime = (($('#studyTime') || {}).value || '').trim();
+    var sDays = selectedStudyDays();
+    if (!sName) { toast('과목 이름을 적어 주세요.'); return; }
+    if (!sDays.length) { toast('요일을 하나 이상 골라 주세요.'); return; }
+    var sEdit = ui.studyEditId ? findStudySubject(ui.studyEditId) : null;
+    if (sEdit) {
+      sEdit.name = sName;
+      sEdit.book = sBook;
+      sEdit.time = sTime;
+      sEdit.days = sDays;
+    } else {
+      studySubjectList().push({ id: uid(), ts: Date.now(), name: sName, book: sBook, time: sTime, days: sDays });
+    }
+    ui.studyEditId = null;
+    closeModal('studyModal');
+    touch();
+    renderAll();
+    toast(sEdit ? '✏️ 과목을 수정했어요' : '📖 ' + sName + ' · 시간표에 넣었어요');
     return;
   }
   if (form.id === 'homeEventForm') {
@@ -5172,7 +6257,7 @@ document.addEventListener('submit', function (e) {
 /* ---------- 입력 이벤트 ---------- */
 document.addEventListener('input', function (e) {
   if (e.target && (e.target.id === 'planStart' || e.target.id === 'planEnd')) {
-    renderHomework();
+    renderStudy();
   }
   if (e.target && e.target.id === 'syncUrl') {
     var v = e.target.value.trim();
@@ -5211,7 +6296,16 @@ function bindStatic() {
       var b = e.target.closest('.day-toggle');
       if (!b) return;
       b.classList.toggle('is-on');
-      renderHomework();
+      renderStudy();
+    });
+  }
+
+  var studyDaysWrap = $('#studyDays');
+  if (studyDaysWrap) {
+    studyDaysWrap.addEventListener('click', function (e) {
+      var b = e.target.closest('.day-toggle');
+      if (!b) return;
+      b.classList.toggle('is-on');
     });
   }
 
@@ -5226,27 +6320,6 @@ function bindStatic() {
       if (!v || v < 1) { toast('분을 숫자로 적어 주세요.'); return; }
       setTimerMinutes(v);
       toast(v + '분으로 맞췄어요');
-    });
-  }
-
-  var feedBtn = $('#petFeedBtn'); if (feedBtn) feedBtn.addEventListener('click', openFeedModal);
-  var renameBtn = $('#petRenameBtn');
-  if (renameBtn) {
-    renameBtn.addEventListener('click', function () {
-      var name = window.prompt('펫 이름을 지어 주세요', state.pet.name);
-      if (name === null) return;
-      name = String(name).trim().slice(0, 12);
-      if (!name) { toast('이름을 적어 주세요.'); return; }
-      state.pet.name = name;
-      touch(); renderAll();
-      toast('이름을 ' + name + '(으)로 바꿨어요');
-    });
-  }
-  var decoBtn = $('#petDecorateBtn');
-  if (decoBtn) {
-    decoBtn.addEventListener('click', function () {
-      ui.decorate = !ui.decorate;
-      renderPet();
     });
   }
 
@@ -5463,6 +6536,7 @@ function init() {
   bindStatic();
   setDateDefaults();
   resetPlanForm();
+  renderStudyDays();
   syncHeaderVar();
   window.addEventListener('resize', syncHeaderVar);
   renderAll();
@@ -5472,8 +6546,10 @@ function init() {
     renderChrome();
     if (ui.view === 'home') { renderHome(); renderTimer(); loadWeather(); }
     if (ui.view === 'routine') renderRoutine();
+    if (ui.view === 'study') renderStudy();
   }, 30000);
   loadWeather();
+  tryPokeballReward(todayISO());
   window.addEventListener('storage', function (e) {
     if (e.key === STORE_KEY && e.newValue) {
       try {
