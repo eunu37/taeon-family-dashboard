@@ -2332,7 +2332,7 @@ function dexPartner() {
   return no ? dexOf(no) : null;
 }
 /* 오프라인에서도 도감이 비지 않게: 타입 색으로 그리는 작은 SVG 포켓몬 */
-function dexFallbackSvg(p) {
+function dexFallbackSvg(p, hideName) {
   var c = TYPE_COLOR[p.t[0]] || '#A79C8E';
   var c2 = TYPE_COLOR[p.t[1] || p.t[0]] || c;
   return '<svg viewBox="0 0 64 64" aria-hidden="true">' +
@@ -2344,7 +2344,7 @@ function dexFallbackSvg(p) {
     '<circle cx="25" cy="31.5" r="1.6" fill="#4A3F35"></circle>' +
     '<circle cx="39" cy="31.5" r="1.6" fill="#4A3F35"></circle>' +
     '<path d="M28 40q4 3 8 0" stroke="#4A3F35" stroke-width="1.6" fill="none" stroke-linecap="round"></path>' +
-    '<text x="32" y="58" text-anchor="middle" font-size="12" font-weight="800" fill="#8B7059" font-family="inherit">' + esc(p.ko.charAt(0)) + '</text>' +
+    '<text x="32" y="58" text-anchor="middle" font-size="12" font-weight="800" fill="#8B7059" font-family="inherit">' + (hideName ? '?' : esc(p.ko.charAt(0))) + '</text>' +
     '</svg>';
 }
 function dexArt(p, size, opts) {
@@ -2353,7 +2353,7 @@ function dexArt(p, size, opts) {
   var cls = 'art dex-art' + (opts.cls ? ' ' + opts.cls : '') + (opts.silhouette ? ' is-sil' : '');
   var src = (opts.small ? SPRITE_SMALL : SPRITE_ART) + p.n + '.png';
   return '<span class="' + cls + '" style="width:' + size + 'px;height:' + size + 'px">' +
-    '<span class="art-fb">' + dexFallbackSvg(p) + '</span>' +
+    '<span class="art-fb">' + dexFallbackSvg(p, opts.silhouette) + '</span>' +
     '<img src="' + src + '" alt="' + esc(opts.silhouette ? '???' : p.ko) + '" loading="lazy" decoding="async"' +
     ' referrerpolicy="no-referrer" onerror="artFail(this)">' +
     '</span>';
