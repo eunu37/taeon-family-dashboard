@@ -3166,22 +3166,40 @@ function rewardChipText(dateStr) {
   if (r.allDone) return '🎁 모두 완료 · 볼 ' + r.claimed + '개';
   return '🎁 공부 ' + r.study.done + '/' + r.study.total + ' · 과목마다 +1' + (r.claimed > 0 ? ' · ' + r.claimed + '개 받음' : '');
 }
-/* 옛 '하루 1개' 기록만 있는 날: 이미 끝나 있던 항목은 받은 것으로 쳐서 두 번 지급하지 않는다 */
+/* 옛 '하루 1개' 기록(claims[날짜]) 정리.
+   1) 예전 버그는 그날 완료된 항목 전부에 옛 값을 똑같이 찍어 실제로는 1개만 받았는데도 여러 개 받은 것처럼 보였다.
+      같은 값이 2개 이상이면 첫 1개만 남기고 나머지는 풀어 준다.
+   2) 그날 항목 기록이 하나도 없을 때만 완료된 항목 하나(공부 우선, 없으면 숙제)에 옛 볼 1개를 승계한다.
+      이미 기록이 하나라도 있으면(정상 수령 포함) 더 찍지 않는다.
+   3) 옛 키는 지운다. 기록이 바뀌었으면 true. */
 function adoptLegacyClaim(dateStr) {
   var claims = pokeballClaims();
-  if (!claims[dateStr]) return false;
-  var touched = false;
-  studyStats(dateStr).items.forEach(function (it) {
-    if (!it.done) return;
-    if (claims[rewardKeyOf(dateStr, it.key)]) return;
-    claims[rewardKeyOf(dateStr, it.key)] = claims[dateStr];
-    touched = true;
-  });
-  if (!claims[rewardKeyOf(dateStr, 'hw')]) {
-    var hw = hwTaskStats(dateStr);
-    if (hw.total > 0 && hw.done >= hw.total) { claims[rewardKeyOf(dateStr, 'hw')] = claims[dateStr]; touched = true; }
+  var legacy = claims[dateStr];
+  if (!legacy) return false;
+  var prefix = dateStr + ':';
+  function keysOfDay() {
+    return Object.keys(claims).filter(function (k) { return k.indexOf(prefix) === 0; });
   }
-  return touched;
+  /* 버그로 덮인 기록 복구: 옛 값과 똑같은 키가 2개 이상이면 첫 1개만 남긴다 */
+  var inherited = keysOfDay().filter(function (k) { return Number(claims[k]) === Number(legacy); });
+  if (inherited.length > 1) {
+    inherited.slice(1).forEach(function (k) { delete claims[k]; });
+  }
+  /* 승계: 그날 받은 기록이 하나도 없을 때만 완료 항목 하나를 옛 볼 1개로 친다 */
+  if (!keysOfDay().length) {
+    var pick = null;
+    studyStats(dateStr).items.forEach(function (it) {
+      if (!pick && it.done) pick = it.key;
+    });
+    if (!pick) {
+      var hw = hwTaskStats(dateStr);
+      if (hw.total > 0 && hw.done >= hw.total) pick = 'hw';
+    }
+    if (pick) claims[prefix + pick] = legacy;
+  }
+  delete claims[dateStr];
+  saveLocal();
+  return true;
 }
 
 /* ---------- 용돈 도우미 ---------- */
@@ -5203,6 +5221,9 @@ function adoptRemote(remoteState, remoteTs) {
   state = merged;
   saveLocal();
   renderAll();
+  /* 다른 기기에서 올라온 옛 '하루 1개' 기록도 같은 방식으로 정리하고, 그날 아직 못 받은 항목의 볼은 바로 지급 */
+  adoptLegacyClaim(todayISO());
+  if (pendingRewards(todayISO()).length > 0) tryPokeballReward(todayISO());
 }
 
 function pullRemote(cb) {
@@ -7033,9 +7054,9 @@ function init() {
     if (ui.view === 'study') renderStudy();
   }, 30000);
   loadWeather();
-  /* 옛 '하루 1개' 기록이 있는 날은 이미 끝나 있던 항목을 받은 것으로 처리한 뒤 새 항목부터 지급 */
+  /* 옛 '하루 1개' 기록은 잘못 덮인 기록을 풀고, 오늘 아직 못 받은 완료 항목의 볼을 바로 지급 */
   adoptLegacyClaim(todayISO());
-  tryPokeballReward(todayISO());
+  if (pendingRewards(todayISO()).length > 0) tryPokeballReward(todayISO());
   window.addEventListener('storage', function (e) {
     if (e.key === STORE_KEY && e.newValue) {
       try {
