@@ -1015,6 +1015,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
 .reward-big-ball svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 20px rgba(200,90,90,.28))}
 .reward-spark{font-size:22px}
 .reward-line{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-weight:900;color:#B3703C}
+.reward-sub{font-size:11.5px;font-weight:700;color:var(--muted)}
 .fam-partner{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;background:#FFF7EC;border:1px solid #F2E2CC;border-radius:10px;padding:1px}
 
 @media (max-width:1024px){
@@ -1259,8 +1260,8 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
                 <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.5"></circle><path d="M5 32a27 27 0 0 1 54 0Z" fill="#EE5B5B"></path><rect x="5" y="28.6" width="54" height="6.8" fill="#4A3F35"></rect><circle cx="32" cy="32" r="8.6" fill="#FFFDF8" stroke="#4A3F35" stroke-width="3.5"></circle></svg>
               </div>
               <div style="flex:1;min-width:150px">
-                <b>오늘 할 일을 다 하면 몬스터볼 +1</b>
-                <p class="hint mt6">오늘의 <b>공부</b>와 <b>숙제</b>를 모두 체크하면 포켓몬볼을 한 개 받아요. 하루에 한 번만 받을 수 있어요.</p>
+                <b>공부 과목마다 몬스터볼 +1</b>
+                <p class="hint mt6">오늘의 <b>공부</b>는 과목을 하나 끝낼 때마다 포켓몬볼을 한 개씩, 그날 <b>숙제</b>를 모두 끝내면 하나 더 받아요. 과목이 셋이면 하루에 세 개까지 받을 수 있어요.</p>
               </div>
               <button class="btn butter" data-action="go-dex" type="button">🔴 도감 열기</button>
             </div>
@@ -1291,7 +1292,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
         <div class="study-today-date card-sub" id="studyTodayDate"></div>
         <div class="study-chips" id="studyTodayChips"></div>
         <div class="mt14" id="studyTodayBar"></div>
-        <p class="hint mt10">과목을 누르면 체크돼요. <b>오늘의 공부</b>와 <b>오늘의 숙제</b>를 모두 끝내면 <b>포켓몬볼 +1</b>!</p>
+        <p class="hint mt10" id="studyTodayHint">과목을 누르면 체크돼요.</p>
       </div>
 
       <div class="card mt14">
@@ -2117,7 +2118,7 @@ create policy "family_state_all" on family_state
         <button class="btn primary" data-action="ball-open" type="button">지금 열어 보기</button>
         <button class="btn ghost" data-close="ballRewardModal" type="button">도감에 모아 두기</button>
       </div>
-      <p class="hint mt10">하루에 한 개씩, 공부와 숙제를 모두 끝낸 날에만 받아요.</p>
+      <p class="hint mt10">공부 과목 하나를 끝낼 때마다 1개, 그날 숙제를 모두 끝내면 하나 더 받아요.</p>
     </div>
   </div>
 </div>
@@ -2935,15 +2936,94 @@ function studyStats(dateStr) {
   var done = items.filter(function (x) { return x.done; }).length;
   return { total: items.length, done: done, left: items.length - done, pct: pctOf(done, items.length), items: items };
 }
-/* 그날 해야 할 공부와 숙제를 모두 끝냈는지 (포켓몬볼 지급 조건) */
+/* ---------- 포켓몬볼 보상 ----------
+   공부 항목(과목·교재 몫) 하나를 끝낼 때마다 +1,
+   그날 숙제를 모두 끝내면 숙제 몫으로 +1 더.
+   수령 기록은 '날짜:항목키'(숙제는 '날짜:hw')로 남겨서 과목마다 한 번만 지급한다. */
+function pokeballClaims() {
+  if (!state.pokeball) state.pokeball = { count: 0, claims: {}, log: [] };
+  if (!state.pokeball.claims || typeof state.pokeball.claims !== 'object') state.pokeball.claims = {};
+  return state.pokeball.claims;
+}
+function rewardKeyOf(dateStr, itemKey) { return dateStr + ':' + itemKey; }
+function isRewardClaimed(dateStr, itemKey) {
+  return !!pokeballClaims()[rewardKeyOf(dateStr, itemKey)];
+}
+/* 아직 볼을 받지 않은 완료 항목들 (공부는 항목마다, 숙제는 그날 몫으로 한 번) */
+function pendingRewards(dateStr) {
+  var out = [];
+  var st = studyStats(dateStr);
+  st.items.forEach(function (it) {
+    if (it.done && !isRewardClaimed(dateStr, it.key)) {
+      out.push({ key: it.key, label: it.title, kind: 'study', type: it.type });
+    }
+  });
+  var hw = hwTaskStats(dateStr);
+  if (hw.total > 0 && hw.done >= hw.total && !isRewardClaimed(dateStr, 'hw')) {
+    out.push({ key: 'hw', label: '숙제', kind: 'hw', type: 'hw' });
+  }
+  return out;
+}
 function dailyRewardStatus(dateStr) {
   var st = studyStats(dateStr);
   var hw = hwTaskStats(dateStr);
+  var pending = pendingRewards(dateStr);
+  var hwClaimed = isRewardClaimed(dateStr, 'hw');
+  var studyClaimed = st.items.filter(function (it) { return it.done && isRewardClaimed(dateStr, it.key); }).length;
   var has = st.total > 0 || hw.total > 0;
-  var ready = has &&
+  var allDone = has &&
     (st.total === 0 || st.done >= st.total) &&
     (hw.total === 0 || hw.done >= hw.total);
-  return { ready: ready, has: has, claimed: !!(state.pokeball && state.pokeball.claims && state.pokeball.claims[dateStr]), study: st, hw: hw };
+  return {
+    ready: pending.length > 0,
+    pending: pending,
+    gained: pending.length,
+    has: has,
+    allDone: allDone,
+    claimed: studyClaimed + (hwClaimed ? 1 : 0),
+    studyClaimed: studyClaimed,
+    hwClaimed: hwClaimed,
+    legacyClaim: !!pokeballClaims()[dateStr],
+    study: st, hw: hw
+  };
+}
+/* 화면에 쓰는 보상 안내 문장 */
+function rewardBannerText(dateStr) {
+  var r = dailyRewardStatus(dateStr);
+  if (!r.has) return '아직 오늘 공부·숙제가 없어요. 과목을 넣으면 하나 끝낼 때마다 포켓몬볼 +1!';
+  if (r.allDone) {
+    return r.claimed > 0
+      ? '오늘 공부·숙제 모두 완료! 포켓몬볼 ' + r.claimed + '개 받았어요'
+      : '오늘 공부·숙제 모두 완료! 포켓몬볼을 받을 수 있어요';
+  }
+  var t = '공부 ' + r.study.done + '/' + r.study.total + '개 완료 · 과목마다 +1';
+  if (r.hw.total) t += ' · 숙제 ' + r.hw.done + '/' + r.hw.total + (r.hw.done >= r.hw.total ? ' (+1 받음)' : ' (다 하면 +1)');
+  if (r.claimed > 0) t += ' · 오늘 ' + r.claimed + '개 받음';
+  return t;
+}
+/* 칩처럼 좁은 자리에 쓰는 짧은 보상 안내 */
+function rewardChipText(dateStr) {
+  var r = dailyRewardStatus(dateStr);
+  if (!r.has) return '🎁 과목마다 +1';
+  if (r.allDone) return '🎁 모두 완료 · 볼 ' + r.claimed + '개';
+  return '🎁 공부 ' + r.study.done + '/' + r.study.total + ' · 과목마다 +1' + (r.claimed > 0 ? ' · ' + r.claimed + '개 받음' : '');
+}
+/* 옛 '하루 1개' 기록만 있는 날: 이미 끝나 있던 항목은 받은 것으로 쳐서 두 번 지급하지 않는다 */
+function adoptLegacyClaim(dateStr) {
+  var claims = pokeballClaims();
+  if (!claims[dateStr]) return false;
+  var touched = false;
+  studyStats(dateStr).items.forEach(function (it) {
+    if (!it.done) return;
+    if (claims[rewardKeyOf(dateStr, it.key)]) return;
+    claims[rewardKeyOf(dateStr, it.key)] = claims[dateStr];
+    touched = true;
+  });
+  if (!claims[rewardKeyOf(dateStr, 'hw')]) {
+    var hw = hwTaskStats(dateStr);
+    if (hw.total > 0 && hw.done >= hw.total) { claims[rewardKeyOf(dateStr, 'hw')] = claims[dateStr]; touched = true; }
+  }
+  return touched;
 }
 
 /* ---------- 용돈 도우미 ---------- */
@@ -3478,9 +3558,8 @@ function renderFamilyCards() {
         '</div></div>' +
         '<div class="fam-block">' +
         '<div class="fam-block-head"><b>📖 오늘의 공부 · 📝 숙제</b>' +
-        (reward.claimed
-          ? '<span class="chip mint" style="font-size:9.5px;padding:3px 7px">🎁 볼 받음</span>'
-          : '<span class="chip butter" style="font-size:9.5px;padding:3px 7px">🎁 다 하면 +1</span>') +
+        '<span class="chip ' + (reward.allDone ? 'mint' : 'butter') + '" style="font-size:9.5px;padding:3px 7px">' +
+          (reward.allDone && reward.claimed > 0 ? '🎁 볼 ' + reward.claimed + '개 받음' : '🎁 과목마다 +1') + '</span>' +
         '</div>' +
         bar(pctOf(stoday.done + hwt.done, stoday.total + hwt.total), pctOf(stoday.done + hwt.done, stoday.total + hwt.total) >= 100 ? 'mint' : '') +
         '<div class="fam-check mt10">' +
@@ -3608,9 +3687,7 @@ function renderHome() {
       '<span class="chip mint">✅ 루틴 ' + rStats.done + '/' + rStats.total + '</span>' +
       '<span class="chip sky">📖 공부 ' + st.done + '/' + st.total + '</span>' +
       '<span class="chip peach">📝 숙제 ' + hw.done + '/' + hw.total + '</span>' +
-      (reward.claimed
-        ? '<span class="chip mint">🎁 오늘 몬스터볼 받았어요</span>'
-        : (reward.ready ? '<span class="chip butter">🎁 몬스터볼 +1 받을 수 있어요!</span>' : '<span class="chip butter">🔴 포켓몬볼 ' + balls + '개</span>')) +
+      '<span class="chip ' + (reward.claimed > 0 ? 'mint' : 'butter') + '">' + esc(rewardChipText(today)) + '</span>' +
       (pending.length ? '<span class="chip butter">💌 확인 대기 ' + pending.length + '건</span>' : '') +
       (unreadTotal(state.viewer) ? '<span class="chip pink">📮 안 읽은 쪽지 ' + unreadTotal(state.viewer) + '</span>' : '');
   }
@@ -3763,12 +3840,11 @@ function renderHomework() {
       '<span class="chip ' + (st.total && st.done === st.total ? 'mint' : 'butter') + '">' +
       (st.total ? '✓ ' + st.done + ' / ' + st.total + ' 완료' : '📝 숙제 0건') + '</span>' +
       (!st.total ? '<span class="chip line">오늘은 숙제가 없어요</span>'
-        : (st.done === st.total
-          ? (reward.claimed ? '<span class="chip mint">🎁 몬스터볼 받았어요</span>' : '<span class="chip mint">🎉 모두 끝냈어요!</span>')
-          : '<span class="chip line">' + (st.total - st.done) + '개 남았어요</span>')) +
-      (reward.claimed
-        ? '<span class="chip mint">🎁 몬스터볼 수령 완료</span>'
-        : (reward.study.total === 0 ? '<span class="chip butter">다 끝내면 몬스터볼 +1</span>' : ''));
+        : '<span class="chip ' + (st.done >= st.total ? 'mint' : 'line') + '">' +
+          (st.done >= st.total
+            ? (reward.hwClaimed ? '🎁 숙제 몫 볼 +1 받았어요' : '🎉 모두 끝냈어요!')
+            : (st.total - st.done) + '개 남았어요') + '</span>') +
+      '<span class="chip ' + (reward.claimed > 0 ? 'mint' : 'butter') + '">' + esc(rewardChipText(ds)) + '</span>';
   }
 
   el = $('#hwTaskList');
@@ -3806,17 +3882,11 @@ function renderHomework() {
     }).join('');
   }
 
-  /* 다 했을 때 보상 안내 */
+  /* 보상 안내 */
   el = $('#hwTaskReward');
   if (el) {
-    var r = dailyRewardStatus(ds);
-    el.innerHTML = r.claimed
-      ? '🎁 이 날은 이미 <b>포켓몬볼 1개</b>를 받았어요. 하나를 풀어도 받은 볼은 그대로예요.'
-      : (!r.has
-        ? '아직 오늘 할 일이 없어요. 공부나 숙제를 넣으면, 다 끝냈을 때 <b>포켓몬볼</b>을 받아요.'
-        : (r.ready ? '🎁 지금 <b>포켓몬볼 +1</b>을 받을 수 있어요!' :
-          '오늘의 <b>공부 ' + r.study.done + '/' + r.study.total + '</b> · <b>숙제 ' + r.hw.done + '/' + r.hw.total +
-          '</b>를 모두 끝내면 <b>포켓몬볼 +1</b>을 받아요.'));
+    el.innerHTML = '🎁 <b>' + esc(rewardBannerText(ds)) + '</b><br>' +
+      '공부는 과목을 하나 끝낼 때마다 1개, 숙제는 그날 숙제를 모두 끝내면 1개를 받아요.';
   }
 }
 
@@ -3857,9 +3927,11 @@ function renderStudy() {
   if (el) {
     el.innerHTML = '<span class="chip ' + (st.total && st.done === st.total ? 'mint' : 'line') + '">' +
       st.done + ' / ' + st.total + '</span>' +
-      (reward.claimed
-        ? '<span class="chip mint">🎁 몬스터볼 받았어요</span>'
-        : '<span class="chip butter">모두 체크하면 몬스터볼 +1</span>');
+      '<span class="chip ' + (reward.claimed > 0 ? 'mint' : 'butter') + '">' + esc(rewardChipText(today)) + '</span>';
+  }
+  el = $('#studyTodayHint');
+  if (el) {
+    el.innerHTML = '과목을 누르면 체크돼요. 🎁 <b>' + esc(rewardBannerText(today)) + '</b>';
   }
 
   el = $('#studyTodayChips');
@@ -4184,16 +4256,13 @@ function renderDex() {
   var caught = dexCollectedCount();
   var total = DEX.length;
   var today = todayISO();
-  var reward = dailyRewardStatus(today);
 
   var el = $('#dexBallCount');
   if (el) el.textContent = balls;
   el = $('#dexBallHint');
   if (el) {
-    el.innerHTML = reward.claimed
-      ? '오늘 몬스터볼은 이미 받았어요.<br>내일 또 받을 수 있어요!'
-      : '오늘의 공부 <b>' + reward.study.done + '/' + reward.study.total + '</b> · 숙제 <b>' + reward.hw.done + '/' + reward.hw.total + '</b>' +
-        '<br>모두 끝내면 몬스터볼 <b>+1</b>';
+    el.innerHTML = '🎁 <b>' + esc(rewardBannerText(today)) + '</b><br>' +
+      '공부 과목 하나마다 +1 · 그날 숙제를 모두 끝내면 +1. 받은 볼로 포켓몬을 만나요!';
   }
   el = $('#dexOpenBtn');
   if (el) {
@@ -5359,29 +5428,40 @@ function focusDone() {
   completeFocus(usedMin, false);
 }
 
-/* ---------- 포켓몬볼 보상 ---------- */
+/* ---------- 포켓몬볼 보상 ----------
+   완료한 공부 항목마다 +1, 그날 숙제를 다 끝내면 +1.
+   방금 새로 지급된 개수를 돌려준다 (0이면 줄 것이 없었다는 뜻). */
 function tryPokeballReward(dateStr) {
   dateStr = dateStr || todayISO();
-  if (!state.pokeball) state.pokeball = { count: 0, claims: {}, log: [] };
-  if (!state.pokeball.claims) state.pokeball.claims = {};
+  var claims = pokeballClaims();
   var s = dailyRewardStatus(dateStr);
-  if (!s.ready || s.claimed) return false;
-  state.pokeball.claims[dateStr] = Date.now();
-  state.pokeball.count = Number(state.pokeball.count || 0) + 1;
+  var pending = s.pending;
+  if (!pending.length) return 0;
+  var now = Date.now();
   state.pokeball.log = state.pokeball.log || [];
-  state.pokeball.log.unshift({ id: uid(), ts: Date.now(), date: dateStr, kind: 'daily' });
-  if (state.pokeball.log.length > 60) state.pokeball.log = state.pokeball.log.slice(0, 60);
+  pending.forEach(function (p) {
+    claims[rewardKeyOf(dateStr, p.key)] = now;
+    state.pokeball.count = Number(state.pokeball.count || 0) + 1;
+    state.pokeball.log.unshift({ id: uid(), ts: now, date: dateStr, kind: p.kind, key: p.key, label: p.label });
+  });
+  if (state.pokeball.log.length > 120) state.pokeball.log = state.pokeball.log.slice(0, 120);
   touch();
   renderAll();
-  celebratePokeball();
-  return true;
+  var reasonLabel = pending.length === 1
+    ? (pending[0].kind === 'hw' ? '숙제 모두 완료!' : pending[0].label + ' 완료!')
+    : null;
+  celebratePokeball(pending.length, reasonLabel);
+  return pending.length;
 }
 
-function celebratePokeball() {
+function celebratePokeball(added, reasonLabel) {
+  added = Number(added || 1);
+  var count = Number(state.pokeball ? state.pokeball.count : 0) || 0;
   var el = $('#ballRewardText');
   if (el) {
-    el.innerHTML = '오늘의 <b>공부</b>와 <b>숙제</b>를 모두 끝냈어요!<br>' +
-      '<span class="reward-line">' + ballIcon(34) + ' 포켓몬볼 <b>+1</b> · 지금 <b>' + state.pokeball.count + '개</b></span>';
+    el.innerHTML = (reasonLabel ? '<b>' + esc(reasonLabel) + '</b><br>' : '') +
+      '<span class="reward-line">' + ballIcon(34) + ' 포켓몬볼 <b>+' + added + '</b> · 지금 <b>' + count + '개</b></span>' +
+      '<br><span class="reward-sub">공부 과목 하나마다 +1 · 숙제 다 끝내면 +1</span>';
   }
   openModal('ballRewardModal');
   confettiBurst();
@@ -5412,7 +5492,7 @@ function ballResultHTML(p, isNew) {
 function openPokeball() {
   if (ui.ballBusy) return;
   if (!state.pokeball || Number(state.pokeball.count || 0) <= 0) {
-    toast('포켓몬볼이 없어요. 오늘의 공부와 숙제를 모두 끝내면 1개를 받아요!');
+    toast('포켓몬볼이 없어요. 공부 과목을 하나 끝낼 때마다, 숙제를 다 끝내면 하나 더 받아요!');
     return;
   }
   ui.ballBusy = true;
@@ -6764,6 +6844,8 @@ function init() {
     if (ui.view === 'study') renderStudy();
   }, 30000);
   loadWeather();
+  /* 옛 '하루 1개' 기록이 있는 날은 이미 끝나 있던 항목을 받은 것으로 처리한 뒤 새 항목부터 지급 */
+  adoptLegacyClaim(todayISO());
   tryPokeballReward(todayISO());
   window.addEventListener('storage', function (e) {
     if (e.key === STORE_KEY && e.newValue) {
