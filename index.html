@@ -1204,7 +1204,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
           <div class="period-tabs" id="periodTabs"></div>
           <div class="routine-progress mt14" id="routineProgress"></div>
           <div class="list mt14" id="routineList"></div>
-          <p class="hint mt14">항목을 하나 끝낼 때마다 <b>별 1개(★+1)</b>를 받아요. 하루에 한 번만 인정돼요.<br>필요 없는 항목은 옆의 <b>🗑️ 삭제</b>로 지우고, <b>✏️ 수정</b>으로 이름·시간대를 바꿔요.</p>
+          <p class="hint mt14">항목을 하나 끝낼 때마다 <b>별 1개(★+1)</b>를 받아요. 하루에 한 번만 인정돼요.<br>필요 없는 항목은 옆의 <b>🗑️ 삭제</b>로 지우고, <b>✏️ 수정</b>으로 이름·시간대를 바꿔요. 고친 목록은 모든 날·가족 기기에 똑같이 반영돼요.</p>
         </div>
         <div class="stack">
           <div class="card">
@@ -1220,7 +1220,7 @@ select.input.mini{padding:6px 8px;font-size:11.5px;border-radius:9px;width:auto;
               <button class="btn ghost tiny" data-action="routine-add-open" type="button">＋ 루틴 추가</button>
             </div>
             <div class="stack routine-manage" id="routineManage"></div>
-            <p class="hint mt14">여기서는 아침·점심·저녁 루틴을 한 번에 볼 수 있어요. <b>✏️ 수정</b>으로 시간대까지 바꿀 수 있어요.</p>
+            <p class="hint mt14">여기서는 아침·점심·저녁 루틴을 한 번에 볼 수 있어요. <b>✏️ 수정</b>으로 시간대까지 바꿀 수 있어요.<br>한 번 고치면 오늘·내일 모든 날과 가족 기기에 똑같이, 바로 반영돼요.</p>
           </div>
         </div>
       </div>
@@ -2656,6 +2656,10 @@ function seedState() {
         { id: 'e4', text: '장난감 정리' }
       ]
     },
+    /* 루틴 목록(추가·수정·삭제)만 따로 남기는 수정 시각.
+       체크(routine-toggle)로 바뀌는 updatedAt과 섞이지 않게 해서,
+       아이패드에서 체크만 해도 폰에서 고친 루틴 목록이 옛것으로 돌아가지 않게 한다. */
+    routinesUpdatedAt: 0,
     routineDone: {},
     plans: [],
     hwDone: {},
@@ -2764,6 +2768,9 @@ var timerHandle = null;
 var syncHandle = null;
 var pushTimer = null;
 var syncBusy = false;
+var pushDirty = false;   /* 이 기기에 아직 서버로 못 보낸 변경이 있는지 */
+var pushQueued = false;  /* 전송 중에 또 바뀌어서, 끝나면 한 번 더 보내야 하는지 */
+var pushRetry = 0;       /* 연속 전송 실패 횟수 */
 var adopting = false;
 
 function deepMerge(base, saved) {
@@ -2793,6 +2800,8 @@ function loadState() {
       state = deepMerge(base, saved);
       /* updatedAt이 없으면 지금 시각이 아니라 0으로 둔다(새 기기가 서버 기록을 덮지 않게). */
       if (typeof state.updatedAt !== 'number' || !isFinite(state.updatedAt)) state.updatedAt = 0;
+      /* 루틴 전용 시각도 숫자로 맞춰 둔다(없는 예전 기록은 0 → 서버 루틴 목록을 따른다). */
+      if (typeof state.routinesUpdatedAt !== 'number' || !isFinite(state.routinesUpdatedAt)) state.routinesUpdatedAt = 0;
     } catch (e) {
       state = base;
     }
@@ -2823,7 +2832,26 @@ function touch(skipPush) {
   if (!skipPush) schedulePush();
 }
 
+/* 루틴 목록(추가·수정·삭제)을 고쳤을 때.
+   루틴 전용 시각을 남기고, 900ms 디바운스를 기다리지 않고 바로 서버로 보낸다.
+   (앱을 바로 닫거나 다른 기기가 곧바로 체크해도 수정이 유실되지 않게) */
+function touchRoutines() {
+  state.routinesUpdatedAt = Date.now();
+  state.updatedAt = state.routinesUpdatedAt;
+  saveLocal();
+  pushImmediate();
+}
+
+/* 루틴 목록의 수정 시각. routinesUpdatedAt이 없는 예전 기록은 전체 수정 시각으로 대신한다. */
+function routineStampOf(s, fallbackTs) {
+  var r = Number(s && s.routinesUpdatedAt);
+  if (isFinite(r) && r > 0) return r;
+  var fb = Number(fallbackTs);
+  return isFinite(fb) && fb > 0 ? fb : 0;
+}
+
 function schedulePush() {
+  pushDirty = true;
   if (!syncConfigured()) return;
   if (pushTimer) clearTimeout(pushTimer);
   pushTimer = setTimeout(function () { pushTimer = null; pushRemote(); }, 900);
@@ -5212,18 +5240,47 @@ function sharedPayload() {
 }
 
 function adoptRemote(remoteState, remoteTs) {
-  if (!remoteState || typeof remoteState !== 'object') return;
+  if (!remoteState || typeof remoteState !== 'object') return false;
   var keepSync = state.sync, keepViewer = state.viewer;
+  /* 루틴 목록은 전체 updatedAt이 아니라 루틴 전용 시각(routinesUpdatedAt)으로 겨룬다.
+     아이패드에서 체크만 해도 전체 updatedAt은 최신이 되므로, 그대로 전체를 덮으면
+     엄마 폰에서 고친 루틴 목록이 아이패드의 옛 목록으로 되돌아간다. */
+  var localRts = routineStampOf(state, state.updatedAt);
+  var remoteRts = routineStampOf(remoteState, remoteTs);
+  var localHasStamp = Number(state.routinesUpdatedAt) > 0;
+  var remoteHasStamp = Number(remoteState.routinesUpdatedAt) > 0;
+  var remoteHasRoutines = !!(remoteState.routines && typeof remoteState.routines === 'object');
+  var keepLocalRoutines = false;
+  if (!remoteHasRoutines) {
+    /* 목록 자체가 없는 예전 기록: 이 기기 목록을 그대로 두고 되밀지도 않는다. */
+    remoteRts = 0;
+  } else if (remoteHasStamp && !localHasStamp) {
+    /* 이 기기는 루틴을 고친 적이 없다(예전 기록). 상대의 루틴 수정을 따른다. */
+    keepLocalRoutines = false;
+  } else if (localRts > remoteRts + 1000 || (pushDirty && localRts >= remoteRts)) {
+    keepLocalRoutines = true;
+  }
   var merged = deepMerge(seedState(), remoteState);
+  if (!remoteHasRoutines || keepLocalRoutines) {
+    merged.routines = JSON.parse(JSON.stringify(state.routines || seedState().routines));
+    merged.routinesUpdatedAt = Math.max(localRts, remoteRts);
+  } else {
+    merged.routinesUpdatedAt = Math.max(remoteRts, Number(merged.routinesUpdatedAt) || 0);
+  }
   merged.sync = keepSync;
   merged.viewer = keepViewer;
-  merged.updatedAt = remoteTs || Date.now();
+  merged.updatedAt = keepLocalRoutines ? Date.now() : (remoteTs || Date.now());
   state = merged;
   saveLocal();
   renderAll();
   /* 다른 기기에서 올라온 옛 '하루 1개' 기록도 같은 방식으로 정리하고, 그날 아직 못 받은 항목의 볼은 바로 지급 */
   adoptLegacyClaim(todayISO());
   if (pendingRewards(todayISO()).length > 0) tryPokeballReward(todayISO());
+  if (keepLocalRoutines) {
+    /* 이 기기의 루틴 목록이 더 최신: 합친 기록을 곧바로 다시 올려 가족 기기와 맞춘다. */
+    pushImmediate();
+  }
+  return keepLocalRoutines;
 }
 
 function pullRemote(cb) {
@@ -5255,6 +5312,11 @@ function pullRemote(cb) {
       }
       /* 로컬에 아직 한 번도 수정한 적이 없는 기기(updatedAt === 0)는 서버 시각과 상관없이
          서버 기록을 받아온다. 이 규칙이 없으면 새 기기의 빈 상태가 가족 기록을 덮어쓴다. */
+      var remoteRoutineTs = routineStampOf(row.state, remoteTs);
+      var localRoutineTs = routineStampOf(state, state.updatedAt);
+      var rawRemoteRoutineTs = Number((row.state || {}).routinesUpdatedAt) || 0;
+      var rawLocalRoutineTs = Number(state.routinesUpdatedAt) || 0;
+      var remoteHasRoutines = !!(row.state && row.state.routines && typeof row.state.routines === 'object');
       if (!state.updatedAt) {
         adoptRemote(row.state, isNaN(remoteTs) ? Date.now() : remoteTs);
         toast('☁️ 가족 기기의 기록을 불러왔어요');
@@ -5262,8 +5324,18 @@ function pullRemote(cb) {
         adoptRemote(row.state, remoteTs);
         toast('☁️ 다른 기기의 기록을 불러왔어요');
       } else if (!isNaN(remoteTs) && state.updatedAt > remoteTs + 1200) {
-        pushRemote();
+        if (remoteHasRoutines && remoteRoutineTs > localRoutineTs + 1000) {
+          /* 기기 시계 차이로 전체 시각은 밀려 있어도, 루틴 목록은 상대가 더 최근일 수 있다. */
+          adoptRemote(row.state, remoteTs);
+        } else {
+          pushRemote();
+        }
+      } else if (remoteHasRoutines && Math.abs(rawRemoteRoutineTs - rawLocalRoutineTs) > 300) {
+        /* 1.2초 안쪽의 동시 수정: 전체 기록은 그대로 두고 루틴 목록만 따로 겨뤄 합진다.
+           adoptRemote가 더 최신 쪽을 고르고, 필요하면 이 기기 목록을 다시 올린다. */
+        adoptRemote(row.state, isNaN(remoteTs) ? Date.now() : remoteTs);
       }
+      flushQueuedPush();
       if (cb) cb(true);
     })
     .catch(function (err) {
@@ -5271,39 +5343,107 @@ function pullRemote(cb) {
       syncBusy = false;
       state.sync.lastError = String(err && err.message ? err.message : err);
       updateSyncUI();
+      /* 연결이 끊긴 동안에는 다시 보내도 실패한다. 연결이 돌아온 확인(pull)에서
+         대기 중인 변경을 이어서 보낸다(flushQueuedPush). */
       if (cb) cb(false);
     });
 }
 
-function pushRemote(cb) {
-  if (!syncConfigured()) { if (cb) cb(false); return; }
-  if (syncBusy) { if (cb) cb(false); return; }
-  syncBusy = true;
-  var body = [{
+/* 보낼 내용(전체 기록 + updatedAt)을 글자로 만든다. 즉시 전송과 종료 직전 전송이 같은 내용을 쓴다. */
+function pushBodyText() {
+  return JSON.stringify([{
     room_id: state.sync.room,
     state: sharedPayload(),
     updated_at: new Date(state.updatedAt || Date.now()).toISOString()
-  }];
+  }]);
+}
+
+function pushRemote(cb) {
+  if (!syncConfigured()) { if (cb) cb(false); return; }
+  if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+  if (syncBusy) {
+    /* 확인(pull) 중이면 지금은 못 보낸다. 끝난 뒤 이어서 보내도록 표시만 해 둔다. */
+    pushDirty = true;
+    pushQueued = true;
+    if (cb) cb(false);
+    return;
+  }
+  syncBusy = true;
+  pushQueued = false;
+  var body = pushBodyText();
   fetch(apiBase() + '/rest/v1/family_state', {
     method: 'POST',
     headers: apiHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
-    body: JSON.stringify(body)
+    body: body
   })
     .then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       syncOnline = true;
       state.sync.lastError = '';
       syncBusy = false;
+      pushRetry = 0;
+      var again = pushQueued;
+      pushQueued = false;
+      if (!again) pushDirty = false;
       updateSyncUI();
+      if (again) setTimeout(function () { if (pushDirty && !syncBusy) pushRemote(); }, 60);
       if (cb) cb(true);
     })
     .catch(function (err) {
       syncOnline = false;
       syncBusy = false;
+      pushDirty = true;                     /* 못 보냈으니 다음 기회에 다시 시도한다 */
       state.sync.lastError = String(err && err.message ? err.message : err);
       updateSyncUI();
+      if (pushRetry < 2) {
+        pushRetry++;
+        setTimeout(function () { if (pushDirty && !syncBusy) pushRemote(); }, 1200 * pushRetry);
+      }
       if (cb) cb(false);
     });
+}
+
+/* 대기 중인 디바운스를 건너뛰고 지금 바로 한 번 보낸다. */
+function pushImmediate() {
+  pushDirty = true;
+  if (!syncConfigured()) return;
+  if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+  if (syncBusy) { pushQueued = true; return; }
+  pushRemote();
+}
+
+/* 보내야 할 변경이 남아 있으면 이어서 보낸다(확인 요청이 끝난 직후 등). */
+function flushQueuedPush() {
+  if (syncBusy) return;
+  if (!pushDirty && !pushQueued) return;
+  pushQueued = false;
+  if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+  pushRemote();
+}
+
+/* 앱을 닫거나 다른 앱으로 넘어가기 직전: 로컬 저장을 확정하고,
+   디바운스를 기다리지 않고 대기 중인 변경을 keepalive로 곧바로 보낸다. */
+function flushPendingSync() {
+  saveLocal();
+  if (!syncConfigured()) return;
+  if (!pushDirty && !pushTimer) return;
+  if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+  var body = pushBodyText();
+  var opts = {
+    method: 'POST',
+    headers: apiHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: body
+  };
+  /* keepalive를 붙이면 페이지가 닫혀도 요청이 살아남는다.
+     다만 64KB를 넘는 본문은 브라우저가 거부하므로, 바이트 길이를 확인해 넘을 때는 일반 전송으로 보낸다. */
+  var bytes = body.length;
+  try { if (window.Blob) bytes = new Blob([body]).size; } catch (e) { }
+  if (bytes < 60000) opts.keepalive = true;
+  try {
+    fetch(apiBase() + '/rest/v1/family_state', opts).then(function (res) {
+      if (res && res.ok) pushDirty = false;
+    }).catch(function () { });
+  } catch (e) { /* 종료 중에는 실패해도 이 기기 저장은 남아 있다 */ }
 }
 
 function syncTick() {
@@ -5358,6 +5498,7 @@ function pushNow() {
   if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
   state.updatedAt = Date.now();
   saveLocal();
+  pushDirty = true;
   syncBusy = false;   /* 3초 대기열의 pull과 겹쳐도 이번 push는 반드시 나가게 */
   pushRemote(function (ok) {
     toast(ok ? '☁️ 이 기기의 기록을 서버에 올렸어요.' : '❌ 서버에 올리지 못했어요. 연결 정보를 확인해 주세요.');
@@ -5482,6 +5623,8 @@ function importJSON(file) {
       state.sync = keepSync;
       state.viewer = keepViewer;
       state.updatedAt = Date.now();
+      /* 백업 파일의 루틴 목록도 '지금 고친 것'으로 보고 가족 기기에 반영한다. */
+      state.routinesUpdatedAt = state.updatedAt;
       saveLocal();
       renderAll();
       toast('⬆️ 기록을 가져왔어요');
@@ -5980,7 +6123,8 @@ document.addEventListener('click', function (e) {
       var goneText = gone ? gone.text : '루틴';
       state.routines[p2] = (state.routines[p2] || []).filter(function (x) { return x.id !== id2; });
       if (ui.routineEditId === id2) ui.routineEditId = null;
-      touch(); renderAll();
+      /* 루틴 목록 구조 변경: 루틴 전용 시각을 남기고 디바운스 없이 바로 올린다. */
+      touchRoutines(); renderAll();
       toast('🗑️ ' + goneText + ' · 루틴을 삭제했어요');
       break;
     }
@@ -6609,7 +6753,8 @@ document.addEventListener('submit', function (e) {
     }
     ui.period = rPeriod;
     closeModal('routineModal');
-    touch();
+    /* 루틴 목록 구조 변경: 루틴 전용 시각을 남기고 디바운스 없이 바로 올린다. */
+    touchRoutines();
     renderAll();
     return;
   }
@@ -6894,10 +7039,15 @@ function bindStatic() {
       var keepSync = state.sync;
       state = seedState();
       state.sync = keepSync;
+      /* 초기화도 '지금 바뀐 기록'이다. updatedAt을 0으로 두면 다음 확인(pull)에서
+         가족 기기의 예전 기록을 곧바로 다시 받아와 초기화가 풀린다. */
+      state.updatedAt = Date.now();
+      state.routinesUpdatedAt = state.updatedAt;
       parentOn = false;
       saveLocal();
       renderAll();
       closeAllModals();
+      pushImmediate();
       toast('기록을 처음 상태로 되돌렸어요');
     });
   }
@@ -7068,7 +7218,18 @@ function init() {
       } catch (err) { /* 무시 */ }
     }
   });
-  window.addEventListener('beforeunload', function () { saveLocal(); });
+  window.addEventListener('pagehide', function () { flushPendingSync(); });
+  window.addEventListener('beforeunload', function () { flushPendingSync(); });
+  /* 탭·앱이 화면에서 사라지기 직전: 대기 중인 변경을 저장하고 곧바로 서버로 보낸다.
+     다시 화면에 돌아오면: 못 보낸 변경을 이어서 올리고 최신 가족 기록을 받는다. */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      flushPendingSync();
+    } else {
+      if (!syncConfigured()) return;
+      pullRemote(function (ok) { if (!ok && pushDirty && !syncBusy) pushRemote(); });
+    }
+  });
 }
 
 if (document.readyState === 'loading') {
